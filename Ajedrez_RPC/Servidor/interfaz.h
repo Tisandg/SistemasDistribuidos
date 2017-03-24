@@ -76,19 +76,25 @@ extern  nodo_usuario * consultarusuario_1_svc(datosValidar *, struct svc_req *);
 #define repartir_fichas 7
 extern  fichas * repartir_fichas_1(int *, CLIENT *);
 extern  fichas * repartir_fichas_1_svc(int *, struct svc_req *);
-#define enviar_jugada 8
-extern  fichas * enviar_jugada_1(int *, CLIENT *);
-extern  fichas * enviar_jugada_1_svc(int *, struct svc_req *);
-#define estado_tablero 9
-extern  fichas * estado_tablero_1(void *, CLIENT *);
-extern  fichas * estado_tablero_1_svc(void *, struct svc_req *);
-#define empezar_partida 10
+#define empezar_partida 8
 extern  fichas * empezar_partida_1(void *, CLIENT *);
 extern  fichas * empezar_partida_1_svc(void *, struct svc_req *);
-#define consultar_estadisticas 11
+#define enviar_jugada 9
+extern  fichas * enviar_jugada_1(int *, CLIENT *);
+extern  fichas * enviar_jugada_1_svc(int *, struct svc_req *);
+#define estado_tablero 10
+extern  fichas * estado_tablero_1(void *, CLIENT *);
+extern  fichas * estado_tablero_1_svc(void *, struct svc_req *);
+#define estado_cliente 11
+extern  fichas * estado_cliente_1(void *, CLIENT *);
+extern  fichas * estado_cliente_1_svc(void *, struct svc_req *);
+#define contar_puntos 12
+extern  int * contar_puntos_1(void *, CLIENT *);
+extern  int * contar_puntos_1_svc(void *, struct svc_req *);
+#define consultar_estadisticas 13
 extern  char ** consultar_estadisticas_1(void *, CLIENT *);
 extern  char ** consultar_estadisticas_1_svc(void *, struct svc_req *);
-#define salir 12
+#define salir 14
 extern  bool_t * salir_1(void *, CLIENT *);
 extern  bool_t * salir_1_svc(void *, struct svc_req *);
 extern int gestion_usuario_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
@@ -115,19 +121,25 @@ extern  nodo_usuario * consultarusuario_1_svc();
 #define repartir_fichas 7
 extern  fichas * repartir_fichas_1();
 extern  fichas * repartir_fichas_1_svc();
-#define enviar_jugada 8
-extern  fichas * enviar_jugada_1();
-extern  fichas * enviar_jugada_1_svc();
-#define estado_tablero 9
-extern  fichas * estado_tablero_1();
-extern  fichas * estado_tablero_1_svc();
-#define empezar_partida 10
+#define empezar_partida 8
 extern  fichas * empezar_partida_1();
 extern  fichas * empezar_partida_1_svc();
-#define consultar_estadisticas 11
+#define enviar_jugada 9
+extern  fichas * enviar_jugada_1();
+extern  fichas * enviar_jugada_1_svc();
+#define estado_tablero 10
+extern  fichas * estado_tablero_1();
+extern  fichas * estado_tablero_1_svc();
+#define estado_cliente 11
+extern  fichas * estado_cliente_1();
+extern  fichas * estado_cliente_1_svc();
+#define contar_puntos 12
+extern  int * contar_puntos_1();
+extern  int * contar_puntos_1_svc();
+#define consultar_estadisticas 13
 extern  char ** consultar_estadisticas_1();
 extern  char ** consultar_estadisticas_1_svc();
-#define salir 12
+#define salir 14
 extern  bool_t * salir_1();
 extern  bool_t * salir_1_svc();
 extern int gestion_usuario_1_freeresult ();

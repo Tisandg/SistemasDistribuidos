@@ -79,6 +79,12 @@ gestion_usuario_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		local = (char *(*)(char *, struct svc_req *)) repartir_fichas_1_svc;
 		break;
 
+	case empezar_partida:
+		_xdr_argument = (xdrproc_t) xdr_void;
+		_xdr_result = (xdrproc_t) xdr_fichas;
+		local = (char *(*)(char *, struct svc_req *)) empezar_partida_1_svc;
+		break;
+
 	case enviar_jugada:
 		_xdr_argument = (xdrproc_t) xdr_int;
 		_xdr_result = (xdrproc_t) xdr_fichas;
@@ -91,10 +97,16 @@ gestion_usuario_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		local = (char *(*)(char *, struct svc_req *)) estado_tablero_1_svc;
 		break;
 
-	case empezar_partida:
+	case estado_cliente:
 		_xdr_argument = (xdrproc_t) xdr_void;
 		_xdr_result = (xdrproc_t) xdr_fichas;
-		local = (char *(*)(char *, struct svc_req *)) empezar_partida_1_svc;
+		local = (char *(*)(char *, struct svc_req *)) estado_cliente_1_svc;
+		break;
+
+	case contar_puntos:
+		_xdr_argument = (xdrproc_t) xdr_void;
+		_xdr_result = (xdrproc_t) xdr_int;
+		local = (char *(*)(char *, struct svc_req *)) contar_puntos_1_svc;
 		break;
 
 	case consultar_estadisticas:

@@ -115,6 +115,21 @@ repartir_fichas_1(int *argp, CLIENT *clnt)
 }
 
 fichas *
+empezar_partida_1(void *argp, CLIENT *clnt)
+{
+	static fichas clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, empezar_partida,
+		(xdrproc_t) xdr_void, (caddr_t) argp,
+		(xdrproc_t) xdr_fichas, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+fichas *
 enviar_jugada_1(int *argp, CLIENT *clnt)
 {
 	static fichas clnt_res;
@@ -145,14 +160,29 @@ estado_tablero_1(void *argp, CLIENT *clnt)
 }
 
 fichas *
-empezar_partida_1(void *argp, CLIENT *clnt)
+estado_cliente_1(void *argp, CLIENT *clnt)
 {
 	static fichas clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	if (clnt_call (clnt, empezar_partida,
+	if (clnt_call (clnt, estado_cliente,
 		(xdrproc_t) xdr_void, (caddr_t) argp,
 		(xdrproc_t) xdr_fichas, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+int *
+contar_puntos_1(void *argp, CLIENT *clnt)
+{
+	static int clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, contar_puntos,
+		(xdrproc_t) xdr_void, (caddr_t) argp,
+		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}

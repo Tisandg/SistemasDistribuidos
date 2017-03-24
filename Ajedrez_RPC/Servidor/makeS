@@ -12,8 +12,8 @@ SOURCES_SVC.c = Servidor.c
 SOURCES_SVC.h = interfaz.h
 SOURCES.x = interfaz.x
 
-TARGETS_SVC.c = interfaz_svc.c   interfaz_xdr.c 
-TARGETS_CLNT.c = interfaz_clnt.c   interfaz_xdr.c 
+TARGETS_SVC.c = interfaz_svc.c   interfaz_xdr.c  
+TARGETS_CLNT.c = interfaz_clnt.c   interfaz_xdr.c     
 TARGETS = interfaz.h interfaz_xdr.c interfaz_clnt.c interfaz_svc.c    
 
 OBJECTS_CLNT = $(SOURCES_CLNT.c:%.c=%.o) $(TARGETS_CLNT.c:%.c=%.o)

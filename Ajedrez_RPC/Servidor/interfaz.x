@@ -55,11 +55,13 @@ program gestion_usuario{
 		nodo_usuario consultarUsuario(datosValidar)=6;
 
 		fichas repartir_fichas(int tamano)=7;
-		fichas enviar_jugada(int id_ficha)=8;
-		fichas estado_tablero(void)=9;
-		fichas empezar_partida(void)=10;
-		string consultar_estadisticas(void)=11;		
-		bool salir()=12;
+		fichas empezar_partida(void)=8;
+		fichas enviar_jugada(int id_ficha)=9;
+		fichas estado_tablero(void)=10;
+		fichas estado_cliente(void)=11;
+		int contar_puntos()=12;
+		string consultar_estadisticas(void)=13;		
+		bool salir()=14;
 
 	}=1;
 }=0x20000001;
