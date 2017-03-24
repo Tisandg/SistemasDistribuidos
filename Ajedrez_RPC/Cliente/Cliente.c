@@ -5,8 +5,133 @@
  */
 
 #include "interfaz.h"
+#include <stdio.h>
+
+int tam_usuario = 0;
+ int tam_tablero = 0;
+
+void menuInicioAdmin(){
+	printf("\n\n**********  Bienvenido Administrador ***************** \n");
+	printf("| 1. Iniciar Sesion                               |\n");
+	printf("| 2. Salir                                           |\n");
+	printf("********************************************************\n");
+}
+void menuInicioUser(){
+	printf("\n\n**********  Bienvenido Usuario ***************** \n");
+	printf("| 1. Iniciar Sesion                               |\n");
+	printf("| 2. Registrarse                                  |\n");
+	printf("| 3. Salir                                           |\n");
+	printf("********************************************************\n");
+}
+
+void menuInicio(){
+	printf("\n\n*************** Bienvenido ********************* \n");
+	printf("| 1. Administrador                               |\n");
+	printf("| 2. Usuario                              |\n");
+	printf("| 3. Salir                                           |\n");
+	printf("********************************************************\n");
+}
+
+void menuJuego()
+{
+	printf("\n\n******************* Ajedrez RPC ********************* \n");
+	printf("| 1. Repartir fichas                               |\n");
+	printf("| 2. Empezar partida                    			 |\n");
+	printf("| 3. Consultar estadisticas                                 |\n");
+	printf("| 4. Salir del juego                                           |\n");
+	printf("********************************************************\n");
+}
+
+void menuAdministrador(){
+	printf("\n\n******************* Menu administrador ********************* \n");
+	printf("| 1. Modificar datos usuario                               |\n");
+	printf("| 2. Listar Usuarios                   			 |\n");
+	printf("| 3. Eliminar Usuario                                 |\n");
+	printf("| 4. Salir                                           |\n");
+	printf("********************************************************\n");
+}
+
+void menuTamFichas(){
+	printf("\n\nPor favor eliga un tamaño\n");
+	printf("| 1. 16                 |\n");
+	printf("| 2. 18                 |\n");
+	printf("| 3. 20                 |\n");
+	printf("| 4. 22                 |\n");
+	printf("| 5. 24                 |\n");
+	printf("| 6. 26                 |\n");
+	printf("| 7. 28                 |\n");
+}
+
+int menu_jugando(){
+	int opc = 0;
+	printf("********* Usuario Vs Servidor ********\n");
+	printf("| 1. Elegir ficha                 |\n");
+	printf("| 2. Salir de juego               |\n\n");
+	printf("	Elige una opcion                  |\n");
+	scanf("%d",&opc);
+
+	return opc;
+}
+
+void Imprimir_Fichas(fichas *estado, int tam){
+	int i = 0;
+	while(i < tam){
+		printf("Ficha[%d]	lado_A = %d   |   Lado_B = %d\n", (*estado).fichasJugadores[i].id, 
+			(*estado).fichasJugadores[i].lado_A,(*estado).fichasJugadores[i].lado_B);
+		i++;
+	}
+}
 
 
+void (*funcionM) ();
+
+int validarUsuario(nodo_usuario * usuario){
+
+	int nnombre = sizeof((*usuario).nombres)/sizeof(char);
+	if(nnombre > 30)
+	{
+		printf("El nombre no debe superar los 30 caracteres!\n");
+		return 0;
+	}
+
+	int napellido = sizeof((*usuario).apellidos)/sizeof(char);
+	if(napellido > 20)
+	{
+		printf("El apellido no debe superar los 20 caracteres!\n");
+		return 0;
+	}
+
+	int nlogin = sizeof((*usuario).login)/sizeof(int);
+	if(nlogin > 10){
+		printf("El login no debe superar los 10 caracteres!\n");
+		return 0;
+	}
+
+	int ncontrasena = sizeof((*usuario).contrasena)/sizeof(int);
+	if(ncontrasena < 8 || ncontrasena > 15){
+		printf("La contraseña no puede ser menor a 8 y mayor a 15 caracteres!\n");
+		return 0;
+	}
+	return 1;
+}
+
+int validarDatos(datosValidar * datos){
+
+	int nlogin = sizeof((*datos).login)/sizeof(int);
+	if(nlogin < 8 || nlogin > 15){
+		printf("El login no puede ser menor a 8 y mayor a 15 caracteres!\n");
+		return 0;
+	}
+
+	int ncontrasena = sizeof((*datos).contrasena)/sizeof(int);
+	if(ncontrasena < 8 || ncontrasena > 15){
+		printf("La contraseña no puede ser menor a 8 y mayor a 15 caracteres!\n");
+		return 0;
+	}
+	return 1;
+}
+
+/////////////////////////////////////////////////////
 void
 gestion_usuario_1(char *host)
 {
@@ -40,6 +165,13 @@ gestion_usuario_1(char *host)
 	bool_t  *result_14;
 	char *salir_1_arg;
 
+/*Estructuras auxiliares*/
+	nodo_usuario usuarionuevo;
+	datosValidar  datos;
+
+	int opcion1, opcionAux = 0, indice;
+
+
 #ifndef	DEBUG
 	clnt = clnt_create (host, gestion_usuario, gestion_usuario_version, "udp");
 	if (clnt == NULL) {
@@ -47,63 +179,500 @@ gestion_usuario_1(char *host)
 		exit (1);
 	}
 #endif	/* DEBUG */
+/*Empieza la copias de las lineas*/
+		do{
+		menuInicio();//Para seleccionar administrador o usuario
+		printf("Seleccione la opcion: ");
+		scanf("%d",&opcion1);
 
-	result_1 = autenticar_usuario_1(&autenticar_usuario_1_arg, clnt);
-	if (result_1 == (bool_t *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_2 = registrarusuario_1(&registrarusuario_1_arg, clnt);
-	if (result_2 == (bool_t *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_3 = listarusuarios_1((void*)&listarusuarios_1_arg, clnt);
-	if (result_3 == (proxNodo *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_4 = eliminar_usuario_1(&eliminar_usuario_1_arg, clnt);
-	if (result_4 == (bool_t *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_5 = modificar_usuario_1(&modificar_usuario_1_arg, clnt);
-	if (result_5 == (bool_t *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_6 = consultarusuario_1(&consultarusuario_1_arg, clnt);
-	if (result_6 == (nodo_usuario *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_7 = repartir_fichas_1(&repartir_fichas_1_arg, clnt);
-	if (result_7 == (fichas *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_8 = empezar_partida_1((void*)&empezar_partida_1_arg, clnt);
-	if (result_8 == (fichas *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_9 = enviar_jugada_1(&enviar_jugada_1_arg, clnt);
-	if (result_9 == (fichas *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_10 = estado_tablero_1((void*)&estado_tablero_1_arg, clnt);
-	if (result_10 == (fichas *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_11 = estado_cliente_1((void*)&estado_cliente_1_arg, clnt);
-	if (result_11 == (fichas *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_12 = contar_puntos_1((void*)&contar_puntos_1_arg, clnt);
-	if (result_12 == (int *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_13 = consultar_estadisticas_1((void*)&consultar_estadisticas_1_arg, clnt);
-	if (result_13 == (char **) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_14 = salir_1((void*)&salir_1_arg, clnt);
-	if (result_14 == (bool_t *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
+		switch(opcion1){
+
+			/*ADMINISTRADOR*/
+			case  1:
+				menuInicioAdmin();
+				scanf("%d",&opcionAux);
+
+				switch(opcionAux){
+					/*Iniciar sesion*/
+					case 1:
+						//datosValidar datos;
+						printf("Por favor ingrese los siguientes datos:");
+						printf("\nLogin Administrador: ");
+						scanf("%d",&datos.login);
+						int nlogin = sizeof(datos.login)/sizeof(char);
+						printf(" %d tamaño \n", nlogin);
+
+						if(nlogin < 2 || nlogin > 15){
+							printf("El login no puede ser menor a 3 y mayor a 15 caracteres!\n");
+							break;
+						}
+
+						printf("\nContraseña administrador: ");
+						scanf("%s",datos.contrasena);
+						int ncontrasena = sizeof(datos.contrasena)/sizeof(char);
+
+						if(ncontrasena < 6 || ncontrasena > 15){
+							printf("La contraseña no puede ser menor a 6 y mayor a 15 caracteres!\n");
+							break;
+						}
+						datos.permiso = 0;
+
+						autenticar_usuario_1_arg = (datos);
+
+						result_1 = autenticar_usuario_1(&autenticar_usuario_1_arg, clnt);
+						if (result_1 == (bool_t *) NULL) {
+							clnt_perror (clnt, "call failed");
+						}else{
+							printf("\nSesion Iniciada!");
+							int opcionAdmin;
+							datosValidar datosAuxiliar;
+							do{
+								menuAdministrador();
+								scanf("%d",&opcionAdmin);
+								switch(opcionAdmin){
+
+									/*Modificar datos*/
+									case 1:
+
+										printf("\n-------MODIFICAR USUARIO-------\n");
+										char * contrasena = (char*)malloc(sizeof(char));
+										int login;
+
+										printf("\nDigite el login del usuario: \n");
+										scanf("%d",&consultarusuario_1_arg.login);
+										printf("\nDigite la contraseña del usuario: \n");
+										scanf("%s", consultarusuario_1_arg.contrasena);
+										fflush(stdin);
+
+										result_6 = consultarusuario_1(&consultarusuario_1_arg, clnt);
+										if (result_6 == (nodo_usuario *) NULL) {
+											clnt_perror (clnt, "call failed");
+										}else{
+											printf("\nUsuario Encontrado");
+											/*Imprimiendo datos del usuario*/
+											printf("\nNombre del usuario: %s \n",(*result_6).nombres);
+											printf("Apellido del usuario: %s \n",(*result_6).apellidos);
+											printf("login del usuario: %d\n\n", (*result_6).login);
+											/*Al modificar volvemos a pedir todos los datos del usuario*/
+											printf("\n\nMODIFICAR DATOS USUARIO:");
+											printf("\nDigite nombre del usuario: \n");
+											scanf("%*c%[^\n]", usuarionuevo.nombres);
+											fflush(stdin);
+
+											int nnombre = sizeof(usuarionuevo.nombres)/sizeof(char);
+
+											if(nnombre > 30)
+											{
+												printf("El nombre no debe superar los 30 caracteres!\n");
+												break;
+											}
+
+
+											printf("\nDigite apellido del usuario: \n");
+											scanf("%*c%[^\n]", usuarionuevo.apellidos);
+											fflush(stdin);
+
+											int napellido = sizeof(usuarionuevo.apellidos)/sizeof(char);
+
+											if(napellido > 20)
+											{
+												printf("El apellido no debe superar los 20 caracteres!\n");
+												break;
+											}
+
+											printf("\nDigite el login del usuario: \n");
+											scanf("%d", &usuarionuevo.login);
+											fflush(stdin);
+											int nlogin = sizeof(usuarionuevo.login)/sizeof(int);
+											if(nlogin > 10){
+												printf("El login no debe superar los 10 caracteres!\n");
+												break;
+											}
+
+											printf("\nDigite la contraseña del usuario: \n");
+											scanf("%s", usuarionuevo.contrasena);
+											fflush(stdin);
+											int ncontrasena = sizeof(usuarionuevo.contrasena)/sizeof(int);
+											if(ncontrasena < 8 || ncontrasena > 15){
+												printf("La contraseña no puede ser menor a 8 y mayor a 15 caracteres!\n");
+												break;
+											}
+											usuarionuevo.permiso = 1;
+											usuarionuevo.nodoSiguiente = NULL;
+											modificar_usuario_1_arg = &(usuarionuevo);
+
+											result_5 = modificar_usuario_1(&modificar_usuario_1_arg, clnt);
+											if (result_5 == (bool_t *) NULL) {
+												clnt_perror (clnt, "call failed");
+											}
+											else
+											{
+												printf("\nSe ha modificado el usuario correctamente:\n");
+												printf("\nDatos del nuevo usuario");
+												printf("\nNombre del usuario: %s \n",(*result_3)->nombres);
+												printf("Apellido del usuario: %s \n",(*result_3)->apellidos);
+												printf("login del usuario: %d\n\n", (*result_3)->login);
+											}			
+
+										}
+
+										break;
+	
+									/*Listar Usuarios*/
+									case 2:
+										printf("\n-------LISTADO DE USUARIOS-------\n");
+										int cont = 1;
+										result_3 = listarusuarios_1((void*)&listarusuarios_1_arg, clnt);
+										if (result_3 == (proxNodo *) NULL) {
+											clnt_perror (clnt, "call failed");
+										}else{
+											while((*result_3) != NULL)
+											{
+												printf("Identificacion del usuario %d: [%d] %s %s\n", 
+												cont, (*result_3)->login,(*result_3)->nombres, (*result_3)->apellidos);
+												(*result_3) = (*result_3)->nodoSiguiente;
+												cont++;
+											}
+										}
+										break;
+
+									/*Eliminar usuario*/
+									case 3:
+										
+										printf("\n-------ELIMINAR USUARIO-------\n");
+										printf("\nPor favor, digite el login y la contrasena del usuario a eliminar");
+										printf("\nDigite el login del usuario: \n");
+										scanf("%d", &datosAuxiliar.login);
+										fflush(stdin);
+										int nlogin = sizeof(datosAuxiliar.login)/sizeof(int);
+										if(nlogin > 10){
+											printf("El login no debe superar los 10 caracteres!\n");
+											break;
+										}
+
+										printf("\nDigite la contraseña del usuario: \n");
+										scanf("%s", datosAuxiliar.contrasena);
+										fflush(stdin);
+										int ncontrasena = sizeof(datosAuxiliar.contrasena)/sizeof(int);
+										if(ncontrasena < 8 || ncontrasena > 15){
+											printf("La contraseña no puede ser menor a 8 y mayor a 15 caracteres!\n");
+											break;
+										}
+										datosAuxiliar.permiso = 1;
+										consultarusuario_1_arg = (datosAuxiliar);
+										/*Consultar si existe el usuario*/
+										result_6 = consultarusuario_1(&consultarusuario_1_arg, clnt);
+										if (result_6 == (nodo_usuario *) NULL) {
+											clnt_perror (clnt, "call failed");
+										}else{
+											eliminar_usuario_1_arg = (datosAuxiliar);
+											/*Se ha encontrado el usuario*/
+											result_4 = eliminar_usuario_1(&eliminar_usuario_1_arg, clnt);
+											if (result_4 == (bool_t *) NULL) {
+												clnt_perror (clnt, "call failed");
+											}else{
+												printf("\nEl usuario ha sido eliminado!.");									
+											}
+										}
+										
+										break;
+
+									/*Salir*/
+									case 4:
+										printf("\nVolviendo al menu principal...");
+										break;	
+									default:
+										printf("\nOpcion invalida");
+										break;						
+								}	
+							}while(opcionAdmin != 4);							
+
+						}
+
+						break;
+		
+					/*SALIR*/
+					case 2:
+						printf("\nVolviendo al menu principal...");
+						break;
+
+					default:
+						printf("\nOpcion no valida");
+						break;
+				}
+
+				break;
+			
+			/*USUARIO*/
+			case  2:
+				opcionAux = 0;
+				int nlogin;
+				int ncontrasena;
+				menuInicioUser();
+				scanf("%d",&opcionAux);
+				switch(opcionAux){
+
+					/*Iniciar sesion*/
+					case 1:
+						printf("Por favor ingrese los siguientes datos:");
+						printf("\nLogin: ");
+						scanf("%d",&datos.login);
+						nlogin = sizeof(datos.login)/sizeof(char);
+						if(nlogin > 10){
+							printf("El login no puede ser menor a 10 caracteres!\n");
+							break;
+						}
+
+						printf("\nContraseña: ");
+						scanf("%s",datos.contrasena);
+						int ncontrasena = sizeof(datos.contrasena)/sizeof(char);
+						if(ncontrasena > 30){
+							printf("La contraseña no puede ser menor a 8 y mayor a 15 caracteres!\n");
+							break;
+						}
+						datos.permiso = 1;
+						autenticar_usuario_1_arg = (datos);
+
+						result_1 = autenticar_usuario_1(&autenticar_usuario_1_arg, clnt);
+						if (result_1 == (bool_t *) NULL) {
+							clnt_perror (clnt, "call failed");
+						}else{
+							printf("\nSesion Iniciada!");
+							
+							/*Menu del juego*/
+							int opcionJuego;
+							int opcionFichas = 0;
+							do{ 
+								menuJuego();
+								scanf("%d",&opcionJuego);
+								switch(opcionJuego){
+
+									/*Repartir fichas*/
+									case 1:
+										//int tamanoFichas;
+										
+										printf("\n-------REPARTIR FICHAS-------\n");
+										printf("Por favor, elija una opcion para el tamaño de las fichas \n");
+										do{
+											menuTamFichas();
+											scanf("%d",&opcionFichas);
+											switch(opcionFichas){
+												case 1:
+													repartir_fichas_1_arg = 16;
+													break;
+												case 2:
+													repartir_fichas_1_arg = 18;
+													break;
+												case 3:
+													repartir_fichas_1_arg = 20;
+													break;
+												case 4:
+													repartir_fichas_1_arg = 22;
+													break;
+												case 5:
+													repartir_fichas_1_arg = 24;
+													break;
+												case 6:
+													repartir_fichas_1_arg = 26;
+													break;
+												case 7:
+													repartir_fichas_1_arg = 28;
+													break;
+												default:
+													printf("Tamaño invalido!.");
+													break;
+							
+											}
+										}while(opcionFichas< 1 || opcionFichas > 7);	
+										printf("Nuero de fichas selesccionadas :%d\n", repartir_fichas_1_arg);
+										tam_usuario = repartir_fichas_1_arg/2;
+										tam_tablero = repartir_fichas_1_arg;
+										result_7 = repartir_fichas_1(&repartir_fichas_1_arg, clnt);
+
+										if (result_7 == (fichas *) NULL) {
+											clnt_perror (clnt, "call failed");
+										}else{
+											printf("\nLas fichas se han repartido...\n");
+											printf("Estas son tus Fichas:  \n");
+											Imprimir_Fichas(result_7,tam_usuario);
+										}
+
+										break;
+									//  >  <
+									/*Empezar Partida*/
+									case 2:
+										result_8 = empezar_partida_1((void*)&empezar_partida_1_arg, clnt);
+										if (result_8 == (fichas *) NULL) {
+											clnt_perror (clnt, "call failed");
+											
+										}else{
+											if((*result_8).fichasJugadores[0].id == -1){
+												printf("Inicia el Usuario.....\n");
+												printf("\nSeleccione la ficha 6|6 para iniciar la partida: ");
+												scanf("%d",&enviar_jugada_1_arg);
+												while(enviar_jugada_1_arg != 27){
+													printf("Por favor, digite el id de la ficha 6|6: ");
+													scanf("%d",&enviar_jugada_1_arg);	
+												}
+											
+												result_9 = enviar_jugada_1(&enviar_jugada_1_arg, clnt);
+												if (result_9 == (fichas *) NULL) {
+												clnt_perror (clnt, "call failed");
+												}
+											}
+
+											result_10 = estado_tablero_1((void*)&estado_tablero_1_arg, clnt);
+											if (result_10 == (fichas *) NULL)
+												clnt_perror (clnt, "call failed");
+											else
+												Imprimir_Fichas(result_9,tam_tablero);		
+											
+											int opc = 0;
+											int id_ficha=-1;
+											do{
+												opc = menu_jugando();
+												switch(opc){
+													case 1:
+														//imprimir las fichas del usuario.
+														printf("Digite el id de la Ficha a colocar : \n");
+														scanf("%d",&id_ficha);
+														if(id_ficha < -1 && id_ficha > 27){
+															
+														}else{
+
+														}
+													break;
+
+													case 2:
+														printf("Seguro de terminar el juego....\n");
+													break;
+
+													default:
+														printf("Opcion invalida....\n");
+													break;
+												}
+
+
+											} while (opc != 2);
+
+
+
+										}
+										break;
+
+									/*Consultar Estadisticas*/
+									case 3:
+										printf("\n-------CONSULTANDO ESTADISTICAS-------\n");
+										result_13 = consultar_estadisticas_1((void*)&consultar_estadisticas_1_arg, clnt);
+										if (result_13 == (char **) NULL) {
+											clnt_perror (clnt, "call failed");
+										}else{
+											printf("\nImprimiendo Estadisticas");
+											printf("\n %s",*result_13);
+										}
+										break;
+
+									/*Salir*/
+									case 4:
+										printf("\nVolviendo al menu principal...");
+										break;
+						
+									default: 
+										printf("\nOpcion no valida");
+										break;
+								}	
+							}while(opcionJuego != 4);
+						}
+						break;
+
+					/*Registrarse*/
+					case 2:
+						printf("\n-------REGISTRO DE USUARIO-------\n");
+
+						printf("\nDigite nombre del usuario: \n");
+						scanf("%*c%[^\n]", usuarionuevo.nombres);
+						fflush(stdin);
+
+						int nnombre = sizeof(usuarionuevo.nombres)/sizeof(char);
+
+						if(nnombre > 30)
+						{
+							printf("El nombre no debe superar los 30 caracteres!\n");
+							break;
+						}
+
+
+						printf("\nDigite apellido del usuario: \n");
+						scanf("%*c%[^\n]", usuarionuevo.apellidos);
+						fflush(stdin);
+
+						int napellido = sizeof(usuarionuevo.apellidos)/sizeof(char);
+
+						if(napellido > 30)
+						{
+							printf("El apellido no debe superar los 20 caracteres!\n");
+							break;
+						}
+
+						printf("\nDigite el login del usuario: \n");
+						scanf("%d", &usuarionuevo.login);
+						fflush(stdin);
+						nlogin = sizeof(usuarionuevo.login)/sizeof(int);
+						if(nlogin > 10){
+							printf("El login no debe superar los 10 caracteres!\n");
+							break;
+						}
+
+						printf("\nDigite la contraseña del usuario: \n");
+						scanf("%s", usuarionuevo.contrasena);
+						fflush(stdin);
+						ncontrasena = sizeof(usuarionuevo.contrasena)/sizeof(char);
+						if(ncontrasena < 8 || ncontrasena > 15){
+							printf("La contraseña no puede ser menor a 8 y mayor a 15 caracteres!\n");
+							break;
+						}
+						usuarionuevo.permiso = 1;
+						usuarionuevo.nodoSiguiente = NULL;
+
+						registrarusuario_1_arg = &(usuarionuevo);
+		
+						result_2 = registrarusuario_1(&registrarusuario_1_arg, clnt);
+						if (result_2 == (bool_t *) NULL) {
+							clnt_perror (clnt, "call failed");
+						}else{
+							printf("\nUsuario registrado!");
+						}
+						break;
+
+					/*Salir*/
+					case 3:
+						printf("\nVolviendo al menu principal...");
+						break;
+
+					default:
+						printf("\nOpcion no valida");
+						break;
+				}
+				
+
+			case  3:
+				result_14 = salir_1((void*)&salir_1_arg, clnt);
+				if (result_14 == (bool_t *) NULL) {
+					clnt_perror (clnt, "call failed");
+				}else{
+					printf("\n Hasta pronto!");
+				}
+
+				break;
+			default :
+				printf("Opcion invalida");
+				break;
+		}
+
+	}while(opcion1 != 3);
+
+
+/*Hasta aqui llego la copia de las lineas*/
 #ifndef	DEBUG
 	clnt_destroy (clnt);
 #endif	 /* DEBUG */
