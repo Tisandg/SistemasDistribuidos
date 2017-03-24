@@ -83,33 +83,32 @@ autenticar_usuario_1_svc(datosValidar *argp, struct svc_req *rqstp)
 		/* Una vez nos aseguramos de que no hay error, se procede a  */
 		/* leer uno a uno todos los archivos que hay */
 	
-	if (dir!=NULL){
-		while ((ent = readdir (dir)) != NULL){
-			if ( (strcmp(ent->d_name, ".")!=0) && (strcmp(ent->d_name, "..")!=0) ){
-				char path[100]="./Usuarios/";
-				nodo_usuario temp;
-				strcat(path,ent->d_name);
-				FILE * usuarioarchivo = fopen(path,"r");
-				fflush(stdout);
-				fread(&temp,sizeof(nodo_usuario),1,usuarioarchivo);
-				nuevoUsuario = &temp;
-				if(nuevoUsuario->login == argp->login &&  strncmp(nuevoUsuario->contrasena,argp->contrasena,10)==0){
-					printf("\n Usuario Encontrado\n");
-					Llenar_Todas_Fichas();
-					result = TRUE;
-					return &result;
+		if (dir!=NULL){
+			while ((ent = readdir (dir)) != NULL){
+				if ( (strcmp(ent->d_name, ".")!=0) && (strcmp(ent->d_name, "..")!=0) ){
+					char path[100]="./Usuarios/";
+					nodo_usuario temp;
+					strcat(path,ent->d_name);
+					FILE * usuarioarchivo = fopen(path,"r");
+					fflush(stdout);
+					fread(&temp,sizeof(nodo_usuario),1,usuarioarchivo);
+					nuevoUsuario = &temp;
+					if(nuevoUsuario->login == argp->login &&  strncmp(nuevoUsuario->contrasena,argp->contrasena,10)==0){
+						printf("\n Usuario Encontrado\n");
+						Llenar_Todas_Fichas();
+						result = TRUE;
+						return &result;
+					}
 				}
-			}
 			
+			}
 		}
-	}
 	
-	printf("Usuario NO Encontrado....\n");
-	result = FALSE;
-	return &result;
-		/*------------------------------------------*/
+		printf("Usuario NO Encontrado....\n");
+		result = FALSE;
+		return &result;
+			/*------------------------------------------*/
 	}
-
 	return &result;
 }
 
@@ -215,9 +214,38 @@ eliminar_usuario_1_svc(datosValidar *argp, struct svc_req *rqstp)
 {
 	static bool_t  result;
 
-	/*
-	 * insert server code here
-	 */
+	DIR *dir;
+	/* en *ent habrá información sobre el archivo que se está "sacando" a cada momento */
+	struct dirent *ent;
+	proxNodo nuevoUsuario;
+
+	dir = opendir ("Usuarios");
+	/* Miramos que no haya error */
+	if (dir == NULL)
+	error("No puedo abrir el directorio");
+	 
+	/* Una vez nos aseguramos de que no hay error, se procede a  */
+	/* leer uno a uno todos los archivos que hay */
+
+	if (dir!=NULL){
+		while ((ent = readdir (dir)) != NULL){
+			if ( (strcmp(ent->d_name, ".")!=0) && (strcmp(ent->d_name, "..")!=0) ){
+				char path[100]="./Usuarios/";
+				nodo_usuario temp;
+				strcat(path,ent->d_name);
+				FILE * usuarioarchivo = fopen(path,"r");
+				fflush(stdout);
+				fread(&temp,sizeof(nodo_usuario),1,usuarioarchivo);
+				nuevoUsuario = &temp;
+				if(nuevoUsuario->login == argp->login ){ //encontro el archivo
+					if(remove(path)==0){
+						printf("El archivo del usuario a sido eliminado");
+					}
+				}
+			}
+		
+		}
+	}
 
 	return &result;
 }
@@ -226,6 +254,7 @@ bool_t *
 modificar_usuario_1_svc(proxNodo *argp, struct svc_req *rqstp)
 {
 	static bool_t  result;
+	//bool_t registro = registrarusuario_1(&argp, clnt);
 
 	/*
 	 * insert server code here
@@ -237,7 +266,7 @@ modificar_usuario_1_svc(proxNodo *argp, struct svc_req *rqstp)
 nodo_usuario *
 consultarusuario_1_svc(datosValidar *argp, struct svc_req *rqstp)
 {
-	static nodo_usuario  result;
+	static nodo_usuario result;
 
 	DIR *dir;
 	printf("Buscando usuario %d...\n",argp->login);
@@ -277,7 +306,6 @@ consultarusuario_1_svc(datosValidar *argp, struct svc_req *rqstp)
 			
 		}
 	}
-	
 	printf("Usuario NO Encontrado....\n");
 	return &result;
 }
