@@ -61,7 +61,7 @@ void menuAdministrador(){
 }
 
 void menuTamFichas(){
-	printf("\nPor favor eliga un tamaño\n");
+	printf("\nPor favor, elija una opcion para el tamaño de las fichas \n");
 	printf("| 1. 16                 |\n");
 	printf("| 2. 18                 |\n");
 	printf("| 3. 20                 |\n");
@@ -510,7 +510,6 @@ gestion_usuario_1(char *host)
 										/*Iniciar  partida*/
 										case 1:
 											printf("\n-------REPARTIR FICHAS-------\n");
-											printf("Por favor, elija una opcion para el tamaño de las fichas \n");
 											do{
 												menuTamFichas();
 												printf("Seleccione una opcion: ");
@@ -570,6 +569,7 @@ gestion_usuario_1(char *host)
 												clnt_perror (clnt, "call failed");
 											
 											}else{
+												printf("\nEMPIEZA EL JUEGO\n");
 												if((*result_8).fichasJugadores[0].id == -1){
 													printf("\nINICIA EL USUARIO.....\n");
 													printf("\nSeleccione la ficha 6|6 para iniciar la partida: ");
@@ -584,7 +584,7 @@ gestion_usuario_1(char *host)
 													clnt_perror (clnt, "call failed");
 													}else{
 														jugadas++;	
-														printf("**********  TABLERO  **********\n");
+														printf("\n**********  TABLERO  **********\n");
 														Imprimir_Fichas(result_9,jugadas);
 													}
 													/*do{
@@ -776,5 +776,6 @@ main (int argc, char *argv[])
 	}
 	host = argv[1];
 	gestion_usuario_1 (host);
+	printf("\nCliente Iniciado!\n");	
 exit (0);
 }

@@ -8,6 +8,8 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
+#include <string.h>
 #define FALSO 0
 #define VERDAD 1
 
@@ -18,11 +20,13 @@ fichas Validas_Fichas;
 fichas Servidor_fichas;
 fichas Cliente_Fichas;
 fichas Tablero;
+ficha Nueva_Ficha;
 int vector_aux[28];
 int lados_validos[2];
 int tam_tablero=0;
 int tam_servidor=0;
 int tam_cliente=0;
+int jugadas = 0;
 
 void Llenar_Todas_Fichas();
 void Llenar_Validas_Fichas(int);
@@ -46,7 +50,7 @@ autenticar_usuario_1_svc(datosValidar *argp, struct svc_req *rqstp)
 
 	if(permisos==0){
 
-		printf("Buscando Administrador %d...\n",argp->login);
+		printf("\nBuscando Administrador %d...",argp->login);
 	    proxNodo nuevoUsuario;
 		dir = opendir ("Administrador");
 	    /* Miramos que no haya error */
@@ -61,15 +65,15 @@ autenticar_usuario_1_svc(datosValidar *argp, struct svc_req *rqstp)
 		fread(&temp,sizeof(nodo_usuario),1,usuarioarchivo);
 		nuevoUsuario = &temp;
 		if(nuevoUsuario->login == argp->login &&  strncmp(nuevoUsuario->contrasena,argp->contrasena,10)==0){
-			printf("\n Administrador Encontrado\n");
+			printf("Administrador Encontrado\n");
 			result = TRUE;
 		}else{
-			printf("\n Administrador No Encontrado\n");
+			printf("Administrador No Encontrado\n");
 			result = FALSE;
 		}
 
 	}else{
-		printf("Buscando Usuario %d...\n",argp->login);
+		printf("\nBuscando Usuario %d...",argp->login);
 		DIR *dir;
 		/* en *ent habrá información sobre el archivo que se está "sacando" a cada momento */
 		struct dirent *ent;
@@ -94,7 +98,7 @@ autenticar_usuario_1_svc(datosValidar *argp, struct svc_req *rqstp)
 					fread(&temp,sizeof(nodo_usuario),1,usuarioarchivo);
 					nuevoUsuario = &temp;
 					if(nuevoUsuario->login == argp->login &&  strncmp(nuevoUsuario->contrasena,argp->contrasena,10)==0){
-						printf("\n Usuario Encontrado\n");
+						printf("Usuario Encontrado\n");
 						Llenar_Todas_Fichas();
 						result = TRUE;
 						return &result;
@@ -157,7 +161,7 @@ listarusuarios_1_svc(void *argp, struct svc_req *rqstp)
 	static proxNodo  result;
 	
 	free (cabeza);
-	printf("Listando usuarios...\n");
+	printf("\nListando usuarios...\n");
 	/* Con un puntero a DIR abriremos el directorio */
 	DIR *dir;
 	/* en *ent habrá información sobre el archivo que se está "sacando" a cada momento */
@@ -196,7 +200,7 @@ listarusuarios_1_svc(void *argp, struct svc_req *rqstp)
 						sigUsuario->nodoSiguiente=nuevoUsuario;
 						sigUsuario=nuevoUsuario;
 					}
-					printf("Login: %d\n",nuevoUsuario->login);
+					printf("Login: %d\n\n",nuevoUsuario->login);
 					sigUsuario->nodoSiguiente=NULL;
 					fclose(usuarioarchivo); 
 			    }
@@ -204,7 +208,7 @@ listarusuarios_1_svc(void *argp, struct svc_req *rqstp)
 	}
 	closedir (dir);
 	result = cabeza;
-	printf("Usuarios listados correctamente...\n");
+	printf("\nUsuarios listados correctamente...\n");
 
 	return &result;
 }
@@ -314,7 +318,7 @@ fichas *
 repartir_fichas_1_svc(int *argp, struct svc_req *rqstp)
 {
 	int tam = (*argp);
-	printf("El servidor esta repartiendo las %d fichas...\n", tam);
+	printf("\nEl servidor esta repartiendo las %d fichas...\n", tam);
 
 	if(tam!=28){
 		Llenar_Validas_Fichas(tam);
@@ -322,7 +326,7 @@ repartir_fichas_1_svc(int *argp, struct svc_req *rqstp)
 	}else{
 		dividir(Todas_Fichas, tam);
 	}
-	printf("division terminada..\n");
+	printf("\nSe han repartido las fichas.\n");
 	Imprimir_Fichas(Servidor_fichas, tam_servidor);
 	return &Cliente_Fichas;
 }
@@ -333,18 +337,18 @@ empezar_partida_1_svc(void *argp, struct svc_req *rqstp)
 	static fichas aux_tablero;
 	ficha *Nueva_Ficha;
 	printf("Tamaño vector Servidor_fichas :%d\n",tam_servidor);
-	Nueva_Ficha = buscar_Ficha_v3(Servidor_fichas, 27, tam_servidor);
-
+	Nueva_Ficha = buscar_Ficha_v3(Servidor_fichas, 28, tam_servidor);
+	printf("\nEMPIEZA EL JUEGO\n");
 	if(Nueva_Ficha == (ficha *) NULL){
-		printf("Inicia el Usuario...\n");
+		printf("\nInicia el Usuario...\n");
 		aux_tablero.fichasJugadores[0].id = -1;
+		jugadas++;
 		return &aux_tablero;
 	}else{
-		printf("Inicia el Servidor...\n");
+		printf("\nInicia el Servidor...\n");
 		Tablero.fichasJugadores[0].lado_A = (*Nueva_Ficha).lado_A;
 		Tablero.fichasJugadores[0].lado_B = (*Nueva_Ficha).lado_B;
 		Tablero.fichasJugadores[0].id = (*Nueva_Ficha).id;
-		tam_tablero = 0;
 		tam_tablero++;
 		return &Tablero;
 	}
@@ -471,7 +475,7 @@ void Llenar_Todas_Fichas(){
 		for(p=k; p<7; p++){
 			Todas_Fichas.fichasJugadores[pos].lado_A=k;
 			Todas_Fichas.fichasJugadores[pos].lado_B=p;
-			Todas_Fichas.fichasJugadores[pos].id=pos;
+			Todas_Fichas.fichasJugadores[pos].id=(pos+1);
 			pos++;
 			}
 		}
@@ -480,30 +484,39 @@ void Llenar_Todas_Fichas(){
 /*Llenamos el vector que contrendra el numero de fichas con las que se jugara*/
 void Llenar_Validas_Fichas(int tam){
 	srand(time(NULL));
-	int i=0;
-	vector_aux[i] = 27;
+	int i=0, j=0;
+	//memset(vector_aux,-1,28);
+
+	//vector aux para guardar al azar los id de las fichas jugar	
+	for(j = 0; j < 28 ; j++){
+		vector_aux[j]= -1;
+	}
+	vector_aux[i] = 28;
 	i++;
 
 	while(i<tam){
-		int randon = rand()%29;
-		if(existe(vector_aux, randon, i) != FALSO){
+		int randon = rand()%28 + 1;
+		if(existe2(vector_aux, randon, i) == FALSO){//si no existe lo agregamos al vector
+			//printf("entro randonm");
 			vector_aux[i] = randon;
 			i++;
 		}			 
 	}
+	printf("Aleatorios generados\n");
+	for(j = 0; j < tam ; j++){
+		printf("%d | ",vector_aux[j]);
+	}
 	i=0;
 	while(i < tam){
 		ficha *Nueva_Ficha;
-		Nueva_Ficha = buscar_Ficha(vector_aux[i]);
-		printf("Ficha id: %d\n",(*Nueva_Ficha).id);
-		printf("Ficha lado_A: %d\n",(*Nueva_Ficha).lado_A);
-		printf("Ficha lado_B: %d\n",(*Nueva_Ficha).lado_B);
+		Nueva_Ficha = buscar_Ficha((vector_aux[i]-1));
+		printf("Ficha [%d] = %d|%d\n",(*Nueva_Ficha).id,(*Nueva_Ficha).lado_A,(*Nueva_Ficha).lado_B);
 		Validas_Fichas.fichasJugadores[i].lado_A = (*Nueva_Ficha).lado_A;
 		Validas_Fichas.fichasJugadores[i].lado_B = (*Nueva_Ficha).lado_B;
 		Validas_Fichas.fichasJugadores[i].id = (*Nueva_Ficha).id;
 		i++;
 	}
-	printf("Fichas para el juego seleccionadas...\n");
+	printf("Se han seleccionado las fichas para los juegos...\n\n");
 }
 
 ficha* Jugada_Servidor(){
@@ -535,7 +548,6 @@ ficha* Jugada_Servidor(){
 }
 
 ficha* buscar_Ficha(int id_Ficha){
-	static ficha Nueva_Ficha;
 
 	Nueva_Ficha.lado_A = Todas_Fichas.fichasJugadores[id_Ficha].lado_A;
 	Nueva_Ficha.lado_B = Todas_Fichas.fichasJugadores[id_Ficha].lado_B;
@@ -569,27 +581,41 @@ ficha* buscar_Ficha_v3(fichas vector_aux, int id_Ficha, int tam){
 
 int existe(int vector[], int numero, int tam){
 	int i = 0;
-	while(i < tam+1){
-		printf("vector[i] = %d numero = %d \n", vector[i], numero);
-		if(vector[i] == numero)
+
+	while(i < tam){
+		if(vector[i] == numero){
 			return FALSO;
+		}
 		i++;
 	}
 	return VERDAD;
 } 
+int existe2(int vector[], int numero, int tam){
+	int i = 0;
+	for(i =0 ;i < tam ;i++ ){
+		if(vector[i] == numero){
+			return VERDAD;
+		}
+	}
+	return FALSO;
+}
 
 void dividir(fichas obj_fichas, int tam){
-	printf("Empezamos a repartir las %d Piezas....\n",tam );
 
+	printf("Empezamos a repartir las %d Piezas....\n",tam );
 	srand(time(NULL));
-	int v_aux1[14];
-	int v_aux2[14];
-	int v_aux_usadas[28];
+	int v_aux1[tam/2];
+	int v_aux2[tam/2];
+	int v_aux_usadas[tam];
 	int i=0, j=0, k=0;
+	memset(v_aux_usadas,-1,tam);
 
 	while(i<tam){
-		int randon = rand()%(tam+1);
-		if(existe(v_aux_usadas, randon, i) != FALSO){
+		//Escogemos al azar un numero entre 1 y el tamaño escogido
+		int randon = rand()%tam + 1;
+
+		//verificamos que las fichas no han sido utilizadas
+		if(existe(v_aux_usadas, randon, i) != FALSO){ //falso si se encuentra
 			if((i%2)==0){
 				v_aux1[j] = randon;
 				j++;
@@ -603,21 +629,23 @@ void dividir(fichas obj_fichas, int tam){
 	}
 
 	i=0;
+	printf("Llenando Cliente_Fichas...\n");
 	while(i < j){
-		printf("Llenando Cliente_Fichas...\n");
-		Cliente_Fichas.fichasJugadores[i].lado_A = Validas_Fichas.fichasJugadores[v_aux1[i]].lado_A;
-		Cliente_Fichas.fichasJugadores[i].lado_B = Validas_Fichas.fichasJugadores[v_aux1[i]].lado_B;
-		Cliente_Fichas.fichasJugadores[i].id = Validas_Fichas.fichasJugadores[v_aux1[i]].id;
-		printf("id ficha: %d \n", Cliente_Fichas.fichasJugadores[i].id);
+		int indice = v_aux1[i] -1;//al no hacer esto imprimia el cero. el indice 28 se desbordaba y generaba el 0
+		Cliente_Fichas.fichasJugadores[i].lado_A = Validas_Fichas.fichasJugadores[indice].lado_A;
+		Cliente_Fichas.fichasJugadores[i].lado_B = Validas_Fichas.fichasJugadores[indice].lado_B;
+		Cliente_Fichas.fichasJugadores[i].id = Validas_Fichas.fichasJugadores[indice].id;
+		printf("ficha [%d] \n", Cliente_Fichas.fichasJugadores[i].id);
 		i++;
 	}
 	i = 0;
+	printf("Llenando Servidor_fichas..\n");
 	while(i < k){
-		printf("Llenando Servidor_fichas..\n");
-		Servidor_fichas.fichasJugadores[i].lado_A = Validas_Fichas.fichasJugadores[v_aux2[i]].lado_A;
-		Servidor_fichas.fichasJugadores[i].lado_B = Validas_Fichas.fichasJugadores[v_aux2[i]].lado_B;
-		Servidor_fichas.fichasJugadores[i].id = Validas_Fichas.fichasJugadores[v_aux2[i]].id;
-		printf("id ficha: %d \n", Servidor_fichas.fichasJugadores[i].id);
+		int indice = v_aux2[i] -1;
+		Servidor_fichas.fichasJugadores[i].lado_A = Validas_Fichas.fichasJugadores[indice].lado_A;
+		Servidor_fichas.fichasJugadores[i].lado_B = Validas_Fichas.fichasJugadores[indice].lado_B;
+		Servidor_fichas.fichasJugadores[i].id = Validas_Fichas.fichasJugadores[indice].id;
+		printf("ficha [%d] \n", Servidor_fichas.fichasJugadores[i].id);
 		i++;
 	}
 	tam_cliente = j;
