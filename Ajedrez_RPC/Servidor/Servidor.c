@@ -240,6 +240,9 @@ eliminar_usuario_1_svc(datosValidar *argp, struct svc_req *rqstp)
 				if(nuevoUsuario->login == argp->login ){ //encontro el archivo
 					if(remove(path)==0){
 						printf("El archivo del usuario a sido eliminado");
+						result = TRUE;
+					}else{
+						return FALSE;			
 					}
 				}
 			}
@@ -254,12 +257,9 @@ bool_t *
 modificar_usuario_1_svc(proxNodo *argp, struct svc_req *rqstp)
 {
 	static bool_t  result;
-	//bool_t registro = registrarusuario_1(&argp, clnt);
-
 	/*
 	 * insert server code here
 	 */
-
 	return &result;
 }
 

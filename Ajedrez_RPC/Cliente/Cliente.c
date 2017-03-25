@@ -8,58 +8,60 @@
 #include <stdio.h>
 
 int tam_usuario = 0;
- int tam_tablero = 0;
+int tam_tablero = 0;
 
 void menuInicioAdmin(){
-	printf("\n\n**********  Bienvenido Administrador **********\n");
-	printf("| 1. Iniciar Sesion                               |\n");
-	printf("| 2. Salir                                        |\n");
-	printf("***************************************************\n");
+	printf("\n\n**************  Menu Administrador  **************\n");
+	printf("| 1. Iniciar Sesion                             |\n");
+	printf("| 2. Salir                                      |\n");
+	printf("*************************************************\n");
 }
+/* 14 asteriscos lado y lado. 2 espacios entre los asteriscos y el titulo del menu
+*/
 void menuInicioUser(){
-	printf("\n\n**********  Bienvenido Usuario ****************\n");
-	printf("| 1. Iniciar Sesion                               |\n");
-	printf("| 2. Registrarse                                  |\n");
-	printf("| 3. Salir                                        |\n");
-	printf("***************************************************\n");
+	printf("\n\n**************  Menu Usuario  **************\n");
+	printf("| 1. Iniciar Sesion                             |\n");
+	printf("| 2. Registrarse                                |\n");
+	printf("| 3. Salir                                      |\n");
+	printf("*************************************************\n");
 }
 
 void menuInicio(){
-	printf("\n\n*************** Bienvenido ******************* \n");
-	printf("| 1. Administrador                                |\n");
-	printf("| 2. Usuario                              		  |\n");
-	printf("| 3. Salir                                        |\n");
+	printf("\n\n**************  Bienvenido  **************\n");
+	printf("| 1. Administrador                              |\n");
+	printf("| 2. Usuario                                    |\n");
+	printf("| 3. Salir                                      |\n");
 	printf("*************************************************\n");
 }
 
 void menuJuego()
 {
-	printf("\n\n****************** Domino RPC ***************** \n");
-	printf("| 1. Empezar partida                    		  |\n");
-	printf("| 2. Consultar estadisticas                       |\n");
-	printf("| 3. Salir del juego                              |\n");
-	printf("****************************************************\n");
+	printf("\n\n**************  Domino RPC  **************\n");
+	printf("| 1. Empezar partida                            |\n");
+	printf("| 2. Consultar estadisticas                     |\n");
+	printf("| 3. Salir del juego                            |\n");
+	printf("*************************************************\n");
 }
 
 void menuPartida(){
-	printf("\n\n************* Partida Domino RPC ***************\n");
-	printf("| 1. Jugar ficha                    		      |\n");
-	printf("| 2. Consultar tablero                            |\n");
-	printf("| 3. Salir de la partida                          |\n");
-	printf("****************************************************\n");
+	printf("\n\n**************  Partida Domino RPC  **************\n");
+	printf("| 1. Jugar ficha                                |\n");
+	printf("| 2. Consultar tablero                          |\n");
+	printf("| 3. Salir de la partida                        |\n");
+	printf("*************************************************\n");
 }
 
 void menuAdministrador(){
-	printf("\n\n************* Menu administrador **************\n");
-	printf("| 1. Modificar datos usuario                      |\n");
-	printf("| 2. Listar Usuarios                   			  |\n");
-	printf("| 3. Eliminar Usuario                             |\n");
-	printf("| 4. Salir                                        |\n");
-	printf("***************************************************\n");
+	printf("\n\n**************  Funciones administrador  **************\n");
+	printf("| 1. Modificar datos usuario                    |\n");
+	printf("| 2. Listar Usuarios                            |\n");
+	printf("| 3. Eliminar Usuario                           |\n");
+	printf("| 4. Salir                                      |\n");
+	printf("*************************************************\n");
 }
 
 void menuTamFichas(){
-	printf("\n\nPor favor eliga un tamaño\n");
+	printf("\nPor favor eliga un tamaño\n");
 	printf("| 1. 16                 |\n");
 	printf("| 2. 18                 |\n");
 	printf("| 3. 20                 |\n");
@@ -197,18 +199,19 @@ gestion_usuario_1(char *host)
 /*Empieza la copias de las lineas*/
 		do{
 		menuInicio();//Para seleccionar administrador o usuario
-		printf("Seleccione la opcion: ");
+		printf("Seleccione una opcion: ");
 		scanf("%d",&opcion1);
-
+		printf("\n");
 		switch(opcion1){
 
 			/*ADMINISTRADOR*/
 			case  1:
 				do{
 					menuInicioAdmin();
-				scanf("%d",&opcionAux);
-
-				switch(opcionAux){
+					printf("Seleccione una opcion: ");
+					scanf("%d",&opcionAux);
+					printf("\n");
+					switch(opcionAux){
 					/*Iniciar sesion*/
 					case 1:
 						//datosValidar datos;
@@ -224,7 +227,7 @@ gestion_usuario_1(char *host)
 							nlogin = sizeof(datos.login)/sizeof(char);
 						}
 
-						printf("\nContraseña administrador: ");
+						printf("Contraseña administrador: ");
 						scanf("%s",datos.contrasena);
 						int ncontrasena = sizeof(datos.contrasena)/sizeof(char);
 
@@ -242,12 +245,14 @@ gestion_usuario_1(char *host)
 							printf("No se ha encontrado el administrador\n");
 							clnt_perror (clnt, "call failed");//No se encuentra el administrador
 						}else{
-							printf("\nSesion Iniciada!");
+							printf("\nSESION INICIADA!");
 							int opcionAdmin;
 							datosValidar datosAuxiliar;
 							do{
 								menuAdministrador();
+								printf("Seleccione una opcion: ");
 								scanf("%d",&opcionAdmin);
+								printf("\n");
 								switch(opcionAdmin){
 
 									/*Modificar datos*/
@@ -257,9 +262,9 @@ gestion_usuario_1(char *host)
 										char * contrasena = (char*)malloc(sizeof(char));
 										int login;
 
-										printf("\nDigite el login del usuario: \n");
+										printf("\nDigite el login del usuario: ");
 										scanf("%d",&consultarusuario_1_arg.login);
-										printf("\nDigite la contraseña del usuario: \n");
+										printf("Digite la contraseña del usuario: ");
 										scanf("%s", consultarusuario_1_arg.contrasena);
 										fflush(stdin);
 
@@ -273,36 +278,37 @@ gestion_usuario_1(char *host)
 											/*Imprimiendo datos del usuario*/
 											printf("\nNombre del usuario: %s \n",(*result_6).nombres);
 											printf("Apellido del usuario: %s \n",(*result_6).apellidos);
-											printf("login del usuario: %d\n\n", (*result_6).login);
+											printf("login del usuario: %d\n", (*result_6).login);
 	
 											/*Al modificar volvemos a pedir todos los datos del usuario*/
-											printf("\n\nMODIFICAR DATOS USUARIO:");
-
-											printf("\nDigite nombre del usuario: \n");
-											scanf("%*c%[^\n]", usuarionuevo.nombres);
+											printf("\nMODIFICAR DATOS USUARIO:");
+											printf("A continuacion, digite los nuevos datos para el usuario.");
+											printf("\nDigite nombre del usuario: ");
+											scanf("%s", usuarionuevo.nombres);
 											fflush(stdin);
 											int nnombre = tamanoChar(usuarionuevo.nombres);
-											printf("tamano nombre: %d",nnombre);
+											//printf("tamano nombre: %d",nnombre);
 											while(nnombre > 30){
 												printf("El nombre no debe superar los 30 caracteres!\n");
 												printf("Vuelva a digitar el nombre: ");
-												scanf("%*c%[^\n]", usuarionuevo.nombres);
+												scanf("%s", usuarionuevo.nombres);
 												nnombre = tamanoChar(usuarionuevo.nombres);
 											}
 
-											printf("\nDigite apellido del usuario: \n");
-											scanf("%*c%[^\n]", usuarionuevo.apellidos);
+											printf("Digite apellido del usuario: ");
+											scanf("%s", usuarionuevo.apellidos);
 											fflush(stdin);
 											int napellido = tamanoChar(usuarionuevo.apellidos);
-											printf("tamano apellidos: %d",napellido);
+											//printf("tamano apellidos: %d",napellido);
 											while(napellido > 20){
 												printf("El apellido no debe superar los 20 caracteres!\n");
 												printf("Vuelva a digitar el apellido: ");
-												scanf("%*c%[^\n]", usuarionuevo.apellidos);
+												scanf("%s", usuarionuevo.apellidos);
 												fflush(stdin);
 												napellido = tamanoChar(usuarionuevo.apellidos);
 											}
 
+											usuarionuevo.login = (*result_6).login;
 											/*printf("\nDigite el login del usuario: \n");
 											scanf("%d", &usuarionuevo.login);
 											fflush(stdin);
@@ -316,7 +322,7 @@ gestion_usuario_1(char *host)
 											}*/
 
 
-											printf("\nDigite la contraseña del usuario: \n");
+											printf("Digite la contraseña del usuario: ");
 											scanf("%s", usuarionuevo.contrasena);
 											fflush(stdin);
 											int ncontrasena = tamanoChar(usuarionuevo.contrasena);
@@ -331,7 +337,25 @@ gestion_usuario_1(char *host)
 											usuarionuevo.nodoSiguiente = NULL;
 											modificar_usuario_1_arg = &(usuarionuevo);
 
-											result_5 = modificar_usuario_1(&modificar_usuario_1_arg, clnt);
+											eliminar_usuario_1_arg = consultarusuario_1_arg;
+
+											result_4 = eliminar_usuario_1(&eliminar_usuario_1_arg, clnt);
+											if (result_4 == (bool_t *) NULL || result_4 == FALSE) {
+												printf("No se ha podido modificar el usuario");
+												clnt_perror (clnt, "call failed");
+											}else{
+												/*Se ha eliminado el registro del usuario
+												* Se procede a crear un nuevo registro con los datos actualizados*/	
+												registrarusuario_1_arg = &usuarionuevo;
+												result_2 = registrarusuario_1(&registrarusuario_1_arg, clnt);
+												if (result_2 == (bool_t *) NULL) {
+													clnt_perror (clnt, "call failed");
+												}else{
+													printf("\nRegistro se ha modificado correctamente");
+												}						
+											}
+
+											/*result_5 = modificar_usuario_1(&modificar_usuario_1_arg, clnt);
 											if (*result_5 == FALSE) {
 												printf("No se ha podido modificar el usuario");
 												clnt_perror (clnt, "call failed");
@@ -343,8 +367,7 @@ gestion_usuario_1(char *host)
 												printf("\nNombre del usuario: %s \n",(*result_3)->nombres);
 												printf("Apellido del usuario: %s \n",(*result_3)->apellidos);
 												printf("login del usuario: %d\n\n", (*result_3)->login);
-											}			
-
+											}*/			
 										}
 
 										break;
@@ -372,7 +395,7 @@ gestion_usuario_1(char *host)
 										
 										printf("\n-------ELIMINAR USUARIO-------\n");
 										printf("\nPor favor, digite el login y la contrasena del usuario a eliminar");
-										printf("\nDigite el login del usuario: \n");
+										printf("\nDigite el login del usuario: ");
 										scanf("%d", &datosAuxiliar.login);
 										fflush(stdin);
 										int nlogin = sizeof(datosAuxiliar.login)/sizeof(int);
@@ -381,7 +404,7 @@ gestion_usuario_1(char *host)
 											break;
 										}
 
-										printf("\nDigite la contraseña del usuario: \n");
+										printf("Digite la contraseña del usuario: ");
 										scanf("%s", datosAuxiliar.contrasena);
 										fflush(stdin);
 										int ncontrasena = sizeof(datosAuxiliar.contrasena)/sizeof(int);
@@ -441,13 +464,15 @@ gestion_usuario_1(char *host)
 				int ncontrasena;
 				do{
 					menuInicioUser();
+					printf("Seleccione una opcion: ");
 					scanf("%d",&opcionAux);
+					printf("\n");
 					switch(opcionAux){
 
 						/*Iniciar sesion*/
 						case 1:
-							printf("Por favor ingrese los siguientes datos:");
-							printf("\nLogin: ");
+							printf("Por favor ingrese los siguientes datos\n");
+							printf("Login: ");
 							scanf("%d",&datos.login);
 							nlogin = sizeof(datos.login)/sizeof(char);
 							if(nlogin > 10){
@@ -455,7 +480,7 @@ gestion_usuario_1(char *host)
 								break;
 							}
 
-							printf("\nContraseña: ");
+							printf("Contraseña: ");
 							scanf("%s",datos.contrasena);
 							int ncontrasena = sizeof(datos.contrasena)/sizeof(char);
 							if(ncontrasena > 30){
@@ -477,7 +502,9 @@ gestion_usuario_1(char *host)
 								int opcionFichas = 0;
 								do{ 
 									menuJuego();
+									printf("Seleccione una opcion: ");
 									scanf("%d",&opcionJuego);
+									printf("\n");
 									switch(opcionJuego){
 
 										/*Iniciar  partida*/
@@ -486,8 +513,9 @@ gestion_usuario_1(char *host)
 											printf("Por favor, elija una opcion para el tamaño de las fichas \n");
 											do{
 												menuTamFichas();
-												printf("\nOpcion: ");
+												printf("Seleccione una opcion: ");
 												scanf("%d",&opcionFichas);
+												printf("\n");
 												switch(opcionFichas){
 													case 1:
 														repartir_fichas_1_arg = 16;
@@ -522,6 +550,9 @@ gestion_usuario_1(char *host)
 											tam_tablero = repartir_fichas_1_arg;
 											result_7 = repartir_fichas_1(&repartir_fichas_1_arg, clnt);
 
+											/*Una vez se tiene el tamaño de las fichas que ha elegido el usuario
+											* las repartimos para empezar la partida*/
+
 											if (result_7 == (fichas *) NULL) {
 												clnt_perror (clnt, "call failed");
 											}else{
@@ -530,7 +561,10 @@ gestion_usuario_1(char *host)
 												Imprimir_Fichas(result_7,tam_usuario);
 											}
 
-											/*Empezar partida*/
+											/*Empieza la partida!
+											* empezamos por comprobar quien tiene la ficha 6|6. quien la tiene
+											* inicia la partida*/
+
  											result_8 = empezar_partida_1((void*)&empezar_partida_1_arg, clnt);
 											if (result_8 == (fichas *) NULL) {
 												clnt_perror (clnt, "call failed");
@@ -564,38 +598,47 @@ gestion_usuario_1(char *host)
 													Imprimir_Fichas(result_9,jugadas);
 													jugadas++;
 												}
-											
+												
+												/*Mientras no haya un ganador, o no puedan colocar fichas o empaten 
+												* no termina el juego */
+
+												/*
+												while(estado partida != condicionTerminada){
+												
+
+												}
+												*/
 												/*do{
 
 												}while(result_9);*/		
 											
-													int opc = 0;
-													int id_ficha=-1;
-													do{
-														opc = menu_jugando();
-														switch(opc){
-															case 1:
-																//imprimir las fichas del usuario.
-																printf("Digite el id de la Ficha a colocar : \n");
-																scanf("%d",&id_ficha);
-																if(id_ficha < -1 && id_ficha > 27){
-															
-																}else{
+												int opc = 0;
+												int id_ficha=-1;
+												do{
+													opc = menu_jugando();
+													switch(opc){
+														case 1:
+															//imprimir las fichas del usuario.
+															printf("Digite el id de la Ficha a colocar : \n");
+															scanf("%d",&id_ficha);
+															if(id_ficha < -1 && id_ficha > 27){
+														
+															}else{
 
-																}
-															break;
+															}
+														break;
 
-															case 2:
-																printf("Seguro de terminar el juego....\n");
-															break;
+														case 2:
+															printf("Seguro de terminar el juego....\n");
+														break;
 
-															default:
-																printf("Opcion invalida....\n");
-															break;
-														}
+														default:
+															printf("Opcion invalida....\n");
+														break;
+													}
 
 
-													} while (opc != 2);
+												} while (opc != 2);
 
 												}//fin else
 											break;
@@ -630,8 +673,8 @@ gestion_usuario_1(char *host)
 						case 2:
 							printf("\n-------REGISTRO DE USUARIO-------\n");
 
-							printf("\nDigite nombre del usuario: \n");
-							scanf("%*c%[^\n]", usuarionuevo.nombres);
+							printf("\nDigite nombre del usuario: ");
+							scanf("%s", usuarionuevo.nombres);
 							fflush(stdin);
 
 							int nnombre = sizeof(usuarionuevo.nombres)/sizeof(char);
@@ -643,8 +686,8 @@ gestion_usuario_1(char *host)
 							}
 
 
-							printf("\nDigite apellido del usuario: \n");
-							scanf("%*c%[^\n]", usuarionuevo.apellidos);
+							printf("Digite apellido del usuario: ");
+							scanf("%s", usuarionuevo.apellidos);
 							fflush(stdin);
 
 							int napellido = sizeof(usuarionuevo.apellidos)/sizeof(char);
@@ -655,7 +698,7 @@ gestion_usuario_1(char *host)
 								break;
 							}
 
-							printf("\nDigite el login del usuario: \n");
+							printf("Digite el login del usuario: ");
 							scanf("%d", &usuarionuevo.login);
 							fflush(stdin);
 							nlogin = sizeof(usuarionuevo.login)/sizeof(int);
@@ -664,7 +707,7 @@ gestion_usuario_1(char *host)
 								break;
 							}
 
-							printf("\nDigite la contraseña del usuario: \n");
+							printf("Digite la contraseña del usuario: ");
 							scanf("%s", usuarionuevo.contrasena);
 							fflush(stdin);
 							ncontrasena = sizeof(usuarionuevo.contrasena)/sizeof(char);
