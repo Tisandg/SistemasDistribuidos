@@ -1,8 +1,7 @@
 /*
 *
-*@Autores:
-*			Jhonnier Kevin Chantré
-*			David Santiago Garcia.
+*@Author	Jhonnier Kevin Chantré
+*@Author	David Santiago Garcia.
 *
  */
 
