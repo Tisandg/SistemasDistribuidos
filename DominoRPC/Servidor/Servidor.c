@@ -81,7 +81,7 @@ autenticar_usuario_1_svc(datosValidar *argp, struct svc_req *rqstp)
 		fread(&temp,sizeof(nodo_usuario),1,usuarioarchivo);
 		nuevoUsuario = &temp;
 		if(nuevoUsuario->login == argp->login &&  strncmp(nuevoUsuario->contrasena,argp->contrasena,10)==0){
-			printf("Administrador Encontrado\n");
+			printf("El pinche administrador a sido Encontrado\n");
 			result = TRUE;
 		}else{
 			printf("Administrador No Encontrado\n");
