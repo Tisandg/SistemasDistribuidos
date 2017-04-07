@@ -481,6 +481,7 @@ gestion_usuario_1(char *host)
 										* la lista de todos los usuarios registrados en el sistema*/
 										result_3 = listarusuarios_1((void*)&listarusuarios_1_arg, clnt);
 										if (result_3 == (proxNodo *) NULL) {
+											printf("No se han encontrado usuarios");
 											clnt_perror (clnt, "call failed");
 										}else{
 											while((*result_3) != NULL)
