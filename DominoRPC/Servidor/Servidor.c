@@ -1,6 +1,7 @@
 /*
 *
 *@Autores:
+*			El presenta proyecto fue desrrollado por las siguientes personas.
 *			Jhonnier Kevin Chantré
 *			David Santiago Garcia.
 *
