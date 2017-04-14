@@ -18,5 +18,6 @@ public interface UsuariosInt extends Remote{
     public boolean modificarJugador(Usuario u)throws RemoteException;
     public boolean eliminarJugador(String login)throws RemoteException;
     public ArrayList<Usuario> listarJugadores()throws RemoteException;
+    public boolean salir(String login) throws RemoteException;
     
 }

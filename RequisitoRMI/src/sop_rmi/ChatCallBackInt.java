@@ -11,4 +11,6 @@ import java.rmi.RemoteException;
 
 public interface ChatCallBackInt extends Remote{
     
+    public boolean enviarMesaje(String mensaje, String login) throws RemoteException;
+    
 }

@@ -131,12 +131,26 @@ public class Archivos {
         return escribio;
     }
     
-    public boolean existeArchivo(String login){
-        String ruta = "./Usuarios/usuario_"+login+".txt";
+    /*Funcion para comprobar que no halla un archivo registrado con el
+    * login ingresado
+    * @param login a buscar
+    * @param boolean para saber si es un administrador
+    * @return boolean que indica si hay o no un archivo registrado con el login*/
+    public boolean existeArchivo(String login, boolean esAdmin){
+        String ruta;
+        if(esAdmin){
+            ruta = "./Administrador/usuario_admin.txt";
+        }else{
+            ruta = "./Usuarios/usuario_"+login+".txt";
+        }
+        return existeArchivo(ruta);
+    }
+    
+    private boolean existeArchivo(String ruta){
         boolean esta = false;
         try {
             //Abrimos el fichero e intentamos leerlo
-            archivo = new File ("./Usuarios/usuario_1.txt");
+            archivo = new File (ruta);
             fr = new FileReader (archivo);
             System.out.println("Se ha encontrado un archivo con el login ingresado");
             esta = true;
@@ -160,7 +174,23 @@ public class Archivos {
         return esta;
     }
     
-    public boolean compararDatos(String login,String clave){
+    /* Funcion para comparar el login y la contraseña ingresados con los datos
+    *  registrados en el archivo del usuario
+    *  @param String con el login del usuario
+    *  @param String con la lave del usuario
+    *  @param boolean para saber si es admin
+    *  @return true si los datos coinciden, de lo contrario false
+    */
+    public boolean compararDatos(String login,String clave, boolean esAdmin){
+        String ruta;
+        if(esAdmin){
+            ruta = "./Administrador/usuario_admin.txt";
+        }else{
+            ruta = "./Usuarios/usuario_"+login+".txt";
+        }
+        return compararDatos(login,clave,ruta);
+    }
+    private boolean compararDatos(String login,String clave,String ruta){
         boolean respuesta = false;
         try {
            // Apertura del fichero y creacion de BufferedReader para poder

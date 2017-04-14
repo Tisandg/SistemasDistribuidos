@@ -11,4 +11,5 @@ import java.rmi.RemoteException;
 
 public interface EstadisticasInt extends Remote{
     
+    public String generarEstadisticas() throws RemoteException;
 }
