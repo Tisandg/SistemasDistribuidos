@@ -172,7 +172,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
                     if(esAdmin == false){
                         usuariosConectados.put(u.getLogin(),consultarUsuario(u.getLogin()));
                         System.out.println("Sesion iniciada!");
-                        this.jugar= new JugarImpl();
+                        //this.jugar= new JugarImpl();
                     }
                     return true;
                 }

@@ -29,7 +29,8 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
 
     @Override
     public void empezarPartida() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        /*Buscamos quien tiene la ficha 6|6*/
+        
     }
 
     @Override
