@@ -10,9 +10,11 @@ public class Jugador {
     
     private ArrayList<Ficha> misFichas;
     private String login;
+    private int fichasRestantes;
     
     public void recibirFichas(ArrayList<Ficha> fichasDesdeServidor){
         this.misFichas = fichasDesdeServidor;
+        this.fichasRestantes = misFichas.size();
     }
 
     public ArrayList<Ficha> getMisFichas() {
@@ -34,5 +36,15 @@ public class Jugador {
     public void notificar(String mensaje){
         System.out.println(mensaje);
     }
+
+    public int getFichasRestantes() {
+        return fichasRestantes;
+    }
+
+    public void setFichasRestantes(int fichasRestantes) {
+        this.fichasRestantes = fichasRestantes;
+    }
+    
+    
     
 }

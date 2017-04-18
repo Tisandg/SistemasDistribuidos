@@ -16,17 +16,18 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     private Jugador jugador2;
     private ArrayList<Ficha> fichasTotal;
     private Tablero tablero;
-    private int estado;
+    private int estadoPartida;
     /*TRUE si es el turno del jugador1
     * FALSE si es del jugador2  */
     private boolean turno;
+    private int contarJugadasPasadas;
     
     public JugarImpl() throws RemoteException
     {
         super(); //invoca al constructor de la clase base
         /*Cargamos todas las fichas del domino*/
         cargarTodasLasFichas();
-        this.estado = 0;
+        this.estadoPartida = 0;
     }
 
     @Override
@@ -38,6 +39,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     @Override
     public void empezarPartida() throws RemoteException {
         /*Buscamos quien tiene la ficha 6|6*/
+        this.estadoPartida = 1;
         System.out.println("EMPEZO LA PARTIDA");
         int quienInicia = quienInicia();
         if(quienInicia == 0){
@@ -87,13 +89,13 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     }
     
     /*Envia la lista de fichas repartidas a cada jugador*/
-    public void enviarFichasAJugadores(){
+    private void enviarFichasAJugadores(){
         jugador1.recibirFichas(this.fichasJugador1);
         jugador2.recibirFichas(this.fichasJugador2);
     }
     
     /*Imprime las fichas repartidas a los jugadores*/
-    public void imprimirFichas(){
+    private void imprimirFichas(){
         int j,i;
         for ( j = 0; j < 2; j++) {
             System.out.println("Jugador "+(j+1)+":");
@@ -112,7 +114,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         int id = 0;
 	for(i=0; i<7; i++){
             for(j=i; j<7; j++){
-                Ficha ficha = new Ficha(id,i,j,0);
+                Ficha ficha = new Ficha(id,i,j,false);
                 fichasTotal.add(ficha);
                 id++;
             }
@@ -143,7 +145,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     * @return 1 si el jugador 1 tiene la ficha
     *         2 si el jugador 2 tiene la ficha
     *         3 si nadie tiene la ficha                    */
-    public int quienInicia(){
+    private int quienInicia(){
         int tam;
         tam = fichasJugador1.size();
         int i;
@@ -162,16 +164,108 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
 
     @Override
     public Tablero estadoTablero() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tablero;
     }
 
     @Override
     public boolean enviarJugada(String jugador, Ficha ficha) throws RemoteException {
         //TODO Notificar al jugador que no es su turno
+        if(turnoValido(jugador)){
+            /*Comprobamos las condiciones del juego para saber si se pude seguir jugando
+            * si ya hay un ganador o no*/
+            
+            if(ficha == null){
+                //TODO debo notificarle al usuario que su oponente paso
+                if(turno){
+                    System.out.println("EL jugador 1 pasa");
+                }else{
+                    System.out.println("El jugador 2 pasa");
+                }
+                //Cambiamos el turno
+                this.contarJugadasPasadas++;
+                turno = !turno;
+                return true;
+            }else{
+                if(contarJugadasPasadas != 0){
+                    this.contarJugadasPasadas--;
+                }
+                /*Comprobamos que la ficha se puede jugar*/
+                if(sePuedeJugar(ficha)){
+                    /*Colocamos la ficha en el lado donde coincida*/
+                    if(colocarFicha(ficha)){
+                        System.out.println("La ficha ha sido colocada");
+                        if(turno){
+                            int posicionFicha = jugador1.getMisFichas().indexOf(ficha);
+                            //marcamos la ficha como ocupada
+                            jugador1.getMisFichas().get(posicionFicha).setEstado(true);
+                            jugador1.setFichasRestantes(jugador1.getFichasRestantes()-1);
+                            
+                        }else{
+                            int posicionFicha = jugador2.getMisFichas().indexOf(ficha);
+                            //marcamos la ficha como ocupada
+                            jugador2.setFichasRestantes(jugador2.getFichasRestantes()-1);
+                            jugador2.getMisFichas().get(posicionFicha).setEstado(true);
+                        }
+                        //Cambiamos el turno
+                        turno = !turno;
+                        return true;
+                    }else{
+                        System.out.println("La ficha no ha podido ser colocada");
+                    }
+                }else{
+                    //TODO notificar al jugador que su ficha es invalida
+                    System.out.println("Ficha Invalida. No se puede colocar en los extremos");
+                }
+            }
+        }
+        return false;
+    }
+    
+    private int condicionesPartida(){
+        
+        int condicion = 0;
+        /*Cuando ambos jugadores no tienen fichas para jugar*/
+        if(contarJugadasPasadas == 2){
+            System.out.println("Ambos jugadores no puede seguir. Se ha terminado el juego");
+            System.out.println("Haciendo conteo de puntos");
+            int conteoJugador1 = contarPuntos(jugador1);
+            int conteoJugador2 = contarPuntos(jugador2);
+            System.out.println("Jugador "+jugador1.getLogin()+" tiene "+conteoJugador1+" puntos");
+            System.out.println("Jugador "+jugador2.getLogin()+" tiene "+conteoJugador2+" puntos");
+            if(conteoJugador1 == conteoJugador2){
+                System.out.println("Hay empate!");
+            }else{
+                if(conteoJugador1 < conteoJugador2){
+                    System.out.println("El jugador "+jugador1.getLogin()+" gana la partida");
+                    condicion = 3;
+                }else{
+                    System.out.println("El jugador "+jugador2.getLogin()+" gana la partida");
+                    condicion = 4;
+                }
+            }
+        }
+        
+        if(jugador1.getFichasRestantes() == 0){
+            System.out.println("El jugador "+jugador1.getLogin()+"  ha jugado todas sus fichas");
+            condicion = 1;
+        }
+        if(jugador2.getFichasRestantes() == 0){
+            System.out.println("El jugador "+jugador2.getLogin()+" ha jugado todas sus fichas");
+            condicion = 2;
+        }
+            
+        return condicion;
+    }
+    
+    
+    /*comprobar que sea el turno del usuario
+    * @param login del usuario que quiere hacer la jugada
+    * @return true si es su turno, de lo contrario false*/
+    private boolean turnoValido(String login){
         if(turno){
             /*El jugador 2 esta realizando una jugada cuando es
             * el turno del jugador 1*/
-            if(jugador1.getLogin().compareTo(jugador) != 0){
+            if(jugador1.getLogin().compareTo(login) != 0){
                 String mensaje = "Es turno del jugador 1";
                 System.out.println(mensaje);
                 return false;
@@ -179,31 +273,10 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         }else{
             /*El jugador 1 esta realizando una jugada cuando es
             * el turno del jugador 2*/
-            if(jugador2.getLogin().compareTo(jugador) != 0){
+            if(jugador2.getLogin().compareTo(login) != 0){
                 String mensaje = "Es turno del jugador 2";
                 System.out.println(mensaje);
                 return false;
-            }
-        }
-        if(ficha != null){
-            //TODO debo notificarle al usuario que su oponente paso
-            if(turno){
-                System.out.println("EL jugador 1 pasa");
-            }else{
-                System.out.println("El jugador 2 pasa");
-            }
-            return true;
-        }else{
-            /*Comprobamos que la ficha se puede jugar*/
-            if(sePuedeJugar(ficha)){
-                if(colocarFicha(ficha)){
-                
-                }else{
-                
-                }
-            }else{
-                //TODO notificar al jugador que su ficha es invalida
-                System.out.println("Ficha Invalida. No se puede colocar en los extremos");
             }
         }
         return true;
@@ -211,7 +284,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     
     /*Metodo para comprobar si la ficha enviada por el jugador coincide en alguno 
       de sus lados con los extremos del tablero */
-    public boolean sePuedeJugar(Ficha ficha){
+    private boolean sePuedeJugar(Ficha ficha){
         if(tablero.getFichasJugadas().size() == 0){
             if(ficha.getId() == 27){
                 return true;
@@ -228,20 +301,55 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         }
         
     }
-    public boolean colocarFicha(Ficha ficha){
+    private boolean colocarFicha(Ficha ficha){
+        boolean respuesta = false;
         if(tablero.getExtremoIzq() == ficha.getLado1()){
-        
+            //Establecemos el lado, que coincide con el extremo, como ocupado
+            ficha.setEstadoLado1(true);
+            tablero.getFichasJugadas().add(0, ficha);
+            //Lado libre es el nuevo extremo izquierdo
+            tablero.setExtremoIzq(ficha.getLado2());
+            respuesta = true;
         }
         if(tablero.getExtremoIzq() == ficha.getLado2()){
-        
+            //Establecemos el lado, que coincide con el extremo, como ocupado
+            ficha.setEstadoLado2(true);
+            tablero.getFichasJugadas().add(0, ficha);
+            //Lado libre es el nuevo extremo izquierdo
+            tablero.setExtremoIzq(ficha.getLado1());
+            respuesta = true;
         }
         if(tablero.getExtremoDer() == ficha.getLado1()){
-        
+            //Establecemos el lado, que coincide con el extremo, como ocupado
+            ficha.setEstadoLado1(true);
+            tablero.getFichasJugadas().add(ficha);
+            //Lado libre es el nuevo extremo derecho
+            tablero.setExtremoDer(ficha.getLado2());
+            respuesta = true;
         }
         if(tablero.getExtremoDer() == ficha.getLado2()){
-        
+            //Establecemos el lado, que coincide con el extremo, como ocupado
+            ficha.setEstadoLado2(true);
+            tablero.getFichasJugadas().add(ficha);
+            //Lado libre es el nuevo extremo derecho
+            tablero.setExtremoDer(ficha.getLado1());
+            respuesta = true;
         }
-        return true;
+        return respuesta;
+    }
+    
+    /*Hace conteo de las fichas que no han sido utilizadas por el jugador*/
+    private int contarPuntos(Jugador jugador){
+        int i;
+        int conteo = 0;
+        int tam = jugador.getMisFichas().size();
+        for (i = 0; i < tam; i++) {
+            if(jugador.getMisFichas().get(i).isEstado() == false){
+                conteo = jugador.getMisFichas().get(i).getLado1() + 
+                        jugador.getMisFichas().get(i).getLado2();
+            }
+        }
+        return conteo;
     }
     
     

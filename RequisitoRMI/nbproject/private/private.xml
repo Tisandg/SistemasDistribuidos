@@ -2,24 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/JugarImpl.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/UsuarioCallBackInt.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/Archivos.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/cliente/UtilidadesConsola.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/Tablero.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/cliente/ClienteDeObjetos.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/JugarInt.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/servidor/ServidorDeObjetos.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/EstadisticasInt.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/Usuario.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/UsuariosImpl.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/Ficha.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/servidor/UtilidadesConsola.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/ChatCallBackInt.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/cliente/UtilidadesRMIServidor.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/sop_rmi/UsuariosInt.java</file>
-            <file>file:/C:/Users/Luis%20Carlos/Documents/NetBeansProjects/RequisitoRMI/src/servidor/UtilidadesRMIServidor.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
