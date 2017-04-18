@@ -226,6 +226,8 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         return false;
     }
 
+    /*Funcion para obtener todos los usuarios registrados en el sistema
+    * @return Lista de usuarios registrados*/
     @Override
     public ArrayList<Usuario> listarJugadores() throws RemoteException {
         return manejadorArchivos.listarArchivosDirectorio();
@@ -239,6 +241,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     }
 
     public Hashtable<String, Usuario> getUsuariosConectados() {
+        System.out.println("Listando usuarios conectados");
         return usuariosConectados;
     }
 

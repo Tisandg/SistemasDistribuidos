@@ -244,6 +244,9 @@ public class Archivos {
         return false;
     }
     
+    /* Funcion que recoore el directorio "usuarios" para saber cuantos hay
+    *  registrados.
+    *  @return Lista de usuarios registrados  */
     public ArrayList<Usuario> listarArchivosDirectorio(){
         String sDirectorio = "./Usuarios";
         File f = new File(sDirectorio);
