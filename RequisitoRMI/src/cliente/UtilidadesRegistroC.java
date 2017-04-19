@@ -8,7 +8,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 /**
  *
- * @author user
+ * @author Kevin Chantré
  */
 public class UtilidadesRegistroC
 {   
