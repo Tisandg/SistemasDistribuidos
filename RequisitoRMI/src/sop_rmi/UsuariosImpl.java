@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import sop_rmi.Jugador;
 
 /**
  * @author Santiago Garcia
@@ -17,9 +18,9 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     private final int minClave = 8;
     private final int maxClave = 15;
     private Archivos manejadorArchivos;
+    
+    /*Guarda el login y la referencia del objeto*/
     private Hashtable<String,Usuario> usuariosConectados;
-    private JugarImpl jugar;
-    //private ArrayList<Usuario> usuariosConectados;
     
     public UsuariosImpl() throws RemoteException
     {
@@ -73,24 +74,24 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         return errores;
     }
     
-    public int validacionesInicioAdmin(Usuario admin){
+    public int validacionesInicioAdmin(String login, String clave){
         int errores = 0;
-        if(admin.getLogin().length() < 1){
+        if(login.length() < 1){
             System.out.println("El login no puede estar vacio");
             errores++;
         }else{
             /*Se puede utilizar las constantes maxClave y minClave ya que tienen los mismo
             * valores de validacion para el login*/
-            if(admin.getLogin().length() > maxClave || admin.getLogin().length() < minClave){
+            if(login.length() > maxClave || login.length() < minClave){
                 System.out.println("El login no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
                 errores++;
             }
         }
-        if(admin.getClave().length() < 1){
+        if(clave.length() < 1){
             System.out.println("La contraseña no puede estar vacia");
             errores++;
         }else{
-            if(admin.getClave().length() > maxClave || admin.getClave().length() < minClave){
+            if(clave.length() > maxClave || clave.length() < minClave){
                 System.out.println("El login no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
                 errores++;
             }
@@ -98,23 +99,23 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         return errores;
     }
     
-    public int validacionesInicioUsuario(Usuario usuario){
+    public int validacionesInicioUsuario(String login, String clave){
         int errores = 0;
-        if(usuario.getLogin().length() < 1){
+        if(login.length() < 1){
             System.out.println("El login no puede estar vacio");
             errores++;
         }else{
-            if(usuario.getLogin().length() > maxLoginU){
+            if(login.length() > maxLoginU){
                 System.out.println("El login no debe superar los "+maxLoginU+" caracteres");
                 errores++;
             }
         }
         
-        if(usuario.getClave().length() < 1){
+        if(clave.length() < 1){
             System.out.println("La contraseña no puede estar vacia");
             errores++;
         }else{
-            if(usuario.getClave().length() > maxClave || usuario.getClave().length() < minClave){
+            if(clave.length() > maxClave || clave.length() < minClave){
                 System.out.println("La clave no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
                 errores++;
             }
@@ -152,32 +153,35 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     }
 
     @Override
-    public boolean iniciarSesion(Usuario u) throws RemoteException {
+    public boolean iniciarSesion(String login, String clave, boolean admin) throws RemoteException 
+    {
         /*Validamos la informacion ingresada*/
         int validaciones;
-        if (u.isAdmin()) {
-            validaciones = validacionesInicioAdmin(u);
+        if (admin) {
+            validaciones = validacionesInicioAdmin(login,clave);
         }else{
-            validaciones = validacionesInicioUsuario(u);
+            validaciones = validacionesInicioUsuario(login,clave);
         }
         if(validaciones != 0){
             System.out.println("Por favor, verifique los datos ingresados");
             return false;
         }else{
-            boolean esAdmin = u.isAdmin();
             /*Buscamos el archivo del usuario por el login*/
-            if(manejadorArchivos.existeArchivo( u.getLogin(),esAdmin)){
+            if(manejadorArchivos.existeArchivo(login,admin)){
                 /*Comprobamos la contraseña*/
-                if(manejadorArchivos.compararDatos(u.getLogin(),u.getClave(),esAdmin)){
-                    if(esAdmin == false){
-                        usuariosConectados.put(u.getLogin(),consultarUsuario(u.getLogin()));
-                        System.out.println("Sesion iniciada!");
-                        //this.jugar= new JugarImpl();
+                if(manejadorArchivos.compararDatos(login,clave,admin)){
+                    /*Si no es administrador lo agregamos a la lista de usuarios conectados*/
+                    if(admin == false){
+                        Usuario auxiliar = consultarUsuario(login);
+                        /*Apenas inicio, se marca como "no jugando"*/
+                        auxiliar.setJugando(false);
+                        usuariosConectados.put(login,auxiliar);
                     }
+                    System.out.println("Sesion iniciada!");
                     return true;
                 }
             }else{
-                System.out.println("El usuario con login "+u.getLogin()+" no esta registrado");
+                System.out.println("El usuario con login "+login+" no esta registrado");
             }
         }
         
@@ -199,7 +203,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     }
 
     @Override
-    public boolean modificarJugador(Usuario u) throws RemoteException {
+    public boolean modificarUsuario(Usuario u) throws RemoteException {
         if(validacionesRegistroUsuario(u) != 0){
             /*El mismo metodos para crear sobreescribe la informacion del archivo*/
             if(manejadorArchivos.crearArchivo(u)){
@@ -215,7 +219,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     }
 
     @Override
-    public boolean eliminarJugador(String login) throws RemoteException {
+    public boolean eliminarUsuario(String login) throws RemoteException {
         /*Suponiendo que el archivo se encuentra*/
         if(manejadorArchivos.eliminarArchivo(login)){
             System.out.println("El usuario "+login+" se ha eliminado exitosamente");
@@ -229,7 +233,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     /*Funcion para obtener todos los usuarios registrados en el sistema
     * @return Lista de usuarios registrados*/
     @Override
-    public ArrayList<Usuario> listarJugadores() throws RemoteException {
+    public ArrayList<Usuario> listarUsuarios() throws RemoteException {
         return manejadorArchivos.listarArchivosDirectorio();
     }
 

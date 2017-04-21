@@ -13,11 +13,11 @@ import java.util.ArrayList;
 public interface UsuariosInt extends Remote{
     
     public boolean registrarse(Usuario nuevoUsuario)throws RemoteException;
-    public boolean iniciarSesion(Usuario u)throws RemoteException;
+    public boolean iniciarSesion(String login, String clave, boolean admin) throws RemoteException;
     public Usuario consultarUsuario(String login)throws RemoteException;
-    public boolean modificarJugador(Usuario u)throws RemoteException;
-    public boolean eliminarJugador(String login)throws RemoteException;
-    public ArrayList<Usuario> listarJugadores()throws RemoteException;
+    public boolean modificarUsuario(Usuario u)throws RemoteException;
+    public boolean eliminarUsuario(String login)throws RemoteException;
+    public ArrayList<Usuario> listarUsuarios()throws RemoteException;
     public boolean salir(String login) throws RemoteException;
     
 }

@@ -1,5 +1,7 @@
 package sop_rmi;
 
+import servidor.UtilidadesConsola;
+
 /**
  * @author Santiago Garcia
  */
@@ -10,8 +12,28 @@ public class Usuario {
     private String apellido;
     private String login;
     private String clave;
-    /*TRUE si es adminsitrador*/
+    
+    /*True si es adminsitrador, de lo contrario False*/
     private boolean admin;
+    
+    /*True si esta en una partoda, de lo contrario False*/
+    private boolean jugando;
+    
+    public boolean invitacionPartida(String jugadorQueInvita){
+        System.out.println("El jugador "+jugadorQueInvita+" te invita a jugar una partida");
+        System.out.println("Aceptas la partida?");
+        System.out.println("1. Si        2. No");
+        int leerEntero = UtilidadesConsola.leerEntero();
+        if(leerEntero == 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public void notificar(String mensaje){
+        System.out.println(mensaje);
+    }
     
     public Usuario(){}
 
@@ -21,6 +43,7 @@ public class Usuario {
         this.login = login;
         this.clave = clave;
         this.admin = admin;
+        this.jugando = false;
     }
 
     public String getNombre() {
@@ -62,5 +85,12 @@ public class Usuario {
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
-    
+
+    public boolean isJugando() {
+        return jugando;
+    }
+
+    public void setJugando(boolean jugando) {
+        this.jugando = jugando;
+    }
 }
