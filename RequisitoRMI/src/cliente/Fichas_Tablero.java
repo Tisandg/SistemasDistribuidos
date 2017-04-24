@@ -2,8 +2,6 @@
 package cliente;
 
 import java.awt.Point;
-
-
 /**
  *
  * @author Kevin Chantré
