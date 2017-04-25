@@ -11,4 +11,6 @@ import java.rmi.RemoteException;
 
 public interface UsuarioCallBackInt extends Remote{
     
+    public void notificar(String login, String mensaje) throws RemoteException;
+    
 }

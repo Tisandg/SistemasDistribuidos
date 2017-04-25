@@ -27,8 +27,8 @@ public class Archivos {
         this.pw = null;
     }
     
-    public Usuario obtenerInfoUsuario(String login){
-        Usuario usuario = new Usuario();
+    public UsuarioCallBackImpl obtenerInfoUsuario(String login){
+        UsuarioCallBackImpl usuario = new UsuarioCallBackImpl();
         try {
            // Apertura del fichero y creacion de BufferedReader para poder
            // hacer una lectura comoda (disponer del metodo readLine()).
@@ -100,7 +100,7 @@ public class Archivos {
         }
     }
     
-    public boolean crearArchivo(Usuario usuario){
+    public boolean crearArchivo(UsuarioCallBackImpl usuario){
         boolean escribio = false;
         try
         {
@@ -195,7 +195,8 @@ public class Archivos {
         try {
            // Apertura del fichero y creacion de BufferedReader para poder
            // hacer una lectura comoda (disponer del metodo readLine()).
-           archivo = new File ("./Usuarios/usuario_"+login+".txt");
+           
+           archivo = new File (ruta);
            fr = new FileReader (archivo);
            br = new BufferedReader(fr);
 
@@ -247,12 +248,12 @@ public class Archivos {
     /* Funcion que recoore el directorio "usuarios" para saber cuantos hay
     *  registrados.
     *  @return Lista de usuarios registrados  */
-    public ArrayList<Usuario> listarArchivosDirectorio(){
+    public ArrayList<UsuarioCallBackImpl> listarArchivosDirectorio(){
         String sDirectorio = "./Usuarios";
         File f = new File(sDirectorio);
         if (f.exists()){ 
             File[] ficheros = f.listFiles();
-            ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+            ArrayList<UsuarioCallBackImpl> usuarios = new ArrayList<UsuarioCallBackImpl>();
             int i;
             int tam = ficheros.length;
             for (i=0; i < tam ; i++){

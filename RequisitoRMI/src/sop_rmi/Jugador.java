@@ -7,7 +7,7 @@ import servidor.UtilidadesConsola;
  * @author Santiago Garcia
  */
 
-public class Jugador extends Usuario{
+public class Jugador extends UsuarioCallBackImpl{
     
     private ArrayList<Ficha> misFichas;
     private int fichasRestantes;
@@ -24,10 +24,6 @@ public class Jugador extends Usuario{
 
     public void setMisFichas(ArrayList<Ficha> misFichas) {
         this.misFichas = misFichas;
-    }
-    
-    public void notificar(String mensaje){
-        System.out.println(mensaje);
     }
 
     public int getFichasRestantes() {

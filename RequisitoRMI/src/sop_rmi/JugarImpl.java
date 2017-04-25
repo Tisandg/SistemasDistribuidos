@@ -8,6 +8,7 @@ import java.util.Random;
 /**
  * @author Santiago Garcia
  */
+
 public class JugarImpl extends UnicastRemoteObject implements JugarInt{
 
     private ArrayList<Ficha> fichasJugador1;
@@ -38,7 +39,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     }
 
     @Override
-    public boolean seleccionarJugador(Usuario usuarioQueInvita, Usuario usuarioAInvitar) throws RemoteException 
+    public boolean seleccionarJugador(UsuarioCallBackImpl usuarioQueInvita, UsuarioCallBackImpl usuarioAInvitar) throws RemoteException 
     {
         /*Comprobamos si el jugador a invitar no este en una partida*/
         if(usuarioAInvitar.isJugando() == false){
@@ -51,14 +52,15 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
                 System.out.println("Se han establecido los jugadores de una partida");
                 System.out.println("    "+usuarioQueInvita.getLogin()+" Vs "+usuarioAInvitar.getLogin());
                 /*Notificamos a los usuarios*/
-                usuarioQueInvita.notificar("El jugador "+usuarioAInvitar.getLogin()+" ha aceptado la partida");
+                usuarioQueInvita.notificar("Servidor","El jugador "+usuarioAInvitar.getLogin()+" ha aceptado la partida");
                 
-                usuarioQueInvita.notificar("Se ha establecido una partida");
-                usuarioAInvitar.notificar("Se ha establecido una partida");
+                usuarioQueInvita.notificar("Servidor","Se ha establecido una partida");
+                usuarioAInvitar.notificar("Servidor","Se ha establecido una partida");
                 this.seleccionadosJugadores = true;
+                this.turno = true;
             }else{
                 System.out.println("El jugador "+usuarioAInvitar.getLogin()+" no ha aceptado la partida");
-                usuarioQueInvita.notificar("El jugador "+usuarioAInvitar.getLogin()+"no ha aceptado la partida");
+                usuarioQueInvita.notificar("Servidor","El jugador "+usuarioAInvitar.getLogin()+"no ha aceptado la partida");
             }
         }else{
             System.out.println("El jugador esta ocupado en una partida");
@@ -80,12 +82,14 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
             if(quienInicia == 1){
                 System.out.println("Inicia el jugador 1");
                 /*Notificacion al jugador 1 para que inicie*/
-                jugador1.notificar("Inicias la partida. Coloca la ficha con doble 6");
+                jugador1.notificar("Servidor","Inicias la partida. Coloca la ficha con doble 6");
+                jugador2.notificar("Servidor","Inicias la partida "+jugador1.getLogin()+". Coloca la ficha con doble 6");
                 turno = true;
             }else{
                 System.out.println("Inicia el jugador 2");
                 /*Notificacion al jugador 2 para que inicie*/
-                jugador2.notificar("Inicias la partida. Coloca la ficha con doble 6");
+                jugador2.notificar("Servidor","Inicias la partida. Coloca la ficha con doble 6");
+                jugador1.notificar("Servidor","Inicias la partida "+jugador2.getLogin()+". Coloca la ficha con doble 6");
                 turno = false;
             }
         }
@@ -157,6 +161,8 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
             }
         }
     }
+    
+    
     
     /*Funcion para escoger al azar las fichas que se van a repartir.
     * Las selecciona de todas las fichas del domino
@@ -259,9 +265,8 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     }
     
     @Override
-    public int condicionesPartida()
+    public int condicionesPartida() throws RemoteException
     {
-        
         int condicion = 0;
         /*Cuando ambos jugadores no tienen fichas para jugar*/
         if(contarJugadasPasadas == 2){
@@ -320,13 +325,13 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     /*comprobar que sea el turno del usuario
     * @param login del usuario que quiere hacer la jugada
     * @return true si es su turno, de lo contrario false*/
-    private boolean turnoValido(String login){
+    private boolean turnoValido(String login) throws RemoteException{
         if(turno){
             /*El jugador 2 esta realizando una jugada cuando es
             * el turno del jugador 1*/
             if(jugador1.getLogin().compareTo(login) != 0){
                 String mensaje = "Es turno del jugador 1";
-                jugador2.notificar("Es turno del jugador 1");
+                notificar(1,"Es turno del jugador 1");
                 System.out.println(mensaje);
                 return false;
             }
@@ -335,7 +340,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
             * el turno del jugador 2*/
             if(jugador2.getLogin().compareTo(login) != 0){
                 String mensaje = "Es turno del jugador 2";
-                jugador1.notificar("Es turno del jugador 2");
+                notificar(1, "Es turno del jugador 2");
                 System.out.println(mensaje);
                 return false;
             }
@@ -416,20 +421,20 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     /*Funcion para notificar a los usuarios de la partida un mensaje
     * @param 1 para jugador1, 2 para jugador2, 3 para ambos
     * @param mensaje a enviar*/
-    private void notificar(int opcion,String mensaje){
+    private void notificar(int opcion,String mensaje) throws RemoteException{
         switch(opcion){
             case 1:
                 System.out.println("\nNotificando a jugador 1");
-                jugador1.notificar(mensaje);
+                jugador1.notificar("Servidor",mensaje);
                 break;
             case 2:
                 System.out.println("\nNotificando a jugador 2");
-                jugador2.notificar(mensaje);
+                jugador2.notificar("Servidor",mensaje);
                 break;
             case 3:
                 System.out.println("\nNotificando a ambos jugador");
-                jugador1.notificar(mensaje);
-                jugador2.notificar(mensaje);
+                jugador1.notificar("Servidor",mensaje);
+                jugador2.notificar("Servidor",mensaje);
                 break;
         }
     }

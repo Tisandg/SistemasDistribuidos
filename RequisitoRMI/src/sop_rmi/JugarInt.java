@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public interface JugarInt extends Remote{
     
-    public boolean seleccionarJugador(Usuario usuarioQueInvita, Usuario usuarioAInvitar) throws RemoteException; 
+    public boolean seleccionarJugador(UsuarioCallBackImpl usuarioQueInvita, UsuarioCallBackImpl usuarioAInvitar) throws RemoteException; 
     public void empezarPartida() throws RemoteException;
     public void repartirFichas(int tamano) throws RemoteException;
     public boolean enviarJugada(String jugador, Ficha ficha) throws RemoteException;

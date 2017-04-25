@@ -1,12 +1,13 @@
 package sop_rmi;
 
+import java.rmi.RemoteException;
 import servidor.UtilidadesConsola;
 
 /**
  * @author Santiago Garcia
  */
 
-public class Usuario {
+public class UsuarioCallBackImpl implements UsuarioCallBackInt{
     
     private String nombre;
     private String apellido;
@@ -31,13 +32,15 @@ public class Usuario {
         }
     }
     
-    public void notificar(String mensaje){
-        System.out.println(mensaje);
+    @Override
+    public void notificar(String login, String mensaje) throws RemoteException
+    {
+        System.out.println(login+": "+mensaje);
     }
     
-    public Usuario(){}
+    public UsuarioCallBackImpl(){}
 
-    public Usuario(String nombre, String apellido, String login, String clave, boolean admin) {
+    public UsuarioCallBackImpl(String nombre, String apellido, String login, String clave, boolean admin) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.login = login;

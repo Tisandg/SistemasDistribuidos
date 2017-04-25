@@ -3,6 +3,7 @@ package sop_rmi;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import sop_rmi.Jugador;
 
@@ -20,55 +21,54 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     private Archivos manejadorArchivos;
     
     /*Guarda el login y la referencia del objeto*/
-    private Hashtable<String,Usuario> usuariosConectados;
+    private Hashtable<String,UsuarioCallBackInt> usuariosConectados;
     
     public UsuariosImpl() throws RemoteException
     {
         super(); //invoca al constructor de la clase base       
         this.manejadorArchivos = new Archivos();
         //this.usuariosConectados = new ArrayList<Usuario>();
-        this.usuariosConectados = new Hashtable<String,Usuario>();
+        this.usuariosConectados = new Hashtable<String,UsuarioCallBackInt>();
     }
     
-    public int validacionesRegistroUsuario(Usuario usuario){
+    public int validacionesRegistroUsuario(UsuarioCallBackImpl usuario){
         int errores = 0;
         if(usuario.getNombre().length() < 1){
             System.out.println("El nombre no puede estar vacio");
             errores++;
-        }else{
-            if(usuario.getNombre().length() > maxNombre){
+        }else if(usuario.getNombre().length() > maxNombre){
                 System.out.println("El nombre no debe superar los "+maxNombre+" caracteres");
                 errores++;
-            }
         }
+        
         if(usuario.getApellido().length() < 1){
             System.out.println("El apellido no puede estar vacio");
             errores++;
-        }else{
-            if(usuario.getApellido().length() > maxApellido){
+        }
+        else if(usuario.getApellido().length() > maxApellido)
+        {
                 System.out.println("El apellido no debe superar los "+maxApellido+" caracteres");
                 errores++;
-            }
         }
         
         if(usuario.getLogin().length() < 1){
             System.out.println("El login no puede estar vacio");
             errores++;
-        }else{
-            if(usuario.getLogin().length() > maxLoginU){
+        }
+        else if(usuario.getLogin().length() > maxLoginU)
+        {
                 System.out.println("El login no debe superar los "+maxLoginU+" caracteres");
                 errores++;
-            }
         }
         
         if(usuario.getClave().length() < 1){
             System.out.println("La contraseña no puede estar vacia");
             errores++;
-        }else{
-            if(usuario.getClave().length() > maxClave || usuario.getClave().length() < minClave){
+        }
+        else if(usuario.getClave().length() > maxClave || usuario.getClave().length() < minClave)
+        {
                 System.out.println("La clave no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
                 errores++;
-            }
         }
         
         return errores;
@@ -92,7 +92,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
             errores++;
         }else{
             if(clave.length() > maxClave || clave.length() < minClave){
-                System.out.println("El login no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
+                System.out.println("La contraseña no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
                 errores++;
             }
         }
@@ -116,7 +116,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
             errores++;
         }else{
             if(clave.length() > maxClave || clave.length() < minClave){
-                System.out.println("La clave no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
+                System.out.println("La contraseña no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
                 errores++;
             }
         }
@@ -125,7 +125,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     
     
     @Override
-    public boolean registrarse(Usuario nuevoUsuario) throws RemoteException {
+    public synchronized boolean registrarse(UsuarioCallBackImpl nuevoUsuario) throws RemoteException {
         int validacion;
         /*Validamos los campos ingresados*/
         validacion = validacionesRegistroUsuario(nuevoUsuario);
@@ -172,13 +172,15 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
                 if(manejadorArchivos.compararDatos(login,clave,admin)){
                     /*Si no es administrador lo agregamos a la lista de usuarios conectados*/
                     if(admin == false){
-                        Usuario auxiliar = consultarUsuario(login);
+                        UsuarioCallBackImpl auxiliar = consultarUsuario(login);
                         /*Apenas inicio, se marca como "no jugando"*/
                         auxiliar.setJugando(false);
                         usuariosConectados.put(login,auxiliar);
                     }
                     System.out.println("Sesion iniciada!");
                     return true;
+                }else{
+                    System.out.println("Los datos no coinciden");
                 }
             }else{
                 System.out.println("El usuario con login "+login+" no esta registrado");
@@ -189,11 +191,12 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     }
 
     @Override
-    public Usuario consultarUsuario(String login) throws RemoteException {
+    public UsuarioCallBackImpl consultarUsuario(String login) throws RemoteException {
+        System.out.println("Consultado usuario");
         /*False ya que es usuario*/
        if(manejadorArchivos.existeArchivo(login,false)){
             /*Comprobamos la contraseña*/
-            Usuario consultado=new Usuario();
+            UsuarioCallBackImpl consultado=new UsuarioCallBackImpl();
             consultado = manejadorArchivos.obtenerInfoUsuario(login);
             return consultado;
         }else{
@@ -203,8 +206,9 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     }
 
     @Override
-    public boolean modificarUsuario(Usuario u) throws RemoteException {
-        if(validacionesRegistroUsuario(u) != 0){
+    public boolean modificarUsuario(UsuarioCallBackImpl u) throws RemoteException {
+        System.out.println("Modificando Usuario");
+        if(validacionesRegistroUsuario(u) == 0){
             /*El mismo metodos para crear sobreescribe la informacion del archivo*/
             if(manejadorArchivos.crearArchivo(u)){
                 System.out.println("El usuario ha sido modificado");
@@ -214,6 +218,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
                 return false;
             }
         }else{
+            System.out.println("No cumple con las validaciones");
             return false;
         }
     }
@@ -231,10 +236,19 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     }
 
     /*Funcion para obtener todos los usuarios registrados en el sistema
-    * @return Lista de usuarios registrados*/
+    * @return Lista con los login de usuarios registrados*/
     @Override
-    public ArrayList<Usuario> listarUsuarios() throws RemoteException {
-        return manejadorArchivos.listarArchivosDirectorio();
+    public ArrayList<String> listarUsuarios() throws RemoteException 
+    {
+        System.out.println("Listando usuarios conectados");
+        ArrayList<String> usuarios = new ArrayList<String>();
+        Enumeration e = usuariosConectados.keys();
+        String clave;
+        while( e.hasMoreElements() ){
+            clave =(String) e.nextElement();
+            usuarios.add(clave);
+        }
+        return usuarios;
     }
 
     @Override
@@ -243,15 +257,5 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         System.out.println("Usuario "+login+" ha cerrado sesion");
         return true;
     }
-
-    public Hashtable<String, Usuario> getUsuariosConectados() {
-        System.out.println("Listando usuarios conectados");
-        return usuariosConectados;
-    }
-
-    public void setUsuariosConectados(Hashtable<String, Usuario> usuariosConectados) {
-        this.usuariosConectados = usuariosConectados;
-    }
-    
     
 }
