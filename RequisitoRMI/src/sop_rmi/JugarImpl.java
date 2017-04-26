@@ -16,10 +16,16 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     private Jugador jugador2;
     private ArrayList<Ficha> fichasTotal;
     private Tablero tablero;
-    private int estadoPartida;
+    private boolean estadoPartida;
+    
+    /*Para saber si los jugadores de esta partida ya han sido seleccionados*/
+    private boolean seleccionadosJugadores;
+    
     /*TRUE si es el turno del jugador1
     * FALSE si es del jugador2  */
     private boolean turno;
+    
+    /*Contador para saber si ambos pasan*/
     private int contarJugadasPasadas;
     
     public JugarImpl() throws RemoteException
@@ -27,19 +33,45 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         super(); //invoca al constructor de la clase base
         /*Cargamos todas las fichas del domino*/
         cargarTodasLasFichas();
-        this.estadoPartida = 0;
+        this.estadoPartida = false;
+        this.seleccionadosJugadores = false;
     }
 
     @Override
-    public void seleccionarJugador(String login1,String login2) throws RemoteException {
-        this.jugador1.setLogin(login1);
-        this.jugador2.setLogin(login2);
+    public boolean seleccionarJugador(Usuario usuarioQueInvita, Usuario usuarioAInvitar) throws RemoteException 
+    {
+        /*Comprobamos si el jugador a invitar no este en una partida*/
+        if(usuarioAInvitar.GetJugando() == false){
+            boolean respuesta = usuarioAInvitar.invitacionPartida(usuarioQueInvita.getLogin());
+            if(respuesta){
+                System.out.println("El jugador "+usuarioAInvitar.getLogin()+" ha aceptado la partida");
+                /*Se establece la partida y los jugadores*/
+                this.jugador1 = (Jugador) usuarioQueInvita;
+                this.jugador2 = (Jugador) usuarioAInvitar;
+                System.out.println("Se han establecido los jugadores de una partida");
+                System.out.println("    "+usuarioQueInvita.getLogin()+" Vs "+usuarioAInvitar.getLogin());
+                /*Notificamos a los usuarios*/
+                usuarioQueInvita.notificar("El jugador "+usuarioAInvitar.getLogin()+" ha aceptado la partida");
+                
+                usuarioQueInvita.notificar("Se ha establecido una partida");
+                usuarioAInvitar.notificar("Se ha establecido una partida");
+                this.seleccionadosJugadores = true;
+            }else{
+                System.out.println("El jugador "+usuarioAInvitar.getLogin()+" no ha aceptado la partida");
+                usuarioQueInvita.notificar("El jugador "+usuarioAInvitar.getLogin()+"no ha aceptado la partida");
+            }
+        }else{
+            System.out.println("El jugador esta ocupado en una partida");
+            
+        }
+        return false;
     }
 
     @Override
-    public void empezarPartida() throws RemoteException {
+    public void empezarPartida() throws RemoteException 
+    {
         /*Buscamos quien tiene la ficha 6|6*/
-        this.estadoPartida = 1;
+        this.estadoPartida = true;
         System.out.println("EMPEZO LA PARTIDA");
         int quienInicia = quienInicia();
         if(quienInicia == 0){
@@ -47,9 +79,13 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         }else{
             if(quienInicia == 1){
                 System.out.println("Inicia el jugador 1");
+                /*Notificacion al jugador 1 para que inicie*/
+                jugador1.notificar("Inicias la partida. Coloca la ficha con doble 6");
                 turno = true;
             }else{
                 System.out.println("Inicia el jugador 2");
+                /*Notificacion al jugador 2 para que inicie*/
+                jugador2.notificar("Inicias la partida. Coloca la ficha con doble 6");
                 turno = false;
             }
         }
@@ -92,6 +128,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     private void enviarFichasAJugadores(){
         jugador1.recibirFichas(this.fichasJugador1);
         jugador2.recibirFichas(this.fichasJugador2);
+        System.out.println("Fichas enviadas");
     }
     
     /*Imprime las fichas repartidas a los jugadores*/
@@ -221,39 +258,61 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         return false;
     }
     
-    private int condicionesPartida(){
+    @Override
+    public int condicionesPartida()
+    {
         
         int condicion = 0;
         /*Cuando ambos jugadores no tienen fichas para jugar*/
         if(contarJugadasPasadas == 2){
             System.out.println("Ambos jugadores no puede seguir. Se ha terminado el juego");
             System.out.println("Haciendo conteo de puntos");
+            
+            /*Notificamos a ambos jugadores*/
+            notificar(3,"No se pueden tirar mas fichas.\nHaciendo conteo de puntos");
+            
             int conteoJugador1 = contarPuntos(jugador1);
             int conteoJugador2 = contarPuntos(jugador2);
+            
             System.out.println("Jugador "+jugador1.getLogin()+" tiene "+conteoJugador1+" puntos");
             System.out.println("Jugador "+jugador2.getLogin()+" tiene "+conteoJugador2+" puntos");
+            
+            notificar(3,"Jugador "+jugador1.getLogin()+" tiene "+conteoJugador1+" puntos");
+            notificar(3,"Jugador "+jugador2.getLogin()+" tiene "+conteoJugador2+" puntos");
+            
             if(conteoJugador1 == conteoJugador2){
                 System.out.println("Hay empate!");
+                notificar(3,"Hay un empate!");
             }else{
                 if(conteoJugador1 < conteoJugador2){
                     System.out.println("El jugador "+jugador1.getLogin()+" gana la partida");
+                    notificar(2,"Has perdido la partida");
+                    notificar(1,"Has ganado la partida. Felicitaciones!");
                     condicion = 3;
                 }else{
                     System.out.println("El jugador "+jugador2.getLogin()+" gana la partida");
+                    notificar(1,"Has perdido la partida");
+                    notificar(2,"Has ganado la partida. Felicitaciones!");
                     condicion = 4;
                 }
             }
         }
-        
         if(jugador1.getFichasRestantes() == 0){
             System.out.println("El jugador "+jugador1.getLogin()+"  ha jugado todas sus fichas");
+            notificar(1,"Has ganado la partida. Felicitaciones!");
+            notificar(2,"Has perdido la partida. Tu oponente a jugado todas sus fichas");
             condicion = 1;
         }
         if(jugador2.getFichasRestantes() == 0){
             System.out.println("El jugador "+jugador2.getLogin()+" ha jugado todas sus fichas");
+            notificar(2,"Has ganado la partida. Felicitaciones!");
+            notificar(1,"Has perdido la partida. Tu oponente a jugado todas sus fichas");
             condicion = 2;
         }
-            
+        if(condicion != 0){
+            /*Se ha acabado la partida*/
+            this.estadoPartida = false;
+        }
         return condicion;
     }
     
@@ -267,6 +326,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
             * el turno del jugador 1*/
             if(jugador1.getLogin().compareTo(login) != 0){
                 String mensaje = "Es turno del jugador 1";
+                jugador2.notificar("Es turno del jugador 1");
                 System.out.println(mensaje);
                 return false;
             }
@@ -275,6 +335,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
             * el turno del jugador 2*/
             if(jugador2.getLogin().compareTo(login) != 0){
                 String mensaje = "Es turno del jugador 2";
+                jugador1.notificar("Es turno del jugador 2");
                 System.out.println(mensaje);
                 return false;
             }
@@ -352,5 +413,25 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         return conteo;
     }
     
+    /*Funcion para notificar a los usuarios de la partida un mensaje
+    * @param 1 para jugador1, 2 para jugador2, 3 para ambos
+    * @param mensaje a enviar*/
+    private void notificar(int opcion,String mensaje){
+        switch(opcion){
+            case 1:
+                System.out.println("\nNotificando a jugador 1");
+                jugador1.notificar(mensaje);
+                break;
+            case 2:
+                System.out.println("\nNotificando a jugador 2");
+                jugador2.notificar(mensaje);
+                break;
+            case 3:
+                System.out.println("\nNotificando a ambos jugador");
+                jugador1.notificar(mensaje);
+                jugador2.notificar(mensaje);
+                break;
+        }
+    }
     
 }

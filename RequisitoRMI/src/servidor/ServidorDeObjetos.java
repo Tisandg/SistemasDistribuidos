@@ -12,19 +12,6 @@ public class ServidorDeObjetos {
     
     public static void main(String args[]) throws RemoteException
     {
-        /*Pruebas*/
-        Archivos archivo = new Archivos();
-        Usuario u = new Usuario();
-        u.setLogin("Tisan");
-        u.setClave("clave");
-        u.setNombre("Santiago");
-        u.setApellido("Garcia Chicangana");
-        System.out.println(archivo.crearArchivo(u));
-        //System.out.println(archivo.eliminarArchivo("Tisan"));
-        
-        archivo.listarArchivosDirectorio();
-        
-        /*Codigo servidor de objetos*/
         int numPuertoRMIRegistry = 0;
         String direccionIpRMIRegistry = "";
         System.out.println("Cual es el la dirección ip donde se encuentra  el rmiregistry ");

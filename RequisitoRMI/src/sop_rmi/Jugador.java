@@ -1,20 +1,21 @@
 package sop_rmi;
 
 import java.util.ArrayList;
+import servidor.UtilidadesConsola;
 
 /**
  * @author Santiago Garcia
  */
 
-public class Jugador {
+public class Jugador extends Usuario{
     
     private ArrayList<Ficha> misFichas;
-    private String login;
     private int fichasRestantes;
     
     public void recibirFichas(ArrayList<Ficha> fichasDesdeServidor){
         this.misFichas = fichasDesdeServidor;
         this.fichasRestantes = misFichas.size();
+        System.out.println("He recibido mis fichas");
     }
 
     public ArrayList<Ficha> getMisFichas() {
@@ -23,14 +24,6 @@ public class Jugador {
 
     public void setMisFichas(ArrayList<Ficha> misFichas) {
         this.misFichas = misFichas;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
     
     public void notificar(String mensaje){
@@ -44,7 +37,5 @@ public class Jugador {
     public void setFichasRestantes(int fichasRestantes) {
         this.fichasRestantes = fichasRestantes;
     }
-    
-    
-    
+
 }

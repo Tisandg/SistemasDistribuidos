@@ -185,17 +185,19 @@ public class Archivos {
         String ruta;
         if(esAdmin){
             ruta = "./Administrador/usuario_admin.txt";
+            return compararDatos(login,clave,ruta);
         }else{
             ruta = "./Usuarios/usuario_"+login+".txt";
-        }
-        return compararDatos(login,clave,ruta);
+            return compararDatos(login,clave,ruta);
+        }   
     }
     private boolean compararDatos(String login,String clave,String ruta){
         boolean respuesta = false;
         try {
            // Apertura del fichero y creacion de BufferedReader para poder
            // hacer una lectura comoda (disponer del metodo readLine()).
-           archivo = new File ("./Usuarios/usuario_"+login+".txt");
+            System.out.println("Ruta - clave "+ruta+" "+clave);
+           archivo = new File (ruta);
            fr = new FileReader (archivo);
            br = new BufferedReader(fr);
 
