@@ -12,9 +12,9 @@ import java.util.ArrayList;
  */
 public class Archivos {
     
-    private File archivo = null;
-    private FileReader fr = null; // este no lee las lineas completas
-    private BufferedReader br = null; //este si tiene los metodos para hacer lo anterior
+    private static File archivo = null;
+    private static FileReader fr = null; // este no lee las lineas completas
+    private static BufferedReader br = null; //este si tiene los metodos para hacer lo anterior
     
     private FileWriter fichero;
     private PrintWriter pw;
@@ -27,7 +27,7 @@ public class Archivos {
         this.pw = null;
     }
     
-    public Usuario obtenerInfoUsuario(String login){
+    public static Usuario obtenerInfoUsuario(String login){
         Usuario usuario = new Usuario();
         try {
            // Apertura del fichero y creacion de BufferedReader para poder
@@ -249,7 +249,7 @@ public class Archivos {
     /* Funcion que recoore el directorio "usuarios" para saber cuantos hay
     *  registrados.
     *  @return Lista de usuarios registrados  */
-    public ArrayList<Usuario> listarArchivosDirectorio(){
+    public static ArrayList<Usuario> listarArchivosDirectorio(){
         String sDirectorio = "./Usuarios";
         File f = new File(sDirectorio);
         if (f.exists()){ 

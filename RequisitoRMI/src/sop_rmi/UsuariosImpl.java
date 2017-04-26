@@ -3,6 +3,7 @@ package sop_rmi;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import sop_rmi.Jugador;
 
@@ -243,11 +244,30 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         return false;
     }
 
-    /*Funcion para obtener todos los usuarios registrados en el sistema
-    * @return Lista de usuarios registrados*/
+    /*Funcion para obtener todos los usuarios que estan conectados en el sistema. 
+    * En el listado no se incluye el usuario que realiza la invocacion
+    * @param login del usuario que invoca este metodo
+    * @return Lista con los login de usuarios registrados*/
     @Override
-    public ArrayList<Usuario> listarUsuarios() throws RemoteException {
-        return manejadorArchivos.listarArchivosDirectorio();
+    public ArrayList<String> listarUsuariosConectados(String login) throws RemoteException
+    {
+        System.out.println("Listando usuarios conectados");
+        ArrayList<String> usuarios = new ArrayList<String>();
+        Enumeration e = usuariosConectados.keys();
+        String clave;
+        while( e.hasMoreElements() ){
+            clave =(String) e.nextElement();
+            if(!clave.equals(login)){
+                usuarios.add(clave);
+            }
+        }
+        return usuarios;
+    }
+    
+    @Override
+    public ArrayList<Usuario> listarUsuariosRegistrados() throws RemoteException {
+        ArrayList<Usuario> usuariosRegistrados = Archivos.listarArchivosDirectorio();
+        return usuariosRegistrados;
     }
 
     @Override
@@ -265,6 +285,8 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     public void setUsuariosConectados(Hashtable<String, Usuario> usuariosConectados) {
         this.usuariosConectados = usuariosConectados;
     }
+
+    
     
     
 }

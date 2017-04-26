@@ -15,6 +15,7 @@ import sop_rmi.*;
 public class Cliente extends javax.swing.JFrame {
 
     private ArrayList<Usuario> ListaUsuariosRegistrados = new ArrayList<>();
+    private ArrayList<String> usuariosConectados = new ArrayList<String>();
     Cliente_Validaciones validaciones = new Cliente_Validaciones();
     private static UsuariosInt objRemoto;
     public static int Hora = 0;
@@ -1851,7 +1852,7 @@ public class Cliente extends javax.swing.JFrame {
         ListaUsuariosRegistrados.clear();
         jTextArea3.setText("  ***  Lista de Usuarios  ***  ");
         try {
-            ListaUsuariosRegistrados = objRemoto.listarUsuarios();
+            ListaUsuariosRegistrados = objRemoto.listarUsuariosRegistrados();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto .....!!", "Error", JOptionPane.ERROR_MESSAGE);
         }
