@@ -630,6 +630,11 @@ public class Cliente extends javax.swing.JFrame {
         Seleccionar_Jugador_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Seleccionar_Jugador_btn.setForeground(new java.awt.Color(0, 0, 204));
         Seleccionar_Jugador_btn.setText("Seleccionar Jugador en Red");
+        Seleccionar_Jugador_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Seleccionar_Jugador_btnActionPerformed(evt);
+            }
+        });
 
         Configurar_Partida_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Configurar_Partida_btn.setForeground(new java.awt.Color(0, 0, 204));
@@ -1968,16 +1973,19 @@ public class Cliente extends javax.swing.JFrame {
         // TODO add your handling code here:
         String login = jComboBox2.getSelectedItem().toString();
         boolean eliminado = false;
-        JOptionPane.showMessageDialog(null, "Realmente decea Eliminar el Usuario .....!!", "Confirmar Eliminacion", JOptionPane.YES_NO_OPTION);
-        try {
-            eliminado = objRemoto.eliminarUsuario(login);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto .....!!", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        if(eliminado){
-            JOptionPane.showMessageDialog(null, "Usuario Eliminado Exitosamente .....!!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        if (JOptionPane.showConfirmDialog(null, "Eliminar Usuario", "CONFIRMAR",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            try {
+                eliminado = objRemoto.eliminarUsuario(login);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto .....!!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if(eliminado){
+                JOptionPane.showMessageDialog(null, "Usuario Eliminado Exitosamente .....!!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(null, "No fue posible eliminar el Usuario .....!!", "Error", JOptionPane.ERROR_MESSAGE);
+            }           
         }else{
-            JOptionPane.showMessageDialog(null, "No fue posible eliminar el Usuario .....!!", "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Eligio no eliminar usuario");
         }
     }//GEN-LAST:event_Eliminar_Usuario_btnActionPerformed
 
@@ -1990,6 +1998,14 @@ public class Cliente extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void Seleccionar_Jugador_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Seleccionar_Jugador_btnActionPerformed
+        // TODO add your handling code here:
+        Menu_Juego.setVisible(false);
+        Seleccionar_Jugador_Red.setLocationRelativeTo(null);
+        Seleccionar_Jugador_Red.setResizable(false);
+        Seleccionar_Jugador_Red.setVisible(true);
+    }//GEN-LAST:event_Seleccionar_Jugador_btnActionPerformed
 
     /**
      * @param args the command line arguments

@@ -3,7 +3,7 @@ package sop_rmi;
 import servidor.UtilidadesConsola;
 
 /**
- * @author Santiago Garcia
+ * @author Kevin Chantré
  */
 
 public class Usuario implements UsuarioInt{
