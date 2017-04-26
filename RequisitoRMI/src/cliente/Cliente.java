@@ -1464,6 +1464,11 @@ public class Cliente extends javax.swing.JFrame {
         );
 
         jButton5.setText("Mostrar Jugadores Conectados");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jTextArea5.setColumns(20);
         jTextArea5.setRows(5);
@@ -1975,6 +1980,16 @@ public class Cliente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "No fue posible eliminar el Usuario .....!!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_Eliminar_Usuario_btnActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // Muestra los usuarios conectados
+        ArrayList<Usuario> ListaUsuarios = new ArrayList<>();
+        try {
+            
+        } catch (Exception e) {
+            
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
