@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class JugarImpl extends UnicastRemoteObject implements JugarInt{
 
-    private ArrayList<Ficha> fichasJugador1 = new ArrayList<>(); 
+    private ArrayList<Ficha> fichasJugador1 = new ArrayList<>(); //nova
     private ArrayList<Ficha> fichasJugador2 = new ArrayList<>();
     private Jugador jugador1;
     private Jugador jugador2;

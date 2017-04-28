@@ -2,6 +2,7 @@ package sop_rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  * @author Santiago Garcia
@@ -11,5 +12,6 @@ import java.rmi.RemoteException;
 
 public interface EstadisticasInt extends Remote{
     
-    public String generarEstadisticas() throws RemoteException;
+    public ArrayList<String> generarEstadisticas() throws RemoteException ;
+    public boolean actualizarEstadisticas(String login1, String login2, String resultadoPartida) throws RemoteException ;
 }

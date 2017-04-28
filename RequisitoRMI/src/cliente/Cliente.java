@@ -621,7 +621,7 @@ public class Cliente extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton19)
                     .addComponent(Autentificar_Usr))
-                .addContainerGap())
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout Autentificar_UsuarioLayout = new javax.swing.GroupLayout(Autentificar_Usuario.getContentPane());
@@ -1463,7 +1463,6 @@ public class Cliente extends javax.swing.JFrame {
             .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        Seleccionar_Jugador_Red.setMaximumSize(new java.awt.Dimension(343, 378));
         Seleccionar_Jugador_Red.setMinimumSize(new java.awt.Dimension(343, 378));
 
         jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1554,7 +1553,6 @@ public class Cliente extends javax.swing.JFrame {
         );
 
         Elegir_Numero_Fichas.setTitle("Configurar Partida");
-        Elegir_Numero_Fichas.setMaximumSize(new java.awt.Dimension(361, 179));
         Elegir_Numero_Fichas.setMinimumSize(new java.awt.Dimension(361, 179));
 
         jComboBox3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1899,7 +1897,9 @@ public class Cliente extends javax.swing.JFrame {
         //System.out.println("Se destruye el Hilo del Cronometro....\n");
         //miCronometro.stop();
         //miCronometro.destroy();
+        IniciaHilo = false;
         Tablero.setVisible(false);
+        
         Menu_Juego.setLocationRelativeTo(null);
         Menu_Juego.setResizable(false);
         Menu_Juego.setVisible(true);
@@ -2427,19 +2427,19 @@ public class Cliente extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(null, "Error. No has resivido ninguna Ficha", "Error", JOptionPane.ERROR_MESSAGE);
         }      
-        /*
+        
         Usuario1_Lb.setText(anfitrion);
         Usuario2_Lb.setText(contrincante);
         Mi_Numero_Fichas_Label.setText(Integer.toString(NumeroFichas));
         Lienzo pintar = new Lienzo();
         pintar.repaint();
-        ----
+        
             Elegir_Numero_Fichas.setVisible(false);
             Tablero.setLocationRelativeTo(null);
             Tablero.setResizable(false);
             Tablero.setVisible(true);
             IniciarHiloCronometro();  
-        */
+        
         return false;
     }
     

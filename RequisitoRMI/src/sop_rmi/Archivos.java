@@ -68,19 +68,24 @@ public class Archivos {
         return usuario;
     }
     
-    public void leerArchivo(){
+    /* Funcion para leer el contenido de un archivo 
+    * @param ruta del archivo a leer
+    * @return Array de las lineas leidas*/
+    public ArrayList<String> leerArchivo(String ruta){
 
+        ArrayList<String> lineasLeidas = new ArrayList<String>();
         try {
            // Apertura del fichero y creacion de BufferedReader para poder
            // hacer una lectura comoda (disponer del metodo readLine()).
-           archivo = new File ("./Usuarios/usuario_1.txt");
+           archivo = new File (ruta);
            fr = new FileReader (archivo);
            br = new BufferedReader(fr);
-
+           
+            System.out.println("Leyendo lineas del archivo de la ruta '"+ruta+"'");
            // Lectura del fichero
            String linea;
            while((linea=br.readLine())!=null){
-               System.out.println(linea);
+               lineasLeidas.add(linea);
            }
         }
         catch(Exception e){
@@ -98,6 +103,39 @@ public class Archivos {
                 e2.printStackTrace();
            }
         }
+        return lineasLeidas;
+    }
+    
+    /*Funcion para escribir informacion en un determinado archivo de texto.
+    * Escribira al final del archivo.
+    * @param ruta del archivo en el que se va a escribir
+    * @param texto a escribir
+    * @return true o false si realizo o no la escritura*/
+    public boolean escribirEnArchivo(String ruta, String texto){
+        boolean respuesta = false; 
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try
+        {
+            /*parametro true para que escribe al final del archivo*/
+            fichero = new FileWriter(ruta,true);
+            pw = new PrintWriter(fichero);
+            pw.println("\n"+texto);
+            respuesta = true;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+           try {
+           // Nuevamente aprovechamos el finally para 
+           // asegurarnos que se cierra el fichero.
+           if (null != fichero)
+              fichero.close();
+           } catch (Exception e2) {
+              e2.printStackTrace();
+           }
+        }
+        return respuesta;
     }
     
     public boolean crearArchivo(Usuario usuario){

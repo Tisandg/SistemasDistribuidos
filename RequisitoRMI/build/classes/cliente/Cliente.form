@@ -707,7 +707,7 @@
                           <Component id="jButton19" min="-2" max="-2" attributes="0"/>
                           <Component id="Autentificar_Usr" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace pref="72" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2259,9 +2259,6 @@
     </Container>
     <Container class="javax.swing.JFrame" name="Seleccionar_Jugador_Red">
       <Properties>
-        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[343, 378]"/>
-        </Property>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[343, 378]"/>
         </Property>
@@ -2401,9 +2398,6 @@
     <Container class="javax.swing.JFrame" name="Elegir_Numero_Fichas">
       <Properties>
         <Property name="title" type="java.lang.String" value="Configurar Partida"/>
-        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[361, 179]"/>
-        </Property>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[361, 179]"/>
         </Property>
