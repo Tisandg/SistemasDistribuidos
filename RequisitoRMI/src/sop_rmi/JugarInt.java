@@ -18,5 +18,6 @@ public interface JugarInt extends Remote{
     public boolean enviarJugada(String jugador, Ficha ficha) throws RemoteException;
     public Tablero estadoTablero() throws RemoteException;
     public int condicionesPartida() throws RemoteException;
-    
+    public ArrayList<Ficha> getFichasJugador1()throws RemoteException;
+    public ArrayList<Ficha> getFichasJugador2()throws RemoteException;
 }

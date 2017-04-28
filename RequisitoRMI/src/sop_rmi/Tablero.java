@@ -3,41 +3,53 @@ package sop_rmi;
 import java.util.ArrayList;
 
 /**
- * @author Santiago Garcia
+ * @author Kevin Chantré
  */
-public class Tablero {
+public class Tablero implements TableroInt{
     
-    private ArrayList<Ficha> fichasJugadas;
-    /*guardan los valores de los extremos de la fichas colocadas. Se supone
-      que estan libres*/
+    private ArrayList<Ficha> tabelro;
     private int extremoIzq;
     private int extremoDer;
 
-    public ArrayList<Ficha> getFichasJugadas() {
-        return fichasJugadas;
+    public Tablero() {
+        this.tabelro = new ArrayList<>();
+        this.extremoIzq = -1;
+        this.extremoDer = -1;
     }
 
-    public void setFichasJugadas(ArrayList<Ficha> fichasJugadas) {
-        this.fichasJugadas = fichasJugadas;
+    @Override
+    public ArrayList<Ficha> getTablero() {
+        return this.tabelro;
     }
 
+    @Override
     public int getExtremoIzq() {
-        return extremoIzq;
+        return this.extremoIzq;
     }
 
+    @Override
+    public int getExtremoDer() {
+        return this.extremoDer;
+    }
+
+    @Override
+    public void setTablero(ArrayList<Ficha> tablero) {
+        if(!tablero.isEmpty()){
+            this.tabelro.clear();
+            for (Ficha tablero1 : tablero) {
+                this.tabelro.add(tablero1);
+            }
+        }
+    }
+
+    @Override
     public void setExtremoIzq(int extremoIzq) {
         this.extremoIzq = extremoIzq;
     }
 
-    public int getExtremoDer() {
-        return extremoDer;
-    }
-
+    @Override
     public void setExtremoDer(int extremoDer) {
         this.extremoDer = extremoDer;
     }
-    
-    
-    
     
 }

@@ -16,8 +16,9 @@ public interface UsuariosInt extends Remote{
     public boolean iniciarSesion(String login, String clave, boolean admin) throws RemoteException;
     public Usuario consultarUsuario(String login)throws RemoteException;
     public boolean modificarUsuario(Usuario u)throws RemoteException;
-    public boolean eliminarUsuario(String login)throws RemoteException;
-    public ArrayList<Usuario> listarUsuarios()throws RemoteException;
+    public boolean eliminarUsuario(String login) throws RemoteException;
+    public ArrayList<String> listarUsuariosConectados(String login) throws RemoteException;
+    public ArrayList<Usuario> listarUsuariosRegistrados() throws RemoteException;
     public boolean salir(String login) throws RemoteException;
     
 }

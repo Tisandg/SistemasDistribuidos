@@ -3,73 +3,85 @@ package sop_rmi;
 /**
  * @author Santiago Garcia
  */
-public class Ficha {
+public class Ficha implements FichaInt{
     
     private int id;
-    private int lado1;
-    private int lado2;
-    private boolean estado;
-    private boolean estadoLado1;
-    private boolean estadoLado2;
-
+    private int lado_A;
+    private int lado_B;
+    private boolean estadoLado_A;
+    private boolean estadoLado_B;
+    private boolean colocada;
+    
     public Ficha() {
     }
 
-    public Ficha(int id, int lado1, int lado2, boolean estado) {
+    public Ficha(int id, int lado_A, int lado_B) {
         this.id = id;
-        this.lado1 = lado1;
-        this.lado2 = lado2;
-        this.estado = estado;
-    }
+        this.lado_A = lado_A;
+        this.lado_B = lado_B;
+        this.estadoLado_A = false;
+        this.estadoLado_B = false;
+        this.colocada = false;
+    } 
 
-    public boolean isEstadoLado1() {
-        return estadoLado1;
-    }
-
-    public void setEstadoLado1(boolean estadoLado1) {
-        this.estadoLado1 = estadoLado1;
-    }
-
-    public boolean isEstadoLado2() {
-        return estadoLado2;
-    }
-
-    public void setEstadoLado2(boolean estadoLado2) {
-        this.estadoLado2 = estadoLado2;
-    }
-
+    @Override
     public int getId() {
-        return id;
+        return this.id;
     }
 
+    @Override
+    public int getLado_A() {
+        return this.lado_A;
+    }
+
+    @Override
+    public int getLado_B() {
+        return this.lado_B;
+    }
+
+    @Override
+    public boolean getEstadoLado_A() {
+        return estadoLado_A;
+    }
+
+    @Override
+    public boolean getEstadoLado_B() {
+        return estadoLado_B;
+    }
+
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    public int getLado1() {
-        return lado1;
+    @Override
+    public void setLado_A(int lado_A) {
+        this.lado_A = lado_A;
     }
 
-    public void setLado1(int lado1) {
-        this.lado1 = lado1;
+    @Override
+    public void setLado_B(int lado_B) {
+        this.lado_B = lado_B;
     }
 
-    public int getLado2() {
-        return lado2;
+    @Override
+    public void setEstadoLado_A(boolean estadoLado_A) {
+        this.estadoLado_A = estadoLado_A;
     }
 
-    public void setLado2(int lado2) {
-        this.lado2 = lado2;
+    @Override
+    public void setEstadoLado_B(boolean estadoLado_B) {
+        this.estadoLado_B = estadoLado_B;
     }
 
-    public boolean isEstado() {
-        return estado;
+    @Override
+    public boolean getColocada() {
+        return this.colocada;
     }
 
-    public void setEstado(boolean estado) {
-        this.estado = estado;
+    @Override
+    public void setColocada(boolean colocada) {
+        this.colocada = colocada;
     }
-
-    
     
 }

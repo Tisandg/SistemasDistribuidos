@@ -3,9 +3,11 @@ package cliente;
 
 import javax.swing.JOptionPane;
 import java.applet.AudioClip;
+import java.awt.HeadlessException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 
 import sop_rmi.*;
 /**
@@ -14,9 +16,12 @@ import sop_rmi.*;
  */
 public class Cliente extends javax.swing.JFrame {
 
+    int numPuertoRMIRegistry = 0;
+    String direccionIpRMIRegistry = "";
     private ArrayList<Usuario> ListaUsuariosRegistrados = new ArrayList<>();
     Cliente_Validaciones validaciones = new Cliente_Validaciones();
     private static UsuariosInt objRemoto;
+    private static JugarInt objRemoto_Juego;
     public static int Hora = 0;
     public static int minuto = 0;
     public static int segundo = 0;
@@ -24,6 +29,10 @@ public class Cliente extends javax.swing.JFrame {
     boolean Corriendo = false;
     public Lienzo pintar_Fichas = new Lienzo();
     public Cronometro miCronometro;
+    private int Numero_Fichas_Partida = 0;
+    private String LoginContrincante = "";
+    DefaultListModel modeloLista = new DefaultListModel();
+    ArrayList<Ficha> Mis_Fichas = new ArrayList<>();
     
     public Cliente() {
         initComponents();
@@ -86,8 +95,6 @@ public class Cliente extends javax.swing.JFrame {
         Menu_Juego = new javax.swing.JFrame();
         jPanel8 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
-        Seleccionar_Jugador_btn = new javax.swing.JButton();
-        Configurar_Partida_btn = new javax.swing.JButton();
         Empezar_Partida_btn = new javax.swing.JButton();
         Consultar_Estadisticas_btn = new javax.swing.JButton();
         Chat_Entre_Jugadores_btn = new javax.swing.JButton();
@@ -102,7 +109,7 @@ public class Cliente extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
+        Mi_Numero_Fichas_Label = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jLabel59 = new javax.swing.JLabel();
         jLabel60 = new javax.swing.JLabel();
@@ -182,8 +189,17 @@ public class Cliente extends javax.swing.JFrame {
         Seleccionar_Jugador_Red = new javax.swing.JFrame();
         jPanel16 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTextArea5 = new javax.swing.JTextArea();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
+        jLabel63 = new javax.swing.JLabel();
+        Aceptar_Seleccion_De_Contrincante = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        Elegir_Numero_Fichas = new javax.swing.JFrame();
+        jPanel17 = new javax.swing.JPanel();
+        jComboBox3 = new javax.swing.JComboBox();
+        Regresar_MenuJuego = new javax.swing.JButton();
+        Seleccionar_NumeroFichas_btn = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -445,7 +461,6 @@ public class Cliente extends javax.swing.JFrame {
         );
 
         Registro_Usuario.setTitle("Registro de Usuario");
-        Registro_Usuario.setMaximumSize(new java.awt.Dimension(348, 308));
         Registro_Usuario.setMinimumSize(new java.awt.Dimension(395, 361));
 
         jPanel6.setMaximumSize(new java.awt.Dimension(348, 308));
@@ -627,19 +642,6 @@ public class Cliente extends javax.swing.JFrame {
         jLabel18.setForeground(new java.awt.Color(204, 0, 0));
         jLabel18.setText(" Domino RMI");
 
-        Seleccionar_Jugador_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        Seleccionar_Jugador_btn.setForeground(new java.awt.Color(0, 0, 204));
-        Seleccionar_Jugador_btn.setText("Seleccionar Jugador en Red");
-        Seleccionar_Jugador_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Seleccionar_Jugador_btnActionPerformed(evt);
-            }
-        });
-
-        Configurar_Partida_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        Configurar_Partida_btn.setForeground(new java.awt.Color(0, 0, 204));
-        Configurar_Partida_btn.setText("Configurar Partida");
-
         Empezar_Partida_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Empezar_Partida_btn.setForeground(new java.awt.Color(0, 0, 204));
         Empezar_Partida_btn.setText("Empezar Partida");
@@ -685,10 +687,8 @@ public class Cliente extends javax.swing.JFrame {
                 .addContainerGap(80, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(Seleccionar_Jugador_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Configurar_Partida_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Empezar_Partida_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Consultar_Estadisticas_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Consultar_Estadisticas_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
                         .addComponent(Chat_Entre_Jugadores_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(Usuario_Actual_Lb, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -709,17 +709,13 @@ public class Cliente extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Usuario_Actual_Lb)
                     .addComponent(jLabel18))
-                .addGap(31, 31, 31)
-                .addComponent(Seleccionar_Jugador_btn)
-                .addGap(18, 18, 18)
-                .addComponent(Configurar_Partida_btn)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
                 .addComponent(Empezar_Partida_btn)
                 .addGap(18, 18, 18)
                 .addComponent(Consultar_Estadisticas_btn)
                 .addGap(18, 18, 18)
                 .addComponent(Chat_Entre_Jugadores_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addGap(85, 85, 85)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton25)
                     .addComponent(jButton26))
@@ -760,8 +756,8 @@ public class Cliente extends javax.swing.JFrame {
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel25.setText("0");
 
-        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel26.setText("14");
+        Mi_Numero_Fichas_Label.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Mi_Numero_Fichas_Label.setText("14");
 
         jLabel27.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel27.setText("0");
@@ -787,7 +783,7 @@ public class Cliente extends javax.swing.JFrame {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jLabel21)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Mi_Numero_Fichas_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jLabel22)
                         .addGap(18, 18, 18)
@@ -816,7 +812,7 @@ public class Cliente extends javax.swing.JFrame {
                             .addComponent(jLabel27))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel23))
-                    .addComponent(jLabel26))
+                    .addComponent(Mi_Numero_Fichas_Label))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel59)
@@ -1222,7 +1218,6 @@ public class Cliente extends javax.swing.JFrame {
         );
 
         Modificar_Datos_Usuario.setTitle("Modificar_Usuario");
-        Modificar_Datos_Usuario.setMaximumSize(new java.awt.Dimension(341, 385));
         Modificar_Datos_Usuario.setMinimumSize(new java.awt.Dimension(341, 385));
 
         jTabbedPane1.setMaximumSize(new java.awt.Dimension(100, 100));
@@ -1468,6 +1463,11 @@ public class Cliente extends javax.swing.JFrame {
             .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        Seleccionar_Jugador_Red.setMaximumSize(new java.awt.Dimension(343, 378));
+        Seleccionar_Jugador_Red.setMinimumSize(new java.awt.Dimension(343, 378));
+
+        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(0, 0, 153));
         jButton5.setText("Mostrar Jugadores Conectados");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1475,9 +1475,40 @@ public class Cliente extends javax.swing.JFrame {
             }
         });
 
-        jTextArea5.setColumns(20);
-        jTextArea5.setRows(5);
-        jScrollPane5.setViewportView(jTextArea5);
+        jList1.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                Seleccionar_Usuario_Conectado_jlist(evt);
+            }
+        });
+        jScrollPane6.setViewportView(jList1);
+
+        jLabel63.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel63.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel63.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel63.setText("Selecciona un Jugador de la Lista");
+
+        Aceptar_Seleccion_De_Contrincante.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Aceptar_Seleccion_De_Contrincante.setForeground(new java.awt.Color(0, 0, 153));
+        Aceptar_Seleccion_De_Contrincante.setText("Aceptar");
+        Aceptar_Seleccion_De_Contrincante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Aceptar_Seleccion_De_ContrincanteActionPerformed(evt);
+            }
+        });
+
+        jButton13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton13.setForeground(new java.awt.Color(0, 0, 153));
+        jButton13.setText("Regresar");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -1485,19 +1516,30 @@ public class Cliente extends javax.swing.JFrame {
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                    .addComponent(jScrollPane5))
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Aceptar_Seleccion_De_Contrincante, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel63, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addContainerGap(36, Short.MAX_VALUE)
+                .addComponent(jLabel63)
+                .addGap(29, 29, 29)
                 .addComponent(jButton5)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Aceptar_Seleccion_De_Contrincante)
+                    .addComponent(jButton13))
+                .addGap(53, 53, 53))
         );
 
         javax.swing.GroupLayout Seleccionar_Jugador_RedLayout = new javax.swing.GroupLayout(Seleccionar_Jugador_Red.getContentPane());
@@ -1509,6 +1551,78 @@ public class Cliente extends javax.swing.JFrame {
         Seleccionar_Jugador_RedLayout.setVerticalGroup(
             Seleccionar_Jugador_RedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        Elegir_Numero_Fichas.setTitle("Configurar Partida");
+        Elegir_Numero_Fichas.setMaximumSize(new java.awt.Dimension(361, 179));
+        Elegir_Numero_Fichas.setMinimumSize(new java.awt.Dimension(361, 179));
+
+        jComboBox3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jComboBox3.setForeground(new java.awt.Color(0, 0, 153));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "N° Fichas", "16 Fichas", "18 Fichas", "20 Fichas", "22 Fichas", "24 Fichas", "26 Fichas", "28 Fichas"}));
+
+        Regresar_MenuJuego.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Regresar_MenuJuego.setText("Cancelar");
+        Regresar_MenuJuego.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Regresar_MenuJuegoActionPerformed(evt);
+            }
+        });
+
+        Seleccionar_NumeroFichas_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Seleccionar_NumeroFichas_btn.setForeground(new java.awt.Color(0, 0, 153));
+        Seleccionar_NumeroFichas_btn.setText("Seleccionar");
+        Seleccionar_NumeroFichas_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Seleccionar_NumeroFichas_btnActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setText("Seleccione el numero de fichas con las cuales decea Jugar");
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Seleccionar_NumeroFichas_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Regresar_MenuJuego, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(104, 104, 104))
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Seleccionar_NumeroFichas_btn))
+                .addGap(29, 29, 29)
+                .addComponent(Regresar_MenuJuego)
+                .addGap(26, 26, 26))
+        );
+
+        javax.swing.GroupLayout Elegir_Numero_FichasLayout = new javax.swing.GroupLayout(Elegir_Numero_Fichas.getContentPane());
+        Elegir_Numero_Fichas.getContentPane().setLayout(Elegir_Numero_FichasLayout);
+        Elegir_Numero_FichasLayout.setHorizontalGroup(
+            Elegir_Numero_FichasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        Elegir_Numero_FichasLayout.setVerticalGroup(
+            Elegir_Numero_FichasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1600,8 +1714,6 @@ public class Cliente extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // EL cliente se registra en el servidor
-        int numPuertoRMIRegistry = 0;
-        String direccionIpRMIRegistry = "";
         if(jTextField1.getText().equals("") || jTextField2.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Espacios sin Lenar.....!!", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
@@ -1802,14 +1914,17 @@ public class Cliente extends javax.swing.JFrame {
 
     private void Empezar_Partida_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Empezar_Partida_btnActionPerformed
         // Empezar Partida
-        Lienzo pintar = new Lienzo();
-        pintar.repaint();
-        Usuario1_Lb.setText(Usuario_Actual_Lb.getText());
-        Menu_Juego.setVisible(false);
-        Tablero.setLocationRelativeTo(null);
-        Tablero.setResizable(false);
-        Tablero.setVisible(true);
-        IniciarHiloCronometro();
+        String msg = "Antes de empezar una partida debes relizar algunas configuraciones como: \n"
+                + "\t Elegir un jugador en linea para enfrentarlo..\n"
+                + "\t Determinar el numero de fichas con las cuales se Jugara \n"
+                + "\nDeseas Continuar";
+        if (JOptionPane.showConfirmDialog(null, msg, "CONFIRMAR",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            Menu_Juego.setVisible(false);
+            Seleccionar_Jugador_Red.setLocationRelativeTo(null);
+            Seleccionar_Jugador_Red.setResizable(false);
+            Seleccionar_Jugador_Red.setVisible(true); 
+        }
+        
     }//GEN-LAST:event_Empezar_Partida_btnActionPerformed
 
     private void jButton25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton25ActionPerformed
@@ -1910,7 +2025,7 @@ public class Cliente extends javax.swing.JFrame {
         ListaUsuariosRegistrados.clear();
         jTextArea3.setText("  ***  Lista de Usuarios  ***  ");
         try {
-            ListaUsuariosRegistrados = objRemoto.listarUsuarios();
+            ListaUsuariosRegistrados = objRemoto.listarUsuariosRegistrados();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto .....!!", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -1991,21 +2106,85 @@ public class Cliente extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // Muestra los usuarios conectados
-        ArrayList<Usuario> ListaUsuarios = new ArrayList<>();
+        ArrayList<String> ListaUsuarios = new ArrayList<>();
+        
         try {
-            
+            ListaUsuarios = objRemoto.listarUsuariosConectados(Usuario_Actual_Lb.getText());
         } catch (Exception e) {
-            
+            JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto .....!!", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
+        if(!ListaUsuarios.isEmpty()){
+            for (int i = 0; i < ListaUsuarios.size(); i++) {
+                System.out.println("usuario : " + ListaUsuarios.get(i));
+                modeloLista.addElement(ListaUsuarios.get(i));
+            }
+        }
+        jList1.setModel(modeloLista);
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void Seleccionar_Jugador_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Seleccionar_Jugador_btnActionPerformed
+    private void Regresar_MenuJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Regresar_MenuJuegoActionPerformed
         // TODO add your handling code here:
-        Menu_Juego.setVisible(false);
-        Seleccionar_Jugador_Red.setLocationRelativeTo(null);
-        Seleccionar_Jugador_Red.setResizable(false);
-        Seleccionar_Jugador_Red.setVisible(true);
-    }//GEN-LAST:event_Seleccionar_Jugador_btnActionPerformed
+        Elegir_Numero_Fichas.setVisible(false);
+        Menu_Juego.setLocationRelativeTo(null);
+        Menu_Juego.setResizable(false);
+        Menu_Juego.setVisible(true);      
+    }//GEN-LAST:event_Regresar_MenuJuegoActionPerformed
+
+    private void Seleccionar_NumeroFichas_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Seleccionar_NumeroFichas_btnActionPerformed
+        // Configuramos la partida con el numero de fichas con las cuales queremos jugar
+        //Se da inicio a la partida
+        String NumeroFichas = jComboBox3.getSelectedItem().toString();
+        if(NumeroFichas.equals("N° Fichas")){
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un numero de fichas .....!!", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            System.out.println("Fichas : "+NumeroFichas);
+            String [] v = NumeroFichas.split(" ");
+            Numero_Fichas_Partida = Integer.parseInt(v[0]);
+            JOptionPane.showMessageDialog(null, "\tResumen \n\nJugaras contra "+LoginContrincante+"\ncada jugador iniciara con "+Numero_Fichas_Partida+" Fichas", "Resumen", JOptionPane.INFORMATION_MESSAGE); 
+            Configurar_Tablero(Usuario_Actual_Lb.getText(), LoginContrincante, Numero_Fichas_Partida/2);
+                    
+        }
+    }//GEN-LAST:event_Seleccionar_NumeroFichas_btnActionPerformed
+
+    private void Seleccionar_Usuario_Conectado_jlist(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_Seleccionar_Usuario_Conectado_jlist
+        // Seleccion del login del contrincante
+        int index= jList1.getSelectedIndex();
+        LoginContrincante = (String)modeloLista.getElementAt(index);
+        jLabel63.setText("Seleccionaste a "+LoginContrincante);
+    }//GEN-LAST:event_Seleccionar_Usuario_Conectado_jlist
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        // TODO add your handling code here:
+        if(LoginContrincante.equals("")){
+            if (JOptionPane.showConfirmDialog(null, "No has Seleccionado ningun Usuario de la lista \n Realmente deseas regresar al menu de Juego", "CONFIRMAR",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                Elegir_Numero_Fichas.setVisible(false);
+                Menu_Juego.setLocationRelativeTo(null);
+                Menu_Juego.setResizable(false);
+                Menu_Juego.setVisible(true);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Se almacenara a "+LoginContrincante+" como tu contrincante", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            Elegir_Numero_Fichas.setVisible(false);
+            Menu_Juego.setLocationRelativeTo(null);
+            Menu_Juego.setResizable(false);
+            Menu_Juego.setVisible(true);
+        }
+                
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void Aceptar_Seleccion_De_ContrincanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Aceptar_Seleccion_De_ContrincanteActionPerformed
+        // TODO add your handling code here:
+       if(LoginContrincante.equals("")){
+            JOptionPane.showMessageDialog(null, "Error. No has seleccionado a ningun gugador de la lista ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Se almacenara a "+LoginContrincante+" como tu contrincante", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            Seleccionar_Jugador_Red.setVisible(false);
+            Elegir_Numero_Fichas.setLocationRelativeTo(null);
+            Elegir_Numero_Fichas.setResizable(false);
+            Elegir_Numero_Fichas.setVisible(true);
+        } 
+    }//GEN-LAST:event_Aceptar_Seleccion_De_ContrincanteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2043,13 +2222,14 @@ public class Cliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Aceptar_Seleccion_De_Contrincante;
     private javax.swing.JButton Actualizar_Usuario_btn;
     private javax.swing.JFrame Autentificar_Administrador;
     private javax.swing.JButton Autentificar_Usr;
     private javax.swing.JFrame Autentificar_Usuario;
     private javax.swing.JButton Chat_Entre_Jugadores_btn;
-    private javax.swing.JButton Configurar_Partida_btn;
     private javax.swing.JButton Consultar_Estadisticas_btn;
+    private javax.swing.JFrame Elegir_Numero_Fichas;
     private javax.swing.JButton Eliminar_Usuario_btn;
     private javax.swing.JButton Empezar_Partida_btn;
     private javax.swing.JButton Estadisticas_btn;
@@ -2057,13 +2237,15 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JFrame Menu_Administrador;
     private javax.swing.JFrame Menu_Juego;
     private javax.swing.JFrame Menu_Principal;
+    private javax.swing.JLabel Mi_Numero_Fichas_Label;
     private javax.swing.JFrame Modificar_Datos_Usuario;
     private javax.swing.JButton Modificar_Datos_Usuario_btn;
     private javax.swing.JButton Registrar_Usuario;
     private javax.swing.JButton Registrar_Usuario_btn;
     private javax.swing.JFrame Registro_Usuario;
+    private javax.swing.JButton Regresar_MenuJuego;
     private javax.swing.JFrame Seleccionar_Jugador_Red;
-    private javax.swing.JButton Seleccionar_Jugador_btn;
+    private javax.swing.JButton Seleccionar_NumeroFichas_btn;
     private javax.swing.JFrame Tablero;
     private javax.swing.JLabel Usuario1_Lb;
     private javax.swing.JLabel Usuario2_Lb;
@@ -2072,6 +2254,7 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton19;
@@ -2087,6 +2270,7 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2105,7 +2289,6 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
@@ -2131,6 +2314,7 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
@@ -2145,9 +2329,11 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JList jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -2162,6 +2348,7 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2175,13 +2362,12 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextArea jTextArea4;
-    private javax.swing.JTextArea jTextArea5;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
@@ -2211,4 +2397,50 @@ public class Cliente extends javax.swing.JFrame {
         Sonido.play();
     }
 
+    private boolean Configurar_Tablero(String anfitrion, String contrincante, int NumeroFichas){
+        
+        try {
+            objRemoto_Juego = (JugarInt) UtilidadesRegistroC.obtenerObjRemoto(numPuertoRMIRegistry, direccionIpRMIRegistry, "ServidorJuego");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error. No se podido obtener la referencia al Objeto Remoto ", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        try {
+            objRemoto_Juego.repartirFichas(NumeroFichas);
+            try {
+                Mis_Fichas = objRemoto_Juego.getFichasJugador1();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error. Invocando la operacion Remota << Obtenr Mis Fichas >> ", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("Error = "+e.getMessage());
+            }
+        } catch (RemoteException | HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Error. Invocando la operacion Remota << Repartir Fichas >> ", "Error", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        
+        
+        if(!Mis_Fichas.isEmpty()){
+            for (int i = 0; i < Mis_Fichas.size(); i++) {
+                System.out.println("Ficha "+i+" Lado A = "+Mis_Fichas.get(i).getLado_A());
+                System.out.println("Ficha "+i+" Lado B = "+Mis_Fichas.get(i).getLado_B());
+                System.out.println("_______________________________________________________________");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Error. No has resivido ninguna Ficha", "Error", JOptionPane.ERROR_MESSAGE);
+        }      
+        /*
+        Usuario1_Lb.setText(anfitrion);
+        Usuario2_Lb.setText(contrincante);
+        Mi_Numero_Fichas_Label.setText(Integer.toString(NumeroFichas));
+        Lienzo pintar = new Lienzo();
+        pintar.repaint();
+        ----
+            Elegir_Numero_Fichas.setVisible(false);
+            Tablero.setLocationRelativeTo(null);
+            Tablero.setResizable(false);
+            Tablero.setVisible(true);
+            IniciarHiloCronometro();  
+        */
+        return false;
+    }
+    
 }

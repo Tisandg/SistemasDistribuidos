@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * @author Santiago Garcia
+ * @author Kevin Chantré
  */
 public class JugarImpl extends UnicastRemoteObject implements JugarInt{
 
-    private ArrayList<Ficha> fichasJugador1;
-    private ArrayList<Ficha> fichasJugador2;
+    private ArrayList<Ficha> fichasJugador1 = new ArrayList<>(); 
+    private ArrayList<Ficha> fichasJugador2 = new ArrayList<>();
     private Jugador jugador1;
     private Jugador jugador2;
-    private ArrayList<Ficha> fichasTotal;
+    private ArrayList<Ficha> fichasTotal = new ArrayList<>();
     private Tablero tablero;
     private boolean estadoPartida;
     
@@ -103,10 +103,10 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         ArrayList<Integer> fichasValidas = seleccionarFichas(tamano);
         ArrayList<Integer> fichasSalidas = new ArrayList<Integer>();
         boolean turno = false;
-        int contador = 0, aleatorio;
+        int contador = 0, aleatorio = 0;
         Random rnd = new Random();
         while(contador < tamano){
-            aleatorio = (int) (rnd.nextDouble() * tamano + 0);
+            aleatorio = (int) (rnd.nextDouble() * (tamano-1) + 0);
             if(!fichasSalidas.contains( fichasValidas.get(aleatorio) )){
                 fichasSalidas.add(aleatorio);
                 if(turno){
@@ -119,7 +119,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
                 contador++;
             }
         }
-        enviarFichasAJugadores();
+        //enviarFichasAJugadores();
         System.out.println("Fichas repartidas");
         imprimirFichas();
     }
@@ -133,16 +133,12 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     
     /*Imprime las fichas repartidas a los jugadores*/
     private void imprimirFichas(){
-        int j,i;
-        for ( j = 0; j < 2; j++) {
-            System.out.println("Jugador "+(j+1)+":");
-            int tam = fichasJugador1.size();
-            for (i = 0; i < tam; i++) {
-                System.out.println("["+fichasJugador1.get(i).getLado1()+"|"+fichasJugador2.get(i).getLado2()+" ]");
-            }
-            System.out.println();
-        }
-        
+        int j;
+        for ( j = 0; j < fichasTotal.size(); j++) {
+            System.out.println("id = " +fichasTotal.get(j).getId());
+            System.out.println(" [ "+fichasTotal.get(j).getLado_A()+" | "+fichasTotal.get(j).getLado_B()+" ]");
+            System.out.println("__________________________________________________________");
+        }      
     }
     
     /*Carga todas las fichas del juego de domino en un array */
@@ -151,11 +147,12 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         int id = 0;
 	for(i=0; i<7; i++){
             for(j=i; j<7; j++){
-                Ficha ficha = new Ficha(id,i,j,false);
+                Ficha ficha = new Ficha(id,i,j);
                 fichasTotal.add(ficha);
                 id++;
             }
         }
+        imprimirFichas();
     }
     
     /*Funcion para escoger al azar las fichas que se van a repartir.
@@ -163,13 +160,13 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     * @param numero de fichas a jugar*/
     private ArrayList<Integer> seleccionarFichas(int tamano){
         int contador = 0;
-        int aleatorio;
+        int aleatorio = 0;
         ArrayList<Integer> fichasSeleccionadas = new ArrayList<Integer>();
         //Agregamos obligatoriamente la ficha 6|6
         fichasSeleccionadas.add(27);
         Random rnd = new Random();
         while(contador < tamano){
-            aleatorio = (int) (rnd.nextDouble() * 28 + 0);
+            aleatorio = (int) (rnd.nextDouble() * 27 + 0);
             if(!fichasSeleccionadas.contains(aleatorio)){
                 fichasSeleccionadas.add(aleatorio);
             }
@@ -234,14 +231,14 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
                         if(turno){
                             int posicionFicha = jugador1.getMisFichas().indexOf(ficha);
                             //marcamos la ficha como ocupada
-                            jugador1.getMisFichas().get(posicionFicha).setEstado(true);
+                            jugador1.getMisFichas().get(posicionFicha).setColocada(true);
                             jugador1.setFichasRestantes(jugador1.getFichasRestantes()-1);
                             
                         }else{
                             int posicionFicha = jugador2.getMisFichas().indexOf(ficha);
                             //marcamos la ficha como ocupada
                             jugador2.setFichasRestantes(jugador2.getFichasRestantes()-1);
-                            jugador2.getMisFichas().get(posicionFicha).setEstado(true);
+                            jugador2.getMisFichas().get(posicionFicha).setColocada(true);
                         }
                         //Cambiamos el turno
                         turno = !turno;
@@ -346,15 +343,15 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     /*Metodo para comprobar si la ficha enviada por el jugador coincide en alguno 
       de sus lados con los extremos del tablero */
     private boolean sePuedeJugar(Ficha ficha){
-        if(tablero.getFichasJugadas().size() == 0){
+        if(tablero.getTablero().isEmpty()){
             if(ficha.getId() == 27){
                 return true;
             }else{
                 return false;
             }
         }else{
-            if(ficha.getLado1() == tablero.getExtremoDer() || ficha.getLado1() == tablero.getExtremoIzq()
-                || ficha.getLado2() == tablero.getExtremoDer() || ficha.getLado2() == tablero.getExtremoIzq()){
+            if(ficha.getLado_A() == tablero.getExtremoDer() || ficha.getLado_A() == tablero.getExtremoIzq()
+                || ficha.getLado_B() == tablero.getExtremoDer() || ficha.getLado_B() == tablero.getExtremoIzq()){
                 return true;
             }else{
                 return false;
@@ -364,36 +361,36 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     }
     private boolean colocarFicha(Ficha ficha){
         boolean respuesta = false;
-        if(tablero.getExtremoIzq() == ficha.getLado1()){
+        if(tablero.getExtremoIzq() == ficha.getLado_A()){
             //Establecemos el lado, que coincide con el extremo, como ocupado
-            ficha.setEstadoLado1(true);
-            tablero.getFichasJugadas().add(0, ficha);
+            ficha.setEstadoLado_A(true);
+            tablero.getTablero().add(0, ficha);
             //Lado libre es el nuevo extremo izquierdo
-            tablero.setExtremoIzq(ficha.getLado2());
+            tablero.setExtremoIzq(ficha.getLado_B());
             respuesta = true;
         }
-        if(tablero.getExtremoIzq() == ficha.getLado2()){
+        if(tablero.getExtremoIzq() == ficha.getLado_B()){
             //Establecemos el lado, que coincide con el extremo, como ocupado
-            ficha.setEstadoLado2(true);
-            tablero.getFichasJugadas().add(0, ficha);
+            ficha.setEstadoLado_B(true);
+            tablero.getTablero().add(0, ficha);
             //Lado libre es el nuevo extremo izquierdo
-            tablero.setExtremoIzq(ficha.getLado1());
+            tablero.setExtremoIzq(ficha.getLado_A());
             respuesta = true;
         }
-        if(tablero.getExtremoDer() == ficha.getLado1()){
+        if(tablero.getExtremoDer() == ficha.getLado_A()){
             //Establecemos el lado, que coincide con el extremo, como ocupado
-            ficha.setEstadoLado1(true);
-            tablero.getFichasJugadas().add(ficha);
+            ficha.setEstadoLado_A(true);
+            tablero.getTablero().add(ficha);
             //Lado libre es el nuevo extremo derecho
-            tablero.setExtremoDer(ficha.getLado2());
+            tablero.setExtremoDer(ficha.getLado_B());
             respuesta = true;
         }
-        if(tablero.getExtremoDer() == ficha.getLado2()){
+        if(tablero.getExtremoDer() == ficha.getLado_B()){
             //Establecemos el lado, que coincide con el extremo, como ocupado
-            ficha.setEstadoLado2(true);
-            tablero.getFichasJugadas().add(ficha);
+            ficha.setEstadoLado_B(true);
+            tablero.getTablero().add(ficha);
             //Lado libre es el nuevo extremo derecho
-            tablero.setExtremoDer(ficha.getLado1());
+            tablero.setExtremoDer(ficha.getLado_A());
             respuesta = true;
         }
         return respuesta;
@@ -405,9 +402,9 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         int conteo = 0;
         int tam = jugador.getMisFichas().size();
         for (i = 0; i < tam; i++) {
-            if(jugador.getMisFichas().get(i).isEstado() == false){
-                conteo = jugador.getMisFichas().get(i).getLado1() + 
-                        jugador.getMisFichas().get(i).getLado2();
+            if(jugador.getMisFichas().get(i).getColocada() == false){
+                conteo = jugador.getMisFichas().get(i).getLado_A() + 
+                        jugador.getMisFichas().get(i).getLado_B();
             }
         }
         return conteo;
@@ -432,6 +429,16 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
                 jugador2.notificar(mensaje);
                 break;
         }
+    }
+
+    @Override
+    public ArrayList<Ficha> getFichasJugador1() throws RemoteException {
+        return this.fichasJugador1;
+    }
+
+    @Override
+    public ArrayList<Ficha> getFichasJugador2() throws RemoteException {
+        return fichasJugador2;
     }
     
 }
