@@ -20,12 +20,6 @@ public class Lienzo extends JComponent{
         fichas = new ArrayList<>();
         Fichas_Tablero f = new Fichas_Tablero(27, "/imagenes/6_6_v.png", new Point(624, 20));
         fichas.add(f);
-        Fichas_Tablero f1 = new Fichas_Tablero(20, "/imagenes/5_6_h.png", new Point(501, 50));
-        Fichas_Tablero f2 = new Fichas_Tablero(20, "/imagenes/5_5_v.png", new Point(438, 20));
-        Fichas_Tablero f3 = new Fichas_Tablero(20, "/imagenes/4_5_h.png", new Point(315, 50));
-        fichas.add(f1);
-        fichas.add(f2);
-        fichas.add(f3);
     }
     
     public void paintComponent(Graphics g){

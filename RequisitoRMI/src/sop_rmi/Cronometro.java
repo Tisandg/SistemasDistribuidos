@@ -2,7 +2,7 @@
 package sop_rmi;
 
 import javax.swing.JLabel;
-import cliente.Cliente;
+import cliente.Tablero_Interface;
 import javax.swing.JOptionPane;
 /**
  *
@@ -17,7 +17,7 @@ public class Cronometro extends Thread{
     
     public void run(){
         try {
-            while (Cliente.IniciaHilo) {                
+            while (Tablero_Interface.IniciaHilo) {                
                 Thread.sleep(1000);
                 EjecutarHiloCronometro();
             }
@@ -32,32 +32,32 @@ public class Cronometro extends Thread{
         String textoHoras = "";
         
         //System.out.println("Nombre del Hilo Actual : "+ Thread.currentThread().getName());
-        Cliente.segundo++;
-        if(Cliente.segundo > 59){
-           Cliente.segundo = 0;
-           Cliente.minuto++;
-           if(Cliente.minuto > 59){
-               Cliente.minuto = 0;
-               Cliente.Hora++;
-               if(Cliente.Hora > 1){
+        Tablero_Interface.segundo++;
+        if(Tablero_Interface.segundo > 59){
+           Tablero_Interface.segundo = 0;
+           Tablero_Interface.minuto++;
+           if(Tablero_Interface.minuto > 59){
+               Tablero_Interface.minuto = 0;
+               Tablero_Interface.Hora++;
+               if(Tablero_Interface.Hora > 1){
                    JOptionPane.showMessageDialog(null, "A pasado 2 Hora...!!!");
                }
            }
         }
-        if(Cliente.segundo < 10)
-            textosegundos = "0"+Cliente.segundo;
+        if(Tablero_Interface.segundo < 10)
+            textosegundos = "0"+Tablero_Interface.segundo;
         else
-            textosegundos = ""+Cliente.segundo;
+            textosegundos = ""+Tablero_Interface.segundo;
         
-        if(Cliente.minuto < 10)
-            textominutos = "0"+Cliente.minuto;
+        if(Tablero_Interface.minuto < 10)
+            textominutos = "0"+Tablero_Interface.minuto;
         else
-            textominutos = ""+Cliente.minuto;
+            textominutos = ""+Tablero_Interface.minuto;
         
-        if(Cliente.Hora < 10)
-            textoHoras = "0"+Cliente.Hora;
+        if(Tablero_Interface.Hora < 10)
+            textoHoras = "0"+Tablero_Interface.Hora;
         else
-            textoHoras = ""+Cliente.Hora;
+            textoHoras = ""+Tablero_Interface.Hora;
         
         String Reloj = textoHoras+" : "+textominutos+" : "+textosegundos;
         aux.setText(Reloj);

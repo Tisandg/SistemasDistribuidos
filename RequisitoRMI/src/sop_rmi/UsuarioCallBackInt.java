@@ -4,11 +4,10 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- * @author Santiago Garcia
- * Contiene metodos que permiten chatear entre los jugadores
- * de una partida
+ * @author Kevin Chantré
  */
 
 public interface UsuarioCallBackInt extends Remote{
-    
+    public void enviarInvitacion(String login, String mensaje) throws RemoteException;    
+    public void enviarMensaje(String login, String mensaje) throws RemoteException;    
 }

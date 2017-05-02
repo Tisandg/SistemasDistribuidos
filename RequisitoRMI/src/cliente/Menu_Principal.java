@@ -118,12 +118,8 @@ public class Menu_Principal extends javax.swing.JFrame {
 
     private void Ingresar_ClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Ingresar_ClienteActionPerformed
         // Usuario
-        /*
-        Menu_Principal.setVisible(false);
-        Autentificar_Usuario.setLocationRelativeTo(null);
-        Autentificar_Usuario.setResizable(false);
-        Autentificar_Usuario.setVisible(true);
-        */
+        this.setVisible(false);
+        new Usuario_Interface(numPuertoRMIRegistry, direccionIpRMIRegistry).setVisible(true);
     }//GEN-LAST:event_Ingresar_ClienteActionPerformed
 
     private void Ingresar_AdministradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Ingresar_AdministradorActionPerformed

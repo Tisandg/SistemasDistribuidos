@@ -33,7 +33,9 @@ public class ServidorDeObjetos {
             UtilidadesRMIServidor.RegistrarObjetoRemoto(ObjetoRemotoJuego, direccionIpRMIRegistry, numPuertoRMIRegistry,"ServidorJuego");            
             System.out.println("Objeto remoto Juego Registrado, esperado peticiones ...");
         } catch (Exception e) {
-            System.err.println("No se pudo Arrancar el NS o Registrar el objeto remoto");
+            System.err.println("No se pudo Registrar el objeto remoto <<ServidorJuego>>");
+            System.out.println("Error " + e.getMessage());
+            System.exit(0);
         }
         
     }

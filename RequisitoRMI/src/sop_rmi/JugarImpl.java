@@ -10,13 +10,13 @@ import java.util.Random;
  */
 public class JugarImpl extends UnicastRemoteObject implements JugarInt{
 
-    private ArrayList<Ficha> fichasJugador1 = new ArrayList<>(); //nova
-    private ArrayList<Ficha> fichasJugador2 = new ArrayList<>();
-    private Jugador jugador1;
-    private Jugador jugador2;
+    private ArrayList<Ficha> fichasJugador1 ;
+    private ArrayList<Ficha> fichasJugador2;
     private ArrayList<Ficha> fichasTotal = new ArrayList<>();
-    private Tablero tablero;
-    private boolean estadoPartida;
+    private Jugador jugador1 = new Jugador();
+    private Jugador jugador2 = new Jugador();;
+    private Tablero tablero = new Tablero();
+    private boolean estadoPartida = false;
     
     /*Para saber si los jugadores de esta partida ya han sido seleccionados*/
     private boolean seleccionadosJugadores;
@@ -35,6 +35,9 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         cargarTodasLasFichas();
         this.estadoPartida = false;
         this.seleccionadosJugadores = false;
+        this.fichasJugador1 = new ArrayList<>();
+        this.fichasJugador2 = new ArrayList<>();
+        
     }
 
     @Override
@@ -100,24 +103,28 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     @Override
     public void repartirFichas(int tamano) throws RemoteException {
         System.out.println("Se estan repartiendo las fichas entre los jugadores");
-        ArrayList<Integer> fichasValidas = seleccionarFichas(tamano);
-        ArrayList<Integer> fichasSalidas = new ArrayList<Integer>();
+        ArrayList<Integer> fichasValidas = new ArrayList<>();
+        ArrayList<Integer> fichasSalidas = new ArrayList<>();
+        fichasValidas = seleccionarFichas(tamano);
         boolean turno = false;
-        int contador = 0, aleatorio = 0;
+        int contador = 0, aleatorio = 0, salir = 0;
         Random rnd = new Random();
-        while(contador < tamano){
-            aleatorio = (int) (rnd.nextDouble() * (tamano-1) + 0);
-            if(!fichasSalidas.contains( fichasValidas.get(aleatorio) )){
-                fichasSalidas.add(aleatorio);
+        while(contador <= fichasValidas.size() && salir < 2){
+            aleatorio = (int) (rnd.nextDouble() * (tamano) + 0);
+            if(!fichasSalidas.contains(fichasValidas.get(aleatorio))){
+                fichasSalidas.add(fichasValidas.get(aleatorio));
                 if(turno){
-                    fichasJugador1.add(fichasTotal.get(aleatorio));
+                    fichasJugador1.add(fichasTotal.get(fichasValidas.get(aleatorio)));
                     turno = false;
                 }else{
-                    fichasJugador2.add(fichasTotal.get(aleatorio));
+                    fichasJugador2.add(fichasTotal.get(fichasValidas.get(aleatorio)));
                     turno = true;
                 }
                 contador++;
             }
+            if(contador == fichasValidas.size()){
+               salir++; 
+            }              
         }
         //enviarFichasAJugadores();
         System.out.println("Fichas repartidas");
@@ -141,6 +148,14 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         }      
     }
     
+    private void Imprimir_Numeros(ArrayList<Integer> Lista){
+        System.out.println("_____________Fichas Validas__________________");
+        for (int i = 0; i < Lista.size(); i++) {
+            System.out.println("Numero = "+Lista.get(i));           
+        }
+        System.out.println("_________________________________________");
+    }
+    
     /*Carga todas las fichas del juego de domino en un array */
     private void cargarTodasLasFichas()throws RemoteException{
         int i = 0, j = 0;
@@ -161,17 +176,18 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     private ArrayList<Integer> seleccionarFichas(int tamano){
         int contador = 0;
         int aleatorio = 0;
-        ArrayList<Integer> fichasSeleccionadas = new ArrayList<Integer>();
+        ArrayList<Integer> fichasSeleccionadas = new ArrayList<>();
         //Agregamos obligatoriamente la ficha 6|6
         fichasSeleccionadas.add(27);
         Random rnd = new Random();
-        while(contador < tamano){
-            aleatorio = (int) (rnd.nextDouble() * 27 + 0);
+        while(contador < (tamano-1)){
+            aleatorio = (int) (rnd.nextDouble() * 26 + 0);
             if(!fichasSeleccionadas.contains(aleatorio)){
                 fichasSeleccionadas.add(aleatorio);
-            }
-            contador++;
+                contador++;
+            }           
         }
+        Imprimir_Numeros(fichasSeleccionadas);
         return fichasSeleccionadas;
     }
     
