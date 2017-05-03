@@ -3,10 +3,7 @@ package sop_rmi;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import sop_rmi.Jugador;
-
+import cliente.UsuarioCallBackInt;
 /**
  * @author Santiago Garcia
  * Clase que implementa la interfaz de UsuariosInt
@@ -19,65 +16,126 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     private final int minClave = 8;
     private final int maxClave = 15;
     private Archivos manejadorArchivos;
+    private ArrayList<UsuarioActivo> listadoUsuariosActivos;
     
-    /*Guarda el login y la referencia del objeto*/
-    private Hashtable<String,Usuario> usuariosConectados;
     
     public UsuariosImpl() throws RemoteException
     {
         super(); //invoca al constructor de la clase base       
         this.manejadorArchivos = new Archivos();
-        //this.usuariosConectados = new ArrayList<Usuario>();
-        this.usuariosConectados = new Hashtable<String,Usuario>();
+        this.listadoUsuariosActivos = new ArrayList<>();
+        
     }
     
     /*************************     Validaciones    ****************************/
     public boolean campoVacio(String dato){
-        if (dato.length() < 1) {
-            return true;
-        }
-        return false;
+        return (dato.length() < 1)?true:false;
     }
+    
+    public int validacionNombre(String nombre){
+        if(nombre.length() > maxNombre){
+            System.out.println("El nombre no debe superar los "+maxNombre+" caracteres");
+            return 1;
+        }
+        return 0;
+    }
+    
+    public int validacionApellido(String apellido){
+        if(apellido.length() > maxApellido){
+            System.out.println("El apellido no debe superar los "+maxApellido+" caracteres");
+            return 1;
+        }
+        return 0;
+    }
+    
+    public int validacionLoginUsuario(String login){
+        if(login.length() > maxLoginU){
+            System.out.println("El login no debe superar los "+maxLoginU+" caracteres");
+            return 1;
+        }
+        return 0;
+    }
+    
+    /*Se puede utilizar las constantes maxClave y minClave ya que tienen los mismo
+    * valores de validacion para el login*/
+    public int validacionLoginAdmin(String login){
+        if(login.length() > maxClave || login.length() < minClave){
+            System.out.println("El login no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
+            return 1;
+        }
+        return 0;
+    }
+    
+    public int validacionClave(String clave){
+        if(clave.length() > maxClave || clave.length() < minClave){
+            System.out.println("La contraseña no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
+            return 1;
+        }
+        return 0;
+    }
+    
     
     public int validacionesRegistroUsuario(Usuario usuario){
         int errores = 0;
         if(campoVacio(usuario.getNombre())){
             System.out.println("El nombre no puede estar vacio");
             errores++;
-        }else if(usuario.getNombre().length() > maxNombre)
-        {
-            System.out.println("El nombre no debe superar los "+maxNombre+" caracteres");
-            errores++;
-        }
-        
+        }else{
+            errores += validacionNombre(usuario.getNombre());
+        } 
         
         if(campoVacio(usuario.getApellido())){
             System.out.println("El apellido no puede estar vacio");
             errores++;
-        }else if(usuario.getApellido().length() > maxApellido)
-        {
-                System.out.println("El apellido no debe superar los "+maxApellido+" caracteres");
-                errores++;
+        }else{
+            errores += validacionApellido(usuario.getApellido());
         }
         
         if(campoVacio(usuario.getLogin())){
             System.out.println("El login no puede estar vacio");
             errores++;
         }
-        else if(usuario.getLogin().length() > maxLoginU)
-        {
-                System.out.println("El login no debe superar los "+maxLoginU+" caracteres");
-                errores++;
+        else{
+            errores += validacionLoginUsuario(usuario.getLogin());
         }
         
         if(campoVacio(usuario.getClave())){
             System.out.println("La contraseña no puede estar vacia");
             errores++;
         }
-        else if(usuario.getClave().length() > maxClave || usuario.getClave().length() < minClave)
-        {
-                System.out.println("La clave no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
-                errores++;
+        else{
+            errores += validacionClave(usuario.getClave());
+        }
+        
+        return errores;
+    }
+    
+    public int validacionesRegistroAdmin(Usuario usuario){
+        int errores = 0;
+        if(campoVacio(usuario.getNombre())){
+            System.out.println("El nombre no puede estar vacio");
+            errores++;
+        }
+        
+        if(campoVacio(usuario.getApellido())){
+            System.out.println("El apellido no puede estar vacio");
+            errores++;
+        }
+        
+        if(campoVacio(usuario.getLogin())){
+            System.out.println("El login no puede estar vacio");
+            errores++;
+        }
+        else{
+            errores += validacionLoginAdmin(usuario.getLogin());
+        }
+        
+        if(campoVacio(usuario.getClave())){
+            System.out.println("La contraseña no puede estar vacia");
+            errores++;
+        }
+        else{
+            errores += validacionClave(usuario.getClave());
         }
         
         return errores;
@@ -89,22 +147,14 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
             System.out.println("El login no puede estar vacio");
             errores++;
         }else{
-            /*Se puede utilizar las constantes maxClave y minClave ya que tienen los mismo
-            * valores de validacion para el login*/
-            if(login.length() > maxClave || login.length() < minClave){
-                System.out.println("El login no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
-                errores++;
-            }
+            errores += validacionLoginAdmin(clave);
         }
         
         if(campoVacio(clave)){
             System.out.println("La contraseña no puede estar vacia");
             errores++;
         }else{
-            if(clave.length() > maxClave || clave.length() < minClave){
-                System.out.println("La contraseña no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
-                errores++;
-            }
+            errores += validacionClave(clave);
         }
         return errores;
     }
@@ -115,20 +165,14 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
             System.out.println("El login no puede estar vacio");
             errores++;
         }else{
-            if(login.length() > maxLoginU){
-                System.out.println("El login no debe superar los "+maxLoginU+" caracteres");
-                errores++;
-            }
+            errores += validacionLoginUsuario(login);
         }
         
         if(campoVacio(clave)){
             System.out.println("La contraseña no puede estar vacia");
             errores++;
         }else{
-            if(clave.length() > maxClave || clave.length() < minClave){
-                System.out.println("La contraseña no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
-                errores++;
-            }
+            errores += validacionClave(clave);
         }
         return errores;
     } 
@@ -181,13 +225,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
             if(manejadorArchivos.existeArchivo(login,admin)){
                 /*Comprobamos la contraseña*/
                 if(manejadorArchivos.compararDatos(login,clave,admin)){
-                    /*Si no es administrador lo agregamos a la lista de usuarios conectados*/
-                    if(admin == false){
-                        Usuario auxiliar = consultarUsuario(login);
-                        /*Apenas inicio, se marca como "no jugando"*/
-                        auxiliar.setJugando(false);
-                        usuariosConectados.put(login,auxiliar);
-                    }
+                   
                     System.out.println("Sesion iniciada!");
                     return true;
                 }
@@ -200,12 +238,12 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     }
 
     @Override
-    public Usuario consultarUsuario(String login) throws RemoteException {
+    public Usuario consultarUsuario(String login, boolean admin) throws RemoteException {
         /*False ya que es usuario*/
-       if(manejadorArchivos.existeArchivo(login,false)){
+       if(manejadorArchivos.existeArchivo(login,admin)){
             /*Comprobamos la contraseña*/
             Usuario consultado=new Usuario();
-            consultado = manejadorArchivos.obtenerInfoUsuario(login);
+            consultado = manejadorArchivos.obtenerInfoUsuario(login,admin);
             return consultado;
         }else{
             System.out.println("El usuario con login "+login+" no esta registrado");
@@ -214,10 +252,18 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     }
 
     @Override
-    public boolean modificarUsuario(Usuario u) throws RemoteException {
+    public boolean modificarUsuario(Usuario u) throws RemoteException 
+    {
         System.out.println("Modificando usuario");
 
-        if(validacionesRegistroUsuario(u) == 0){
+        int resultado;
+        if(u.GetAdmin()){
+            resultado = validacionesRegistroAdmin(u);
+        }else{
+            resultado = validacionesRegistroUsuario(u);
+        }
+        
+        if(resultado == 0){
             /*El mismo metodos para crear sobreescribe la informacion del archivo*/
             if(manejadorArchivos.crearArchivo(u)){
                 System.out.println("El usuario ha sido modificado");
@@ -251,17 +297,15 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     @Override
     public ArrayList<String> listarUsuariosConectados(String login) throws RemoteException
     {
-        System.out.println("Listando usuarios conectados");
-        ArrayList<String> usuarios = new ArrayList<String>();
-        Enumeration e = usuariosConectados.keys();
-        String clave;
-        while( e.hasMoreElements() ){
-            clave =(String) e.nextElement();
-            if(!clave.equals(login)){
-                usuarios.add(clave);
+        System.out.println("Consultado usuarios activos ...");
+        ArrayList<String> listaUsuariosAct= new ArrayList();
+        for(UsuarioActivo objUsuario: listadoUsuariosActivos)
+        {
+            if(!objUsuario.getLogin().equals(login) && objUsuario.isDisponible()){
+                listaUsuariosAct.add(objUsuario.getLogin());   
             }
         }
-        return usuarios;
+        return listaUsuariosAct;
     }
     
     @Override
@@ -272,21 +316,106 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
 
     @Override
     public boolean salir(String login) throws RemoteException {
-        usuariosConectados.remove(login);
+        
         System.out.println("Usuario "+login+" ha cerrado sesion");
         return true;
     }
 
-    public Hashtable<String, Usuario> getUsuariosConectados() {
-        System.out.println("Listando usuarios conectados");
-        return usuariosConectados;
+    @Override
+    public synchronized boolean registrarReferenciaRemota(String login, UsuarioCallBackInt objRemoto) throws RemoteException {
+        System.out.println("Registrando referencia remota ...");
+        boolean bandera=false;
+        UsuarioActivo nuevoUsuario= new UsuarioActivo(login, objRemoto, true);
+        bandera=listadoUsuariosActivos.add(nuevoUsuario);
+        return bandera;
     }
 
-    public void setUsuariosConectados(Hashtable<String, Usuario> usuariosConectados) {
-        this.usuariosConectados = usuariosConectados;
+    @Override
+    public boolean EnviarInvitacion(String loginOrigen, String loginDestino, String mensaje, int numeroFichas) throws RemoteException {
+        System.out.println("Enviando mensaje ...");
+        boolean bandera=false;
+        
+        if(loginDestino.equals("")){
+            String aux = buscandoPar(loginOrigen);
+            if(aux != null){
+                loginDestino = aux;
+            }
+        }
+        UsuarioCallBackInt objUsuarioRemoto = null;
+        for(UsuarioActivo objUsuario: listadoUsuariosActivos)
+        {
+            if (objUsuario.getLogin().equals(loginDestino) && objUsuario.getLoginPar().equals(loginOrigen)){
+                objUsuarioRemoto=objUsuario.getObjRemotoUsuario();
+                break;
+            }
+        }
+        
+        if (objUsuarioRemoto!=null)
+        {
+            objUsuarioRemoto.enviarInvitacion(loginOrigen, mensaje, numeroFichas);
+            bandera=true;
+        }
+        return bandera;
+    }
+    
+    public String buscandoPar(String login){
+        System.out.println("Buscando par");
+        for(UsuarioActivo objUsuario: listadoUsuariosActivos)
+        {
+            if(objUsuario.getLogin().equals(login)){
+                System.out.println("El par es "+objUsuario.getLoginPar());
+                return objUsuario.getLoginPar();
+            }
+        }
+        return null;
     }
 
-    
-    
+    @Override
+    public boolean establecerComunicacion(String loginOrigen, String loginDestino) throws RemoteException {
+        System.out.println("Sesion establecida para los dos usuarios");
+        boolean bandera = false;
+        int contador = 0;
+        int tam = listadoUsuariosActivos.size();
+        int i;
+        for (i = 0; i < tam; i++) {
+            if(listadoUsuariosActivos.get(i).getLogin().equals(loginOrigen)){
+                listadoUsuariosActivos.get(i).setLoginPar(loginDestino);
+                listadoUsuariosActivos.get(i).setDisponible(false);
+                contador++;
+            }
+            if(listadoUsuariosActivos.get(i).getLogin().equals(loginDestino)){
+                listadoUsuariosActivos.get(i).setLoginPar(loginOrigen);
+                listadoUsuariosActivos.get(i).setDisponible(false);
+                contador++;
+            }
+        }
+        
+        if(contador == 2){
+            bandera = true;
+        }
+        return bandera;
+    }
+
+    @Override
+    public boolean enviarRespuestaInvitacion(String loginOrigen, String loginDestino, boolean respuesta) throws RemoteException {
+        System.out.println("Enviando mensaje ...");
+        boolean bandera=false;
+        
+        UsuarioCallBackInt objUsuarioRemoto = null;
+        for(UsuarioActivo objUsuario: listadoUsuariosActivos)
+        {
+            if (objUsuario.getLogin().equals(loginDestino) && objUsuario.getLoginPar().equals(loginOrigen)){
+                objUsuarioRemoto=objUsuario.getObjRemotoUsuario();
+                break;
+            }
+        }
+        
+        if (objUsuarioRemoto!=null)
+        {
+            objUsuarioRemoto.enviarRespuestaInvitacion(loginOrigen, respuesta);
+            bandera=true;
+        }
+        return bandera;       
+    }
     
 }

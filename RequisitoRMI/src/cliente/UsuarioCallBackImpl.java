@@ -1,9 +1,8 @@
 
-package sop_rmi;
+package cliente;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import cliente.Usuario_Interface;
 
 /**
  *
@@ -19,13 +18,18 @@ public class UsuarioCallBackImpl extends UnicastRemoteObject implements UsuarioC
     }
     
     @Override
-    public void enviarInvitacion(String login, String mensaje) throws RemoteException {
-        usuario_Interface.Enviar_Invitacion(login, mensaje);
+    public void enviarInvitacion(String login, String mensaje, int numeroFichas) throws RemoteException {
+        usuario_Interface.Enviar_Invitacion(login, mensaje, numeroFichas);
     }
 
     @Override
     public void enviarMensaje(String login, String mensaje) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void enviarRespuestaInvitacion(String login, boolean respuesta) throws RemoteException {
+        usuario_Interface.Resivir_respuesta_Invitacion(login, respuesta);
     }
     
 }

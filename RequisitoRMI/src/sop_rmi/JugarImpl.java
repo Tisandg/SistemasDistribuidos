@@ -1,5 +1,6 @@
 package sop_rmi;
 
+import cliente.CallBackJuegoInt;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     private Jugador jugador2 = new Jugador();;
     private Tablero tablero = new Tablero();
     private boolean estadoPartida = false;
+    private ArrayList<TableroActivo> ListaTablerosActivos;
     
     /*Para saber si los jugadores de esta partida ya han sido seleccionados*/
     private boolean seleccionadosJugadores;
@@ -37,7 +39,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         this.seleccionadosJugadores = false;
         this.fichasJugador1 = new ArrayList<>();
         this.fichasJugador2 = new ArrayList<>();
-        
+        this.ListaTablerosActivos = new ArrayList<>();
     }
 
     @Override
@@ -455,6 +457,21 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     @Override
     public ArrayList<Ficha> getFichasJugador2() throws RemoteException {
         return fichasJugador2;
+    }
+
+    @Override
+    public boolean EnviarFichasContrincante(String loginOrigen, String loginDestino, ArrayList<Ficha> FichasContrincante) throws RemoteException {
+        
+        return false;
+    }
+
+    @Override
+    public boolean registrarReferenciaRemotaTablro(String login, CallBackJuegoInt objRemoto) throws RemoteException {
+        System.out.println("Registrando referencia remota ...");
+        boolean bandera=false;
+        TableroActivo nuevoTablero= new TableroActivo(login, objRemoto, true);
+        bandera = ListaTablerosActivos.add(nuevoTablero);
+        return bandera;
     }
     
 }

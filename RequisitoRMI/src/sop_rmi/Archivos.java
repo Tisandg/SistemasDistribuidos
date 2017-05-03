@@ -27,12 +27,25 @@ public class Archivos {
         this.pw = null;
     }
     
-    public static Usuario obtenerInfoUsuario(String login){
+    public static Usuario obtenerInfoUsuario(String login, boolean admin){
+        String ruta;
+        if(admin){
+            ruta = "./Administrador/usuario_admin.txt";
+        }else{
+            ruta = "./Usuarios/usuario_"+login+".txt";
+        }  
+        Usuario usuario = obtenerInfoUsuario(login, ruta);
+        usuario.setAdmin(admin);
+        return usuario;
+        
+    }
+    
+    public static Usuario obtenerInfoUsuario(String login,String ruta){
         Usuario usuario = new Usuario();
         try {
            // Apertura del fichero y creacion de BufferedReader para poder
            // hacer una lectura comoda (disponer del metodo readLine()).
-           archivo = new File ("./Usuarios/usuario_"+login+".txt");
+           archivo = new File (ruta);
            fr = new FileReader (archivo);
            br = new BufferedReader(fr);
 
@@ -48,7 +61,6 @@ public class Archivos {
                 if(i == 3) usuario.setApellido(linea);
              }
            }
-           usuario.setAdmin(false);
         }
         catch(Exception e){
            //e.printStackTrace();
@@ -137,14 +149,23 @@ public class Archivos {
         }
         return respuesta;
     }
-    
     public boolean crearArchivo(Usuario usuario){
+        String ruta;
+        if(usuario.GetAdmin()){
+            ruta = "./Administrador/usuario_admin.txt";
+        }else{
+            ruta = "./Usuarios/usuario_"+usuario.getLogin()+".txt";
+        }  
+        return crearArchivo(usuario,ruta);
+    }
+    
+    public boolean crearArchivo(Usuario usuario,String ruta){
         boolean escribio = false;
         try
         {
             /* ../PRUEBA.txt  =  Asi escribe fuera de la carpeta(con 2 puntos)
             * con un punto dentro de la carpeta*/
-            fichero = new FileWriter("./Usuarios/usuario_"+usuario.getLogin()+".txt");
+            fichero = new FileWriter(ruta);
             pw = new PrintWriter(fichero);
             
             /*Escribimos los datos de nuestro objeto en el txt*/
@@ -302,7 +323,7 @@ public class Archivos {
                 String auxiliar = partido[1];
                 String[] login = auxiliar.split(".txt");
                 //System.out.println("login: "+login[0]);
-                usuarios.add(obtenerInfoUsuario(login[0]));
+                usuarios.add(obtenerInfoUsuario(login[0], false) );
             }
             return usuarios;
         }else {

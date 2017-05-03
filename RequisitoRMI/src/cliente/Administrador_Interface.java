@@ -1,7 +1,10 @@
 
 package cliente;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import sop_rmi.UsuariosInt;
@@ -19,6 +22,8 @@ public class Administrador_Interface extends javax.swing.JFrame {
     private ArrayList<Usuario> ListaUsuariosRegistrados;
     DefaultListModel modeloLista;
     private String LoginSeleccion;
+    private String loginAdmin;
+    private boolean editandoAdmin;
     
     public Administrador_Interface(int numPuertoRMIRegistry, String direccionIpRMIRegistry) {
         initComponents();
@@ -46,6 +51,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
         jButton14 = new javax.swing.JButton();
         Estadisticas_btn = new javax.swing.JButton();
         Registrar_Usuario_btn = new javax.swing.JButton();
+        jButtonEditarPerfil = new javax.swing.JButton();
         Registro_Usuario = new javax.swing.JFrame();
         jPanel6 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -132,6 +138,13 @@ public class Administrador_Interface extends javax.swing.JFrame {
             }
         });
 
+        jButtonEditarPerfil.setText("Modificar mi perfil");
+        jButtonEditarPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarPerfilActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -143,7 +156,8 @@ public class Administrador_Interface extends javax.swing.JFrame {
                     .addComponent(Modificar_Datos_Usuario_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Estadisticas_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Registrar_Usuario_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Registrar_Usuario_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonEditarPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(87, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -157,7 +171,9 @@ public class Administrador_Interface extends javax.swing.JFrame {
                 .addComponent(Modificar_Datos_Usuario_btn)
                 .addGap(18, 18, 18)
                 .addComponent(Estadisticas_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonEditarPerfil)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(jButton14)
                 .addGap(42, 42, 42))
         );
@@ -309,9 +325,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        Operaciones_Sobre_Usuario.setMaximumSize(new java.awt.Dimension(450, 440));
         Operaciones_Sobre_Usuario.setMinimumSize(new java.awt.Dimension(450, 440));
-        Operaciones_Sobre_Usuario.setPreferredSize(new java.awt.Dimension(450, 440));
 
         jPanel7.setMaximumSize(new java.awt.Dimension(450, 440));
         jPanel7.setMinimumSize(new java.awt.Dimension(450, 440));
@@ -405,7 +419,6 @@ public class Administrador_Interface extends javax.swing.JFrame {
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        Modificar_Datos_Usuario.setMaximumSize(new java.awt.Dimension(358, 390));
         Modificar_Datos_Usuario.setMinimumSize(new java.awt.Dimension(358, 390));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -626,8 +639,9 @@ public class Administrador_Interface extends javax.swing.JFrame {
             String Clave = Clave_admin.getText();
             try {
                 sesion = ObjRemotoAdministrador.iniciarSesion(login, Clave, true);
-                System.out.println("boolean  "+sesion);
+                System.out.println("Autentificacion administrador:  "+sesion);
                 if(sesion){
+                    loginAdmin = login;
                     this.setVisible(false);
                     Menu_Administrador.setLocationRelativeTo(null);
                     Menu_Administrador.setResizable(false);
@@ -638,6 +652,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
                     Clave_admin.setText("");
                 }
             } catch (Exception e) {
+                System.out.println(e);
                 JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto .....!!", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
@@ -753,7 +768,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
  
     private void Guardar_Cambios_ModificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Guardar_Cambios_ModificacionActionPerformed
         // TODO add your handling code here:
-        boolean admin = false, modificado = false;
+        boolean admin = editandoAdmin, modificado = false;
         if(Nombre_Usuario_Modificar_JTextFiel.getText().equals("") || Apellido_Usuario_Modificar_JTextFiel.getText().equals("") 
             || Contraseña_Usuario_Modificar_JTextFiel.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Espacios sin llenar.....!!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -765,12 +780,20 @@ public class Administrador_Interface extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto <<Modificar Usuario>>.....!!", "Error", JOptionPane.ERROR_MESSAGE);
             }
             if(modificado){
-                JOptionPane.showMessageDialog(null, "Usuario Actualizado Exitosamente .....!!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                Consultar_Usuarios_Registrados();
+                JOptionPane.showMessageDialog(null, "Los datos se han Actualizado Exitosamente .....!!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
                 Modificar_Datos_Usuario.setVisible(false);
-                Operaciones_Sobre_Usuario.setLocationRelativeTo(null);
-                Operaciones_Sobre_Usuario.setResizable(false);
-                Operaciones_Sobre_Usuario.setVisible(true);
+                /*Si estaba editando un administrador, volvemos al menu principal de admin*/
+                if(editandoAdmin){
+                    Menu_Administrador.setLocationRelativeTo(null);
+                    Menu_Administrador.setResizable(false);
+                    Menu_Administrador.setVisible(true);
+                    editandoAdmin = false;
+                }else{
+                    Consultar_Usuarios_Registrados();
+                    Operaciones_Sobre_Usuario.setLocationRelativeTo(null);
+                    Operaciones_Sobre_Usuario.setResizable(false);
+                    Operaciones_Sobre_Usuario.setVisible(true);
+                }
             }else{
               JOptionPane.showMessageDialog(null, "No fue posible actualizar los datos \n Intente nuevamente .....!!", "Error", JOptionPane.ERROR_MESSAGE);  
             }
@@ -781,11 +804,19 @@ public class Administrador_Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (JOptionPane.showConfirmDialog(null, "Al salir de la modificacion se perderan los datos no guardados...!!!\n\n\tDesea Continuar", "CONFIRMAR",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             Modificar_Datos_Usuario.setVisible(false);
-            Operaciones_Sobre_Usuario.setLocationRelativeTo(null);
-            Operaciones_Sobre_Usuario.setResizable(false);
-            Operaciones_Sobre_Usuario.setVisible(true);
-            LoginSeleccion = "";
-            jLabel1.setText("Seleccione un Usuario de la Lista de Usuarios");
+            if(editandoAdmin){
+                editandoAdmin = false;
+                Menu_Administrador.setLocationRelativeTo(null);
+                Menu_Administrador.setResizable(false);
+                Menu_Administrador.setVisible(true);
+            }else{
+                Operaciones_Sobre_Usuario.setLocationRelativeTo(null);
+                Operaciones_Sobre_Usuario.setResizable(false);
+                Operaciones_Sobre_Usuario.setVisible(true);
+                LoginSeleccion = "";
+                jLabel1.setText("Seleccione un Usuario de la Lista de Usuarios");
+            }
+            
         }       
     }//GEN-LAST:event_Cancelar_Modificacion_Datos_UsuarioActionPerformed
 
@@ -828,6 +859,26 @@ public class Administrador_Interface extends javax.swing.JFrame {
         LoginSeleccion = (String)modeloLista.getElementAt(index);
         jLabel1.setText("Seleccionaste al Usuario : "+LoginSeleccion);       
     }//GEN-LAST:event_Seleccion_Usuario_evt
+
+    private void jButtonEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarPerfilActionPerformed
+        Usuario admin = new Usuario();
+        try {
+            admin = ObjRemotoAdministrador.consultarUsuario(loginAdmin, true);
+        } catch (RemoteException ex) {
+            System.out.println("Excepcion al obtener informacion del administador "+ex);
+        }
+        Nombre_Usuario_Modificar_JTextFiel.setText(admin.getNombre());
+        Apellido_Usuario_Modificar_JTextFiel.setText(admin.getApellido());
+        Login_Usuario_Mod.setText(admin.getLogin());
+        Contraseña_Usuario_Modificar_JTextFiel.setText(admin.getClave());
+        
+        editandoAdmin = true;
+        
+        Menu_Administrador.setVisible(false);
+        Modificar_Datos_Usuario.setLocationRelativeTo(null);
+        Modificar_Datos_Usuario.setResizable(false);
+        Modificar_Datos_Usuario.setVisible(true);
+    }//GEN-LAST:event_jButtonEditarPerfilActionPerformed
 
     /**
      * @param args the command line arguments
@@ -891,6 +942,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonEditarPerfil;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
