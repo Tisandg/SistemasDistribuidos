@@ -17,18 +17,26 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
     private final int maxClave = 15;
     private Archivos manejadorArchivos;
     private ArrayList<UsuarioActivo> listadoUsuariosActivos;
+<<<<<<< HEAD
     private final JugarImpl objJugar;
     private ArrayList<Ficha> FichasUsuario1;
     private ArrayList<Ficha> FichasUsuario2;
+=======
+    
+>>>>>>> origin/master
     
     public UsuariosImpl() throws RemoteException
     {
         super(); //invoca al constructor de la clase base       
         this.manejadorArchivos = new Archivos();
         this.listadoUsuariosActivos = new ArrayList<>();
+<<<<<<< HEAD
         this.objJugar = new JugarImpl();
         this.FichasUsuario1 = new ArrayList<>();
         this.FichasUsuario2 = new ArrayList<>();
+=======
+        
+>>>>>>> origin/master
     }
     
     /*************************     Validaciones    ****************************/
@@ -42,6 +50,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
             return 1;
         }
         return 0;
+<<<<<<< HEAD
     }
     
     public int validacionApellido(String apellido){
@@ -78,6 +87,44 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         return 0;
     }
     
+=======
+    }
+    
+    public int validacionApellido(String apellido){
+        if(apellido.length() > maxApellido){
+            System.out.println("El apellido no debe superar los "+maxApellido+" caracteres");
+            return 1;
+        }
+        return 0;
+    }
+    
+    public int validacionLoginUsuario(String login){
+        if(login.length() > maxLoginU){
+            System.out.println("El login no debe superar los "+maxLoginU+" caracteres");
+            return 1;
+        }
+        return 0;
+    }
+    
+    /*Se puede utilizar las constantes maxClave y minClave ya que tienen los mismo
+    * valores de validacion para el login*/
+    public int validacionLoginAdmin(String login){
+        if(login.length() > maxClave || login.length() < minClave){
+            System.out.println("El login no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
+            return 1;
+        }
+        return 0;
+    }
+    
+    public int validacionClave(String clave){
+        if(clave.length() > maxClave || clave.length() < minClave){
+            System.out.println("La contraseña no debe ser menor a "+minClave+" o mayor a "+maxClave+" caracteres");
+            return 1;
+        }
+        return 0;
+    }
+    
+>>>>>>> origin/master
     
     public int validacionesRegistroUsuario(Usuario usuario){
         int errores = 0;
@@ -90,11 +137,33 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         
         if(campoVacio(usuario.getApellido())){
             System.out.println("El apellido no puede estar vacio");
+<<<<<<< HEAD
+=======
             errores++;
         }else{
             errores += validacionApellido(usuario.getApellido());
         }
         
+        if(campoVacio(usuario.getLogin())){
+            System.out.println("El login no puede estar vacio");
+            errores++;
+        }
+        else{
+            errores += validacionLoginUsuario(usuario.getLogin());
+        }
+        
+        if(campoVacio(usuario.getClave())){
+            System.out.println("La contraseña no puede estar vacia");
+>>>>>>> origin/master
+            errores++;
+        }else{
+            errores += validacionApellido(usuario.getApellido());
+        }
+        else{
+            errores += validacionClave(usuario.getClave());
+        }
+        
+<<<<<<< HEAD
         if(campoVacio(usuario.getLogin())){
             System.out.println("El login no puede estar vacio");
             errores++;
@@ -111,6 +180,8 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
             errores += validacionClave(usuario.getClave());
         }
         
+=======
+>>>>>>> origin/master
         return errores;
     }
     
@@ -332,6 +403,7 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         UsuarioActivo nuevoUsuario= new UsuarioActivo(login, objRemoto, true);
         bandera=listadoUsuariosActivos.add(nuevoUsuario);
         return bandera;
+<<<<<<< HEAD
     }
 
     @Override
@@ -447,11 +519,11 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
             }
         } 
         
-        return bandera;
+=======
     }
 
     @Override
-    public boolean enviarMensaje(String loginOrigen, String loginDestino, String mensaje) throws RemoteException {
+    public boolean EnviarInvitacion(String loginOrigen, String loginDestino, String mensaje, int numeroFichas) throws RemoteException {
         System.out.println("Enviando mensaje ...");
         boolean bandera=false;
         
@@ -465,11 +537,90 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         for(UsuarioActivo objUsuario: listadoUsuariosActivos)
         {
             if (objUsuario.getLogin().equals(loginDestino) && objUsuario.getLoginPar().equals(loginOrigen)){
-                objUsuarioRemoto = objUsuario.getObjRemotoUsuario();
+                objUsuarioRemoto=objUsuario.getObjRemotoUsuario();
                 break;
             }
         }
         
+        if (objUsuarioRemoto!=null)
+        {
+            objUsuarioRemoto.enviarInvitacion(loginOrigen, mensaje, numeroFichas);
+            bandera=true;
+        }
+        return bandera;
+    }
+    
+    public String buscandoPar(String login){
+        System.out.println("Buscando par");
+        for(UsuarioActivo objUsuario: listadoUsuariosActivos)
+        {
+            if(objUsuario.getLogin().equals(login)){
+                System.out.println("El par es "+objUsuario.getLoginPar());
+                return objUsuario.getLoginPar();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean establecerComunicacion(String loginOrigen, String loginDestino) throws RemoteException {
+        System.out.println("Sesion establecida para los dos usuarios");
+        boolean bandera = false;
+        int contador = 0;
+        int tam = listadoUsuariosActivos.size();
+        int i;
+        for (i = 0; i < tam; i++) {
+            if(listadoUsuariosActivos.get(i).getLogin().equals(loginOrigen)){
+                listadoUsuariosActivos.get(i).setLoginPar(loginDestino);
+                listadoUsuariosActivos.get(i).setDisponible(false);
+                contador++;
+            }
+            if(listadoUsuariosActivos.get(i).getLogin().equals(loginDestino)){
+                listadoUsuariosActivos.get(i).setLoginPar(loginOrigen);
+                listadoUsuariosActivos.get(i).setDisponible(false);
+                contador++;
+            }
+        }
+        
+        if(contador == 2){
+            bandera = true;
+        }
+>>>>>>> origin/master
+        return bandera;
+    }
+
+    @Override
+<<<<<<< HEAD
+    public boolean enviarMensaje(String loginOrigen, String loginDestino, String mensaje) throws RemoteException {
+        System.out.println("Enviando mensaje ...");
+        boolean bandera=false;
+        
+        if(loginDestino.equals("")){
+            String aux = buscandoPar(loginOrigen);
+            if(aux != null){
+                loginDestino = aux;
+            }
+        }
+=======
+    public boolean enviarRespuestaInvitacion(String loginOrigen, String loginDestino, boolean respuesta) throws RemoteException {
+        System.out.println("Enviando mensaje ...");
+        boolean bandera=false;
+        
+>>>>>>> origin/master
+        UsuarioCallBackInt objUsuarioRemoto = null;
+        for(UsuarioActivo objUsuario: listadoUsuariosActivos)
+        {
+            if (objUsuario.getLogin().equals(loginDestino) && objUsuario.getLoginPar().equals(loginOrigen)){
+<<<<<<< HEAD
+                objUsuarioRemoto = objUsuario.getObjRemotoUsuario();
+=======
+                objUsuarioRemoto=objUsuario.getObjRemotoUsuario();
+>>>>>>> origin/master
+                break;
+            }
+        }
+        
+<<<<<<< HEAD
         if (objUsuarioRemoto!=null){
             objUsuarioRemoto.enviarMensaje(loginOrigen, mensaje);
             bandera=true;
@@ -477,5 +628,14 @@ public class UsuariosImpl extends UnicastRemoteObject implements UsuariosInt{
         return bandera;
     }
      
+=======
+        if (objUsuarioRemoto!=null)
+        {
+            objUsuarioRemoto.enviarRespuestaInvitacion(loginOrigen, respuesta);
+            bandera=true;
+        }
+        return bandera;       
+    }
+>>>>>>> origin/master
     
 }

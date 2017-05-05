@@ -3,8 +3,6 @@ package cliente;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import sop_rmi.Ficha;
 
 /**
  *
@@ -12,7 +10,7 @@ import sop_rmi.Ficha;
  */
 public class UsuarioCallBackImpl extends UnicastRemoteObject implements UsuarioCallBackInt{
 
-    Usuario_Interface usuario_Interface;
+    Usuario_Interface usuario_Interface = new Usuario_Interface();
     
     public UsuarioCallBackImpl(Usuario_Interface usuario_interface )throws RemoteException{
         super();
@@ -26,17 +24,12 @@ public class UsuarioCallBackImpl extends UnicastRemoteObject implements UsuarioC
 
     @Override
     public void enviarMensaje(String login, String mensaje) throws RemoteException {
-        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void enviarRespuestaInvitacion(String login, boolean respuesta) throws RemoteException {
         usuario_Interface.Resivir_respuesta_Invitacion(login, respuesta);
-    }
-
-    @Override
-    public void iniciarJuego(ArrayList<Ficha> Fichas) throws RemoteException {
-        usuario_Interface.IniciarJuego(Fichas);
     }
     
 }

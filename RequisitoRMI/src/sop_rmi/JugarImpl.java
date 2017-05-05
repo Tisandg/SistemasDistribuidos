@@ -1,6 +1,9 @@
 package sop_rmi;
 
+<<<<<<< HEAD
 import cliente.CallBackJuegoImpl;
+=======
+>>>>>>> origin/master
 import cliente.CallBackJuegoInt;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -462,13 +465,25 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     }
 
     @Override
+<<<<<<< HEAD
     public boolean registrarReferenciaRemotaTablro(String login, CallBackJuegoInt objRemoto) throws RemoteException {
         System.out.println("Registrando referencia remota Tablero...");
+=======
+    public boolean EnviarFichasContrincante(String loginOrigen, String loginDestino, ArrayList<Ficha> FichasContrincante) throws RemoteException {
+        
+        return false;
+    }
+
+    @Override
+    public boolean registrarReferenciaRemotaTablro(String login, CallBackJuegoInt objRemoto) throws RemoteException {
+        System.out.println("Registrando referencia remota ...");
+>>>>>>> origin/master
         boolean bandera=false;
         TableroActivo nuevoTablero= new TableroActivo(login, objRemoto, true);
         bandera = ListaTablerosActivos.add(nuevoTablero);
         return bandera;
     }
+<<<<<<< HEAD
      @Override
     public boolean enviarMensaje(String loginOrigen, String loginDestino, String mensaje) throws RemoteException {
         System.out.println("Enviando mensaje ...");
@@ -488,5 +503,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         }
         return bandera;
     }
+=======
+>>>>>>> origin/master
     
 }

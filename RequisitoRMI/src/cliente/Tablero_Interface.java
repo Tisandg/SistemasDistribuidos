@@ -18,7 +18,11 @@ public class Tablero_Interface extends javax.swing.JFrame {
 
     private static JugarInt objRemoto_Juego;
     private static CallBackJuegoInt objRemotoCallBackJuego;
+<<<<<<< HEAD
     private static UsuariosInt ObjRemotoUsuarioChat;
+=======
+    private boolean Anfitrion;
+>>>>>>> origin/master
     Lienzo Mi_Lienzo;
     Utilidades utilidades;
     ArrayList<Ficha> Mis_Fichas;
@@ -34,7 +38,11 @@ public class Tablero_Interface extends javax.swing.JFrame {
     public static boolean IniciaHilo = true;
     public Fichas_Tablero FichaPaint;
     
+<<<<<<< HEAD
     public Tablero_Interface(String UsuarioActual, String UsuarioContrincante, ArrayList<Ficha> MisFichas, int numPuertoRMIRegistry, String direccionIpRMIRegistry) {
+=======
+    public Tablero_Interface(String UsuarioActual, String UsuarioContrincante, int NumeroFichasPartida,int numPuertoRMIRegistry, String direccionIpRMIRegistry, boolean Anfitrion) {
+>>>>>>> origin/master
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -44,11 +52,16 @@ public class Tablero_Interface extends javax.swing.JFrame {
         this.UsuarioContrincante = UsuarioContrincante;
         this.Mis_Fichas = MisFichas;
         this.Mi_Lienzo = new Lienzo();
+<<<<<<< HEAD
         this.NumeroFichas = MisFichas.size();
         this.utilidades = new Utilidades(NumeroFichas);
         Mi_Lienzo.setBounds(2, 2, 1310, 272);
         Mi_Lienzo.setBorder(BorderFactory.createBevelBorder(1));
         jPanel12.add(Mi_Lienzo);
+=======
+        this.utilidades = new Utilidades(NumeroFichasPartida/2);
+        this.Anfitrion = Anfitrion;
+>>>>>>> origin/master
         IniciarTablero();
     }
 
@@ -940,6 +953,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
         ObtenerObjetoRemotoUsuarioChat();
         ArrayList<Ficha> Sus_Fichas = new ArrayList<>();
         try {
+<<<<<<< HEAD
             objRemotoCallBackJuego = new CallBackJuegoImpl(this);
             objRemoto_Juego.registrarReferenciaRemotaTablro(UsuarioActual, objRemotoCallBackJuego);
         } catch (Exception e) {
@@ -956,6 +970,58 @@ public class Tablero_Interface extends javax.swing.JFrame {
             System.out.println("Lado B = "+Mis_Fichas.get(i).getLado_B());
             System.out.println("_________________________");
         }
+=======
+            objRemoto_Juego.registrarReferenciaRemotaTablro(UsuarioActual, null);
+        } catch (Exception e) {
+            
+        }
+        if(Anfitrion){
+            try {
+                objRemoto_Juego.repartirFichas(NumeroFichasPartida);
+                try {
+                    Mis_Fichas = objRemoto_Juego.getFichasJugador1();
+                    Sus_Fichas = objRemoto_Juego.getFichasJugador2();
+                    
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Error. Invocando la operacion Remota << Obtenr Mis Fichas >> ", "Error", JOptionPane.ERROR_MESSAGE);
+                    System.out.println("Error = "+e.getMessage());
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error. Invocando la operacion Remota << Repartir Fichas >> ", "Error", JOptionPane.ERROR_MESSAGE);            
+                System.out.println("Error = "+e.getMessage());
+            }
+        }
+        
+        
+//        if(!Mis_Fichas.isEmpty()){
+//            for (int i = 0; i < Mis_Fichas.size(); i++) {
+//                System.out.println("Ficha "+i+" Lado A = "+Mis_Fichas.get(i).getLado_A());
+//                System.out.println("Ficha "+i+" Lado B = "+Mis_Fichas.get(i).getLado_B());
+//                System.out.println("_______________________________________________________________");
+//            }
+//        }else{
+//            JOptionPane.showMessageDialog(null, "Error. No has resivido ninguna Ficha", "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+//        
+//        if(!Sus_Fichas.isEmpty()){
+//            System.out.println("#############################################################");
+//            for (int i = 0; i < Mis_Fichas.size(); i++) {
+//                System.out.println("Ficha "+i+" Lado A = "+Sus_Fichas.get(i).getLado_A());
+//                System.out.println("Ficha "+i+" Lado B = "+Sus_Fichas.get(i).getLado_B());
+//                System.out.println("_______________________________________________________________");
+//            }
+//        }else{
+//            JOptionPane.showMessageDialog(null, "Error. No has resivido ninguna Ficha", "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+        
+        Pintar_Mis_Fichas();
+               
+>>>>>>> origin/master
+    }
+    
+    public void Resivir_Fichas(ArrayList<Ficha> Mis_Fichas){
+        this.Mis_Fichas = Mis_Fichas;
+        Pintar_Mis_Fichas();
     }
     
     private void Pintar_Mis_Fichas(){
