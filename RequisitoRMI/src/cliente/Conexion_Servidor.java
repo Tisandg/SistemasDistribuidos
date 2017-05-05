@@ -150,11 +150,9 @@ public class Conexion_Servidor extends javax.swing.JFrame {
             if(validaciones.Es_Numero(jTextField2.getText())){
                 numPuertoRMIRegistry = Integer.parseInt(jTextField2.getText());
                 direccionIpRMIRegistry = jTextField1.getText();
+                objRemoto = (UsuariosInt) UtilidadesRegistroC.obtenerObjRemoto(numPuertoRMIRegistry, direccionIpRMIRegistry, "ServidorUsuarios");
                 this.setVisible(false);
                 mi_play();
-
-                objRemoto = (UsuariosInt) UtilidadesRegistroC.obtenerObjRemoto(numPuertoRMIRegistry, direccionIpRMIRegistry, "ServidorUsuarios");
-                
                 new Menu_Principal(numPuertoRMIRegistry, direccionIpRMIRegistry).setVisible(true);
                 
             }else{

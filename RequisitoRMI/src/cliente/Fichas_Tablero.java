@@ -2,36 +2,36 @@
 package cliente;
 
 import java.awt.Point;
+import sop_rmi.Ficha;
 /**
  *
  * @author Kevin Chantré
  */
 public class Fichas_Tablero {
-    private int id_ficha;
+    private Ficha ficha;
     private String imagen;
     private Point ubicacion;
     
     public Fichas_Tablero(){
         
     }
-    
-    public Fichas_Tablero(int id_ficha, String imagen, Point ubicacion){
-        this.id_ficha = id_ficha;
-        this.imagen = imagen;
+
+    public Fichas_Tablero(Ficha ficha, String imagen, Point ubicacion) {
+        this.ficha = ficha;
         this.ubicacion = ubicacion;
+        this.imagen = imagen;
     }
 
-    public int getId_ficha() {
-        return id_ficha;
-    }
-
-    public String getImagen() {
-        return imagen;
+    public Ficha getFicha() {
+        return ficha;
     }
 
     public Point getUbicacion() {
         return ubicacion;
     }
-    
+
+    public String getImagen() {
+        return imagen;
+    }
     
 }

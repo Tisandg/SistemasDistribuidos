@@ -1,10 +1,13 @@
 package sop_rmi;
 
+import cliente.CallBackJuegoImpl;
+import cliente.CallBackJuegoInt;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Random;
-
+import cliente.CallBackJuegoInt;
+        
 /**
  * @author Kevin Chantré
  */
@@ -17,6 +20,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     private Jugador jugador2 = new Jugador();;
     private Tablero tablero = new Tablero();
     private boolean estadoPartida = false;
+    private ArrayList<TableroActivo> ListaTablerosActivos;
     
     /*Para saber si los jugadores de esta partida ya han sido seleccionados*/
     private boolean seleccionadosJugadores;
@@ -37,7 +41,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         this.seleccionadosJugadores = false;
         this.fichasJugador1 = new ArrayList<>();
         this.fichasJugador2 = new ArrayList<>();
-        
+        this.ListaTablerosActivos = new ArrayList<>();
     }
 
     @Override
@@ -455,6 +459,34 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     @Override
     public ArrayList<Ficha> getFichasJugador2() throws RemoteException {
         return fichasJugador2;
+    }
+
+    @Override
+    public boolean registrarReferenciaRemotaTablro(String login, CallBackJuegoInt objRemoto) throws RemoteException {
+        System.out.println("Registrando referencia remota Tablero...");
+        boolean bandera=false;
+        TableroActivo nuevoTablero= new TableroActivo(login, objRemoto, true);
+        bandera = ListaTablerosActivos.add(nuevoTablero);
+        return bandera;
+    }
+     @Override
+    public boolean enviarMensaje(String loginOrigen, String loginDestino, String mensaje) throws RemoteException {
+        System.out.println("Enviando mensaje ...");
+        boolean bandera=false;
+        CallBackJuegoInt objUsuarioRemoto = null;
+        for(TableroActivo objUsuario: ListaTablerosActivos)
+        {
+            if (objUsuario.getLogin().equals(loginDestino)){
+                objUsuarioRemoto = objUsuario.getObjetoRemotoTablero();
+                break;
+            }
+        }
+        
+        if (objUsuarioRemoto!=null){
+            objUsuarioRemoto.enviarMensaje(loginOrigen, mensaje);
+            bandera=true;
+        }
+        return bandera;
     }
     
 }

@@ -4,6 +4,7 @@ package cliente;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import sop_rmi.Ficha;
 import sop_rmi.UsuariosInt;
 
 /**
@@ -18,6 +19,8 @@ public class Usuario_Interface extends javax.swing.JFrame {
     DefaultListModel modeloLista = new DefaultListModel();
     private String LoginContrincante;
     private int Numero_Fichas_Partida = 0;
+    private static UsuarioCallBackInt objRemotoCallbk;
+    private boolean AceptarInvitacion;
     
     public Usuario_Interface(int numPuertoRMIRegistry, String direccionIpRMIRegistry) {
         initComponents();
@@ -26,6 +29,7 @@ public class Usuario_Interface extends javax.swing.JFrame {
         this.setResizable(false);
         this.numPuertoRMIRegistry = numPuertoRMIRegistry;
         this.direccionIpRMIRegistry = direccionIpRMIRegistry;
+        this.AceptarInvitacion = false;
         obtenerObjetoRemoto();
     }
 
@@ -452,6 +456,8 @@ public class Usuario_Interface extends javax.swing.JFrame {
             try {
                 inicio = ObjRemotoUsuario.iniciarSesion(login, clave, false);
                 if(inicio){
+                    objRemotoCallbk = new UsuarioCallBackImpl(this);
+                    ObjRemotoUsuario.registrarReferenciaRemota(login, objRemotoCallbk);
                     this.setVisible(false);
                     Menu_Juego.setLocationRelativeTo(null);
                     Menu_Juego.setResizable(false);
@@ -533,6 +539,11 @@ public class Usuario_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error. No has seleccionado a ningun gugador de la lista ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             JOptionPane.showMessageDialog(null, "Se almacenara a "+LoginContrincante+" como tu contrincante", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                ObjRemotoUsuario.establecerComunicacion(Usuario_Actual_Lb.getText(), LoginContrincante);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto <<Establecer Comunicacion>>.....!!", "Error", JOptionPane.ERROR_MESSAGE);
+            }   
             Seleccionar_Jugador_Red.setVisible(false);
             Elegir_Numero_Fichas.setLocationRelativeTo(null);
             Elegir_Numero_Fichas.setResizable(false);
@@ -572,6 +583,8 @@ public class Usuario_Interface extends javax.swing.JFrame {
         // Configuramos la partida con el numero de fichas con las cuales queremos jugar
         //Se da inicio a la partida
         String NumeroFichas = jComboBox3.getSelectedItem().toString();
+        boolean enviarInvitacion = false;
+        boolean iniciaJuego = false;
         if(NumeroFichas.equals("N° Fichas")){
             JOptionPane.showMessageDialog(null, "Debe seleccionar un numero de fichas .....!!", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
@@ -579,8 +592,35 @@ public class Usuario_Interface extends javax.swing.JFrame {
             String [] v = NumeroFichas.split(" ");
             Numero_Fichas_Partida = Integer.parseInt(v[0]);
             JOptionPane.showMessageDialog(null, "\tResumen \n\nJugaras contra "+LoginContrincante+"\ncada jugador iniciara con "+Numero_Fichas_Partida/2+" Fichas", "Resumen", JOptionPane.INFORMATION_MESSAGE);
-            Elegir_Numero_Fichas.setVisible(false);
-            new Tablero_Interface(Usuario_Actual_Lb.getText(), LoginContrincante, Numero_Fichas_Partida, numPuertoRMIRegistry, direccionIpRMIRegistry).setVisible(true);
+            try {
+                enviarInvitacion = ObjRemotoUsuario.EnviarInvitacion(Usuario_Actual_Lb.getText(), LoginContrincante, "Te reto a un DUUU..ELO...!!!", Numero_Fichas_Partida);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Este es el Error"+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if(enviarInvitacion){
+                if(AceptarInvitacion){
+                    System.out.println("El usuario Acepto la invitacion...");
+                    Elegir_Numero_Fichas.setVisible(false);                    
+                    try {
+                        iniciaJuego = ObjRemotoUsuario.iniciarJuego(Numero_Fichas_Partida, Usuario_Actual_Lb.getText(), LoginContrincante);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto <<Iniciar Juego>>.....!!\n"+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    if(iniciaJuego)
+                        System.out.println("Inia el Juego...!!!");
+                    else
+                        System.out.println("Error.. No es posible Inicar el juego...!");
+                }else{
+                    JOptionPane.showMessageDialog(null, "El usuario "+LoginContrincante+" Rechazo la invitacion...!!", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+                }               
+            }else{
+                JOptionPane.showMessageDialog(null, "No fue posible enviar la Invitación \n Intenta Nuevamente", "Error", JOptionPane.ERROR_MESSAGE);
+                Elegir_Numero_Fichas.setVisible(false);
+                Menu_Juego.setLocationRelativeTo(null);
+                Menu_Juego.setResizable(false);
+                Menu_Juego.setVisible(true);
+            }
+            
         }
     }//GEN-LAST:event_Seleccionar_NumeroFichas_btnActionPerformed
 
@@ -661,7 +701,42 @@ public class Usuario_Interface extends javax.swing.JFrame {
         }
     }
 
-    public void Enviar_Invitacion(String Login, String Mensaje){
-        
+    public void Enviar_Invitacion(String Login, String Mensaje, int numeroFichas){
+        this.Numero_Fichas_Partida = numeroFichas;
+        this.LoginContrincante = Login;
+        boolean respuesta = false;
+        if (JOptionPane.showConfirmDialog(null, "El Usuario " + Login +" Dice : \n"+ Mensaje+" Con "+Numero_Fichas_Partida+" Fichas", "CONFIRMAR",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            try {
+                respuesta = ObjRemotoUsuario.enviarRespuestaInvitacion(Usuario_Actual_Lb.getText(), Login, true);
+                System.out.println("Acepto invitacion");
+            } catch (Exception e) {
+                System.out.println("No fue posible responder a la Solicitud \n "+e.getMessage());
+            }
+            if(respuesta){
+                System.out.println("Informacion mi Tablero : \n login actual = "+Usuario_Actual_Lb.getText()+"\n contrincante = "+Login);
+                //new Tablero_Interface(Usuario_Actual_Lb.getText(), Login, Numero_Fichas_Partida, numPuertoRMIRegistry, direccionIpRMIRegistry, false).setVisible(true);
+            }
+                
+        }else{
+            try {
+                ObjRemotoUsuario.enviarRespuestaInvitacion(Usuario_Actual_Lb.getText(), Login, false);
+                System.out.println("Rechaso invitacion");
+            } catch (Exception e) {
+                System.out.println("No fue posible responder a la Solicitud \n "+e.getMessage());
+            }
+        }
     }
+    
+    public void Resivir_respuesta_Invitacion(String login, boolean Respuesta){
+        if(Respuesta)
+            this.AceptarInvitacion = true;
+        else
+            this.AceptarInvitacion = false;
+    }
+    
+    public void IniciarJuego(ArrayList<Ficha> Fichas){
+        Menu_Juego.setVisible(false);
+        new Tablero_Interface(Usuario_Actual_Lb.getText(), LoginContrincante, Fichas, numPuertoRMIRegistry, direccionIpRMIRegistry).setVisible(true);
+    }
+    
 }

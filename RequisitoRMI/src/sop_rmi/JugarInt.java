@@ -1,5 +1,7 @@
 package sop_rmi;
 
+import cliente.CallBackJuegoInt;
+import cliente.UsuarioCallBackInt;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -20,4 +22,6 @@ public interface JugarInt extends Remote{
     public int condicionesPartida() throws RemoteException;
     public ArrayList<Ficha> getFichasJugador1()throws RemoteException;
     public ArrayList<Ficha> getFichasJugador2()throws RemoteException;
+    public boolean registrarReferenciaRemotaTablro(String login, CallBackJuegoInt objRemoto) throws RemoteException;
+    public boolean enviarMensaje(String loginOrigen, String loginDestino, String mensaje) throws RemoteException;
 }

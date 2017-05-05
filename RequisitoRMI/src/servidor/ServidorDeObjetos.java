@@ -3,6 +3,7 @@ package servidor;
 import java.rmi.RemoteException;
 import sop_rmi.UsuariosImpl;
 import sop_rmi.JugarImpl;
+//import sop_rmi.UsuarioCallBackImpl;
 /**
  * @author Santiago Garcia
  */
@@ -37,6 +38,12 @@ public class ServidorDeObjetos {
             System.out.println("Error " + e.getMessage());
             System.exit(0);
         }
+//        
+//        try {
+//            UsuarioCallBackImpl bjRemotoCallback = new UsuarioCallBackImpl(null);
+//        } catch (Exception e) {
+//            System.err.println("No se pudo Registrar el objeto remoto <<ServidorUsuarioCallBack>>");
+//        }
         
     }
 }
