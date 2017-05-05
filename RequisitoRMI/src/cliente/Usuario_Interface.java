@@ -4,6 +4,7 @@ package cliente;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import sop_rmi.Ficha;
 import sop_rmi.UsuariosInt;
 
 /**
@@ -583,6 +584,10 @@ public class Usuario_Interface extends javax.swing.JFrame {
         //Se da inicio a la partida
         String NumeroFichas = jComboBox3.getSelectedItem().toString();
         boolean enviarInvitacion = false;
+<<<<<<< HEAD
+        boolean iniciaJuego = false;
+=======
+>>>>>>> origin/master
         if(NumeroFichas.equals("N° Fichas")){
             JOptionPane.showMessageDialog(null, "Debe seleccionar un numero de fichas .....!!", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
@@ -593,13 +598,30 @@ public class Usuario_Interface extends javax.swing.JFrame {
             try {
                 enviarInvitacion = ObjRemotoUsuario.EnviarInvitacion(Usuario_Actual_Lb.getText(), LoginContrincante, "Te reto a un DUUU..ELO...!!!", Numero_Fichas_Partida);
             } catch (Exception e) {
+<<<<<<< HEAD
+                JOptionPane.showMessageDialog(null, "Este es el Error"+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+=======
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+>>>>>>> origin/master
             }
             if(enviarInvitacion){
                 if(AceptarInvitacion){
                     System.out.println("El usuario Acepto la invitacion...");
+<<<<<<< HEAD
+                    Elegir_Numero_Fichas.setVisible(false);                    
+                    try {
+                        iniciaJuego = ObjRemotoUsuario.iniciarJuego(Numero_Fichas_Partida, Usuario_Actual_Lb.getText(), LoginContrincante);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Excepcion generada al invocar al método remoto <<Iniciar Juego>>.....!!\n"+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    if(iniciaJuego)
+                        System.out.println("Inia el Juego...!!!");
+                    else
+                        System.out.println("Error.. No es posible Inicar el juego...!");
+=======
                     Elegir_Numero_Fichas.setVisible(false);
                     new Tablero_Interface(Usuario_Actual_Lb.getText(), LoginContrincante, Numero_Fichas_Partida, numPuertoRMIRegistry, direccionIpRMIRegistry, true).setVisible(true);                    
+>>>>>>> origin/master
                 }else{
                     JOptionPane.showMessageDialog(null, "El usuario "+LoginContrincante+" Rechazo la invitacion...!!", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
                 }               
@@ -693,20 +715,37 @@ public class Usuario_Interface extends javax.swing.JFrame {
 
     public void Enviar_Invitacion(String Login, String Mensaje, int numeroFichas){
         this.Numero_Fichas_Partida = numeroFichas;
+<<<<<<< HEAD
+        this.LoginContrincante = Login;
+=======
+>>>>>>> origin/master
         boolean respuesta = false;
         if (JOptionPane.showConfirmDialog(null, "El Usuario " + Login +" Dice : \n"+ Mensaje+" Con "+Numero_Fichas_Partida+" Fichas", "CONFIRMAR",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             try {
                 respuesta = ObjRemotoUsuario.enviarRespuestaInvitacion(Usuario_Actual_Lb.getText(), Login, true);
+<<<<<<< HEAD
+                System.out.println("Acepto invitacion");
+=======
+>>>>>>> origin/master
             } catch (Exception e) {
                 System.out.println("No fue posible responder a la Solicitud \n "+e.getMessage());
             }
             if(respuesta){
+<<<<<<< HEAD
+                System.out.println("Informacion mi Tablero : \n login actual = "+Usuario_Actual_Lb.getText()+"\n contrincante = "+Login);
+                //new Tablero_Interface(Usuario_Actual_Lb.getText(), Login, Numero_Fichas_Partida, numPuertoRMIRegistry, direccionIpRMIRegistry, false).setVisible(true);
+=======
                 new Tablero_Interface(Usuario_Actual_Lb.getText(), Login, Numero_Fichas_Partida, numPuertoRMIRegistry, direccionIpRMIRegistry, false).setVisible(true);
+>>>>>>> origin/master
             }
                 
         }else{
             try {
                 ObjRemotoUsuario.enviarRespuestaInvitacion(Usuario_Actual_Lb.getText(), Login, false);
+<<<<<<< HEAD
+                System.out.println("Rechaso invitacion");
+=======
+>>>>>>> origin/master
             } catch (Exception e) {
                 System.out.println("No fue posible responder a la Solicitud \n "+e.getMessage());
             }
@@ -720,4 +759,12 @@ public class Usuario_Interface extends javax.swing.JFrame {
             this.AceptarInvitacion = false;
     }
     
+<<<<<<< HEAD
+    public void IniciarJuego(ArrayList<Ficha> Fichas){
+        Menu_Juego.setVisible(false);
+        new Tablero_Interface(Usuario_Actual_Lb.getText(), LoginContrincante, Fichas, numPuertoRMIRegistry, direccionIpRMIRegistry).setVisible(true);
+    }
+    
+=======
+>>>>>>> origin/master
 }
