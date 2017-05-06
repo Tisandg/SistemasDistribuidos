@@ -1,6 +1,6 @@
 
 package cliente;
-
+ 
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -58,20 +58,21 @@ public class Lienzo extends JComponent{
     }
   //===================================================
     
-    public boolean setFiha(Ficha ficha, String Lado){
+    public Fichas_Tablero setFiha(Ficha ficha, String Lado){
         Fichas_Tablero NuevaFicha;
+        Fichas_Tablero Aux;
         Point p = new Point(635, 110);
         String Imagen;
         String tipo;
         if(ListaFichas.isEmpty()){
             if(ficha.getId() != 27){
-                return false;
+                return null;
             }else{
                 NuevaFicha = new Fichas_Tablero(ficha, imagen(ficha, "_v"), p);
                 ListaFichas.add(NuevaFicha);
                 Lado_Izq_Valido = 6;
                 Lado_Der_Valido = 6;
-                return true;
+                return NuevaFicha;
             }
         }else{
             if(Lado.equals("Izquierda")){
@@ -81,7 +82,7 @@ public class Lienzo extends JComponent{
                         Imagen = imagen(ficha, tipo);
                         NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
                         ListaFichas.add(NuevaFicha);                                
-                        return true;
+                        return NuevaFicha;
                     }else{
                         if(ficha.getLado_A() == Lado_Izq_Valido){                            
                             tipo = UbicacionFichaHorizontal_Izq();
@@ -89,38 +90,40 @@ public class Lienzo extends JComponent{
                             NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
                             ListaFichas.add(NuevaFicha);
                             Lado_Izq_Valido = ficha.getLado_B();
-                            return true;
+                            return null;
                         }else{
                             tipo = UbicacionFichaHorizontal_Izq();
                             Imagen = "/imagenes/"+Integer.toString(ficha.getLado_A())+"_"+Integer.toString(ficha.getLado_B())+tipo+".png";
                             NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
                             ListaFichas.add(NuevaFicha);
                             Lado_Izq_Valido = ficha.getLado_A();
-                            return true;
+                            return NuevaFicha;
                         }
                     }
                 }else{
                     System.out.println("La ficha no se puede colocar a la Izquierda");
-                    return false;
+                    return null;
                 }
             }else{
                 if(ficha.getLado_A() == Lado_Der_Valido || ficha.getLado_B() == Lado_Der_Valido){
                     if(ficha.getLado_A() == ficha.getLado_B()){
                         Imagen = utilidades.Buscar_Imagen(ficha);
-                        
-                        return true;
+                        NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
+                        return NuevaFicha;
                     }else{
                         if(ficha.getLado_A() == Lado_Der_Valido){
                             Imagen = "/imagenes/"+Integer.toString(ficha.getLado_A())+"_"+Integer.toString(ficha.getLado_B())+"_h.png";
-                            return true;
+                            NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
+                            return NuevaFicha;
                         }else{
                             Imagen = "/imagenes/"+Integer.toString(ficha.getLado_B())+"_"+Integer.toString(ficha.getLado_A())+"_h.png";
-                            return true;
+                            NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
+                            return NuevaFicha;
                         }
                     }
                 }else{
                     System.out.println("La ficha no se puede colocar a la Izquierda");
-                    return false;
+                    return null;
                 }
             }
         }        
@@ -139,17 +142,15 @@ public class Lienzo extends JComponent{
         }
     }
 
-    public Point UbicacionFicha_Izq_SinEspacio(int tam_vertical){
-        Point Nubicacion;
+    public String UbicacionFicha_Izq_SinEspacio(int tam_vertical){
         if(distancia_y_Arr > 90){
             distancia_y_Arr = distancia_y_Arr - tam_vertical;
-            Nubicacion = new Point(distancia_x_Izq, distancia_y_Arr);
-            return Nubicacion;
+            ubicacion = new Point(distancia_x_Izq, distancia_y_Arr);
+            return "_v";
         }else{
-            Nubicacion = new Point(distancia_x_Izq, distancia_y_Arr);
-            return Nubicacion;
-        }
-        
+            ubicacion = new Point(distancia_x_Izq, distancia_y_Arr);
+            return "_v";
+        }      
     }
     
     
@@ -160,8 +161,7 @@ public class Lienzo extends JComponent{
             return "_h";
         }else{
             System.out.println("Sin espacio por la izquierda...!");
-            UbicacionFicha_Izq_SinEspacio(82);
-            return "_v";
+            return UbicacionFicha_Izq_SinEspacio(82);            
         }      
     }
     
@@ -192,6 +192,7 @@ public class Lienzo extends JComponent{
     
     public void ResibirFcha(Fichas_Tablero N_ficha){
         ListaFichas.add(N_ficha);
+        System.out.println("Resiviendo Ficha de otro juador...!!");
     }
 
     public ArrayList<Fichas_Tablero> getListaFichas() {

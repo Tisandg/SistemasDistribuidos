@@ -492,7 +492,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
 
     @Override
     public boolean enviarFicha(String LoginDestino, Fichas_Tablero N_ficha) throws RemoteException {
-        System.out.println("Enviando mensaje ...");
+        System.out.println("Enviando ficha ...");
         boolean bandera=false;
         CallBackJuegoInt objUsuarioRemoto = null;
         for(TableroActivo objUsuario: ListaTablerosActivos)

@@ -715,9 +715,13 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(0).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(0).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+            if(Mis_Fichas.get(0).getId() == 27){               
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -734,8 +738,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(1).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -751,8 +759,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(2).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -768,8 +780,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(3).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -785,8 +801,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(4).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -802,8 +822,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(5).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -819,8 +843,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(6).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -836,8 +864,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(7).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioActual, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -853,8 +885,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(8).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -866,12 +902,16 @@ public class Tablero_Interface extends javax.swing.JFrame {
     private void Ficha_10_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_10_LabelMouseClicked
         // TODO add your handling code here:
         FichaSeleccionada = Mis_Fichas.get(9);
-        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(10).getId() != 27){
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(9).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(9).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -883,12 +923,16 @@ public class Tablero_Interface extends javax.swing.JFrame {
     private void Ficha_11_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_11_LabelMouseClicked
         // TODO add your handling code here:
         FichaSeleccionada = Mis_Fichas.get(10);
-        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(0).getId() != 27){
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(10).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(10).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -904,8 +948,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(11).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -921,8 +969,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(12).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
@@ -938,8 +990,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             if(Mis_Fichas.get(13).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                Mi_Lienzo.repaint();
+                try {
+                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda"));
+                    Mi_Lienzo.repaint();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
                 BanderaSeleccion = true;            
