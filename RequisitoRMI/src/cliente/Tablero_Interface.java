@@ -18,11 +18,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
 
     private static JugarInt objRemoto_Juego;
     private static CallBackJuegoInt objRemotoCallBackJuego;
-<<<<<<< HEAD
     private static UsuariosInt ObjRemotoUsuarioChat;
-=======
-    private boolean Anfitrion;
->>>>>>> origin/master
     Lienzo Mi_Lienzo;
     Utilidades utilidades;
     ArrayList<Ficha> Mis_Fichas;
@@ -37,12 +33,10 @@ public class Tablero_Interface extends javax.swing.JFrame {
     public static int segundo = 0;
     public static boolean IniciaHilo = true;
     public Fichas_Tablero FichaPaint;
+    private Ficha FichaSeleccionada;
+    private boolean BanderaSeleccion = false;
     
-<<<<<<< HEAD
     public Tablero_Interface(String UsuarioActual, String UsuarioContrincante, ArrayList<Ficha> MisFichas, int numPuertoRMIRegistry, String direccionIpRMIRegistry) {
-=======
-    public Tablero_Interface(String UsuarioActual, String UsuarioContrincante, int NumeroFichasPartida,int numPuertoRMIRegistry, String direccionIpRMIRegistry, boolean Anfitrion) {
->>>>>>> origin/master
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -52,16 +46,12 @@ public class Tablero_Interface extends javax.swing.JFrame {
         this.UsuarioContrincante = UsuarioContrincante;
         this.Mis_Fichas = MisFichas;
         this.Mi_Lienzo = new Lienzo();
-<<<<<<< HEAD
         this.NumeroFichas = MisFichas.size();
         this.utilidades = new Utilidades(NumeroFichas);
-        Mi_Lienzo.setBounds(2, 2, 1310, 272);
+        this.FichaSeleccionada = new Ficha();
+        Mi_Lienzo.setBounds(2, 2, 1310, 300);
         Mi_Lienzo.setBorder(BorderFactory.createBevelBorder(1));
         jPanel12.add(Mi_Lienzo);
-=======
-        this.utilidades = new Utilidades(NumeroFichasPartida/2);
-        this.Anfitrion = Anfitrion;
->>>>>>> origin/master
         IniciarTablero();
     }
 
@@ -260,9 +250,9 @@ public class Tablero_Interface extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(EnviarMensaje_jbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,24 +271,25 @@ public class Tablero_Interface extends javax.swing.JFrame {
         );
 
         jPanel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel12.setMaximumSize(new java.awt.Dimension(1310, 272));
-        jPanel12.setMinimumSize(new java.awt.Dimension(1310, 272));
-        jPanel12.setPreferredSize(new java.awt.Dimension(1310, 272));
+        jPanel12.setMaximumSize(new java.awt.Dimension(1310, 300));
+        jPanel12.setMinimumSize(new java.awt.Dimension(1310, 300));
+        jPanel12.setPreferredSize(new java.awt.Dimension(1310, 300));
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1308, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 270, Short.MAX_VALUE)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         jPanel13.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel13.setMaximumSize(new java.awt.Dimension(1283, 168));
-        jPanel13.setMinimumSize(new java.awt.Dimension(1283, 168));
+        jPanel13.setMaximumSize(new java.awt.Dimension(1310, 149));
+        jPanel13.setMinimumSize(new java.awt.Dimension(1310, 149));
+        jPanel13.setPreferredSize(new java.awt.Dimension(1310, 149));
 
         Ficha_1_Label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ninguna.png"))); // NOI18N
         Ficha_1_Label.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -473,137 +464,124 @@ public class Tablero_Interface extends javax.swing.JFrame {
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(123, 123, 123)
                 .addComponent(Izquierda)
-                .addGap(18, 18, 18)
+                .addGap(67, 67, 67)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Ficha_1_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Ficha_1_Label))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Ficha_2_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Ficha_2_Label))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Ficha_3_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Ficha_3_Label))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel48, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Ficha_4_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Ficha_5_Label)
-                    .addComponent(jLabel49, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Ficha_4_Label))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Ficha_6_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Ficha_5_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel49, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(Ficha_6_Label))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(Ficha_7_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel51, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel52, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Ficha_8_Label))
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(Ficha_8_Label)
+                        .addGap(18, 18, 18)
+                        .addComponent(Ficha_9_Label)
+                        .addGap(18, 18, 18)
+                        .addComponent(Ficha_10_Label))
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel53, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Ficha_9_Label))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Ficha_10_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Ficha_11_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Ficha_11_Label))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(Ficha_12_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel56, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Ficha_13_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel57, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Ficha_13_Label))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Ficha_14_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel58, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Ficha_14_Label))
+                .addGap(89, 89, 89)
                 .addComponent(Derecha)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(85, 85, 85))
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Ficha_14_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel13Layout.createSequentialGroup()
-                                .addGap(46, 46, 46)
-                                .addComponent(Derecha)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel58))
-                    .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel13Layout.createSequentialGroup()
-                            .addComponent(Ficha_13_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel57))
-                        .addGroup(jPanel13Layout.createSequentialGroup()
-                            .addComponent(Ficha_11_Label)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel55))
+                .addGap(35, 35, 35)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Ficha_10_Label)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel13Layout.createSequentialGroup()
-                                .addComponent(Ficha_10_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel54))
-                            .addGroup(jPanel13Layout.createSequentialGroup()
-                                .addComponent(Ficha_9_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel53))
-                            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel13Layout.createSequentialGroup()
-                                    .addComponent(Ficha_7_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel51))
-                                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(jPanel13Layout.createSequentialGroup()
-                                        .addComponent(Ficha_6_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel50))
-                                    .addGroup(jPanel13Layout.createSequentialGroup()
-                                        .addComponent(Ficha_5_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel49))
-                                    .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(Ficha_4_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel48))
-                                    .addGroup(jPanel13Layout.createSequentialGroup()
-                                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(Ficha_8_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(Ficha_3_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(Ficha_12_Label)
-                                                .addComponent(Ficha_1_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(Ficha_2_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel13Layout.createSequentialGroup()
-                                                .addGap(51, 51, 51)
-                                                .addComponent(Izquierda)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jLabel33)
-                                                .addComponent(jLabel32)
-                                                .addComponent(jLabel31))
-                                            .addComponent(jLabel52)
-                                            .addComponent(jLabel56))))))))
-                .addContainerGap(14, Short.MAX_VALUE))
+                                        .addComponent(Ficha_1_Label, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(Ficha_2_Label, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(Ficha_3_Label, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(jPanel13Layout.createSequentialGroup()
+                                            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(Ficha_5_Label)
+                                                .addComponent(Ficha_6_Label)
+                                                .addComponent(Ficha_7_Label)
+                                                .addComponent(Ficha_8_Label)
+                                                .addComponent(Ficha_9_Label)
+                                                .addComponent(Ficha_11_Label)
+                                                .addComponent(Ficha_12_Label))
+                                            .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addComponent(Ficha_13_Label)
+                                    .addComponent(Ficha_14_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addComponent(Derecha)
+                                .addGap(35, 35, 35))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel13Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(Izquierda)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel48)
+                            .addComponent(jLabel49)
+                            .addComponent(jLabel50)
+                            .addComponent(jLabel51)
+                            .addComponent(jLabel52)
+                            .addComponent(jLabel53)
+                            .addComponent(jLabel54)
+                            .addComponent(jLabel55)
+                            .addComponent(jLabel56)
+                            .addComponent(jLabel57)
+                            .addComponent(jLabel58)
+                            .addComponent(jLabel33)
+                            .addComponent(jLabel32)
+                            .addComponent(jLabel31))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         Usuario1_Lb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -636,13 +614,13 @@ public class Tablero_Interface extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
                                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(64, 64, 64)
-                                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
-                .addContainerGap(33, Short.MAX_VALUE))
+                                .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jPanel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -652,11 +630,11 @@ public class Tablero_Interface extends javax.swing.JFrame {
                     .addComponent(Usuario1_Lb)
                     .addComponent(jLabel29)
                     .addComponent(Usuario2_Lb))
-                .addGap(3, 3, 3)
-                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -705,7 +683,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 739, Short.MAX_VALUE)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -733,69 +711,267 @@ public class Tablero_Interface extends javax.swing.JFrame {
 
     private void Ficha_1_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_1_LabelMouseClicked
         // Al Clickear la ficha 1
-        Ficha_1_Label.setVisible(false);
-        Mi_Lienzo.setFiha(Mis_Fichas.get(0));
-        Mi_Lienzo.repaint();
+        FichaSeleccionada = Mis_Fichas.get(0);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(0).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(0).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 1");    
+            }
+        }
+              
     }//GEN-LAST:event_Ficha_1_LabelMouseClicked
 
     private void Ficha_2_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_2_LabelMouseClicked
         // Al Clickear la ficha 2
+        FichaSeleccionada = Mis_Fichas.get(1);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(1).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(1).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 2");    
+            }
+        }    
     }//GEN-LAST:event_Ficha_2_LabelMouseClicked
 
     private void Ficha_3_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_3_LabelMouseClicked
         // Al Clickear la ficha 3
+        FichaSeleccionada = Mis_Fichas.get(2);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(2).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(2).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 3");    
+            }
+        }
     }//GEN-LAST:event_Ficha_3_LabelMouseClicked
 
     private void Ficha_4_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_4_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(3);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(3).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(3).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 4");    
+            }
+        }
     }//GEN-LAST:event_Ficha_4_LabelMouseClicked
 
     private void Ficha_5_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_5_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(4);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(4).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(4).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 5");    
+            }
+        }
     }//GEN-LAST:event_Ficha_5_LabelMouseClicked
 
     private void Ficha_6_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_6_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(5);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(5).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(5).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 6");    
+            }
+        }
     }//GEN-LAST:event_Ficha_6_LabelMouseClicked
 
     private void Ficha_7_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_7_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(6);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(6).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(6).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 7");    
+            }
+        }
     }//GEN-LAST:event_Ficha_7_LabelMouseClicked
 
     private void Ficha_8_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_8_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(7);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(7).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(7).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 8");    
+            }
+        }
     }//GEN-LAST:event_Ficha_8_LabelMouseClicked
 
     private void Ficha_9_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_9_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(8);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(8).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(8).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 9");    
+            }
+        }
     }//GEN-LAST:event_Ficha_9_LabelMouseClicked
 
     private void Ficha_10_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_10_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(9);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(10).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(9).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 10");    
+            }
+        }
     }//GEN-LAST:event_Ficha_10_LabelMouseClicked
 
     private void Ficha_11_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_11_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(10);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(0).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(10).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 11");    
+            }
+        }
     }//GEN-LAST:event_Ficha_11_LabelMouseClicked
 
     private void Ficha_12_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_12_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(11);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(11).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(11).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 12");    
+            }
+        }
     }//GEN-LAST:event_Ficha_12_LabelMouseClicked
 
     private void Ficha_13_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_13_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(12);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(12).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(12).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 13");    
+            }
+        }
     }//GEN-LAST:event_Ficha_13_LabelMouseClicked
 
     private void Ficha_14_LabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Ficha_14_LabelMouseClicked
         // TODO add your handling code here:
+        FichaSeleccionada = Mis_Fichas.get(13);
+        if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(13).getId() != 27){
+            JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(Mis_Fichas.get(13).getId() == 27){
+                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                Mi_Lienzo.repaint();
+            }
+            else{
+                BanderaSeleccion = true;            
+                System.out.println("Seleccionaste la ficha 14");    
+            }
+        }
     }//GEN-LAST:event_Ficha_14_LabelMouseClicked
 
     private void IzquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IzquierdaActionPerformed
         // TODO add your handling code here:
+        Ficha aux = new Ficha();
+        if(!BanderaSeleccion){
+            JOptionPane.showMessageDialog(null, "Error. Debe seleccionar una Ficha", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{            
+            Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+            Mi_Lienzo.repaint();
+            FichaSeleccionada = new Ficha();
+            BanderaSeleccion = false;
+        }
+        System.out.println("click en izquierda...!");
     }//GEN-LAST:event_IzquierdaActionPerformed
 
     private void DerechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DerechaActionPerformed
         // TODO add your handling code here:
+        Ficha aux = new Ficha();
+        if(!BanderaSeleccion){
+            JOptionPane.showMessageDialog(null, "Error. Debe seleccionar una Ficha", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            Mi_Lienzo.ColocarFicha(FichaSeleccionada,"Derecha");
+            Mi_Lienzo.repaint();
+        }
+        
     }//GEN-LAST:event_DerechaActionPerformed
 
     private void EnviarMensaje_jbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarMensaje_jbtnActionPerformed
@@ -953,11 +1129,11 @@ public class Tablero_Interface extends javax.swing.JFrame {
         ObtenerObjetoRemotoUsuarioChat();
         ArrayList<Ficha> Sus_Fichas = new ArrayList<>();
         try {
-<<<<<<< HEAD
             objRemotoCallBackJuego = new CallBackJuegoImpl(this);
             objRemoto_Juego.registrarReferenciaRemotaTablro(UsuarioActual, objRemotoCallBackJuego);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error. Invocando la operacion Remota << Requistrar referencia  Remota >> ", "Error", JOptionPane.ERROR_MESSAGE);            
+            System.out.println("Error registrando la referencia remota...!  "+e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error. No se podido obtener la referencia al Objeto Remoto <<Registrar fer remota tablero>>", "Error", JOptionPane.ERROR_MESSAGE);
         }
         ImprimirMisFichas();
         Pintar_Mis_Fichas();               
@@ -970,58 +1146,6 @@ public class Tablero_Interface extends javax.swing.JFrame {
             System.out.println("Lado B = "+Mis_Fichas.get(i).getLado_B());
             System.out.println("_________________________");
         }
-=======
-            objRemoto_Juego.registrarReferenciaRemotaTablro(UsuarioActual, null);
-        } catch (Exception e) {
-            
-        }
-        if(Anfitrion){
-            try {
-                objRemoto_Juego.repartirFichas(NumeroFichasPartida);
-                try {
-                    Mis_Fichas = objRemoto_Juego.getFichasJugador1();
-                    Sus_Fichas = objRemoto_Juego.getFichasJugador2();
-                    
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Error. Invocando la operacion Remota << Obtenr Mis Fichas >> ", "Error", JOptionPane.ERROR_MESSAGE);
-                    System.out.println("Error = "+e.getMessage());
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error. Invocando la operacion Remota << Repartir Fichas >> ", "Error", JOptionPane.ERROR_MESSAGE);            
-                System.out.println("Error = "+e.getMessage());
-            }
-        }
-        
-        
-//        if(!Mis_Fichas.isEmpty()){
-//            for (int i = 0; i < Mis_Fichas.size(); i++) {
-//                System.out.println("Ficha "+i+" Lado A = "+Mis_Fichas.get(i).getLado_A());
-//                System.out.println("Ficha "+i+" Lado B = "+Mis_Fichas.get(i).getLado_B());
-//                System.out.println("_______________________________________________________________");
-//            }
-//        }else{
-//            JOptionPane.showMessageDialog(null, "Error. No has resivido ninguna Ficha", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-//        
-//        if(!Sus_Fichas.isEmpty()){
-//            System.out.println("#############################################################");
-//            for (int i = 0; i < Mis_Fichas.size(); i++) {
-//                System.out.println("Ficha "+i+" Lado A = "+Sus_Fichas.get(i).getLado_A());
-//                System.out.println("Ficha "+i+" Lado B = "+Sus_Fichas.get(i).getLado_B());
-//                System.out.println("_______________________________________________________________");
-//            }
-//        }else{
-//            JOptionPane.showMessageDialog(null, "Error. No has resivido ninguna Ficha", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-        
-        Pintar_Mis_Fichas();
-               
->>>>>>> origin/master
-    }
-    
-    public void Resivir_Fichas(ArrayList<Ficha> Mis_Fichas){
-        this.Mis_Fichas = Mis_Fichas;
-        Pintar_Mis_Fichas();
     }
     
     private void Pintar_Mis_Fichas(){
@@ -1033,9 +1157,9 @@ public class Tablero_Interface extends javax.swing.JFrame {
         Ficha_6_Label.setIcon(new javax.swing.ImageIcon(getClass().getResource(utilidades.Buscar_Imagen(Mis_Fichas.get(5)))));
         Ficha_7_Label.setIcon(new javax.swing.ImageIcon(getClass().getResource(utilidades.Buscar_Imagen(Mis_Fichas.get(6)))));
         Ficha_8_Label.setIcon(new javax.swing.ImageIcon(getClass().getResource(utilidades.Buscar_Imagen(Mis_Fichas.get(7)))));
-        if(Mis_Fichas.size() == 9){
+        if(Mis_Fichas.size() > 9){
             Ficha_9_Label.setIcon(new javax.swing.ImageIcon(getClass().getResource(utilidades.Buscar_Imagen(Mis_Fichas.get(8)))));
-            if(Mis_Fichas.size() == 10){
+            if(Mis_Fichas.size() > 10){
                 Ficha_10_Label.setIcon(new javax.swing.ImageIcon(getClass().getResource(utilidades.Buscar_Imagen(Mis_Fichas.get(9)))));                
                 if(Mis_Fichas.size() > 11){
                     Ficha_11_Label.setIcon(new javax.swing.ImageIcon(getClass().getResource(utilidades.Buscar_Imagen(Mis_Fichas.get(10)))));              
@@ -1052,6 +1176,11 @@ public class Tablero_Interface extends javax.swing.JFrame {
             }
             
         }
+    }
+    
+    public void ResivirFicha(Fichas_Tablero N_ficha){
+        Mi_Lienzo.ResibirFcha(N_ficha);
+        Mi_Lienzo.repaint();
     }
     
 }

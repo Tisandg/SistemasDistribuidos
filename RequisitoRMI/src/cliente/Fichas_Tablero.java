@@ -20,6 +20,7 @@ public class Fichas_Tablero {
         this.ficha = ficha;
         this.ubicacion = ubicacion;
         this.imagen = imagen;
+        System.out.println("Ficha Tablero = "+this.ficha.getLado_A() +" "+this.ficha.getLado_B());
     }
 
     public Ficha getFicha() {

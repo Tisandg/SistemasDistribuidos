@@ -22,13 +22,9 @@ public interface UsuariosInt extends Remote{
     public boolean registrarReferenciaRemota(String login, UsuarioCallBackInt objRemoto) throws RemoteException;
     public boolean EnviarInvitacion(String loginOrigen,String loginDestino, String mensaje, int numeroFichas) throws RemoteException;
     public boolean establecerComunicacion(String loginOrigen, String loginDestino) throws RemoteException ;
-<<<<<<< HEAD
     public boolean enviarMensaje(String loginOrigen,String loginDestino, String mensaje)throws RemoteException;
     public boolean enviarRespuestaInvitacion(String loginOrigen, String loginDestino, boolean respuesta) throws RemoteException;
     public boolean iniciarJuego(int numFichas, String LoginOrigeen, String LoginDestino) throws RemoteException;
-=======
-    public boolean enviarRespuestaInvitacion(String loginOrigen, String loginDestino, boolean respuesta) throws RemoteException;
->>>>>>> origin/master
     public boolean salir(String login) throws RemoteException;
     
 }
