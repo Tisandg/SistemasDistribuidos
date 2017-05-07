@@ -104,12 +104,11 @@ public class EstadisticasImpl extends UnicastRemoteObject implements Estadistica
             }
         }
         ArrayList<String> resultadosEstadisticas = new ArrayList<String>();
-        resultadosEstadisticas.add("Total partidas jugadas hasta el momento: "+totalPartidas);
-        resultadosEstadisticas.add("Total de empates: "+empates);
-        resultadosEstadisticas.add("Imprimiendo ganadores de mayor a menor: ");
+        resultadosEstadisticas.add(""+totalPartidas);
+        resultadosEstadisticas.add(""+empates);
         
         for ( i = 0; i < tamJugadores; i++) {
-            resultadosEstadisticas.add(""+(i+1)+". "+loginsContados.get(i)+":"+contadores.get(i));
+            resultadosEstadisticas.add(""+loginsContados.get(i)+":"+contadores.get(i));
         }
 
         return resultadosEstadisticas;
