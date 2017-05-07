@@ -255,25 +255,40 @@ public class Archivos {
         try {
            // Apertura del fichero y creacion de BufferedReader para poder
            // hacer una lectura comoda (disponer del metodo readLine()).
-            System.out.println("Ruta - clave "+ruta+" "+clave);
+            System.out.println("Ruta: "+ruta+" Clave:"+clave);
            archivo = new File (ruta);
            fr = new FileReader (archivo);
            br = new BufferedReader(fr);
 
            // Lectura del fichero
            String linea;
+           int aciertos = 0;
            int i;
            for (i = 0; i < 4; i++) {
              linea=br.readLine();
              if( linea != null){
+                /*Comparamos la contraseña. Si i es igual a 1 significa que estamos en la
+                * segunda linea donde se encuentra la contraseña*/
+                if(i == 0){
+                    if(linea.compareTo(login) == 0){
+                        aciertos++;
+                    }
+                }  
+                /*Comparamos la contraseña. Si i es igual a 1 significa que estamos en la
+                * segunda linea donde se encuentra la contraseña*/
                 if(i == 1){
                     if(linea.compareTo(clave) == 0){
-                        respuesta = true;
+                        aciertos++;
                     }
                 } 
              }
            }
-           /*Comparamos la contraseña*/
+           /*Si el valor de aciertos es 2, significa que el login y contraseña
+           *coinciden por tanto devolvemos true*/
+           if(aciertos == 2){
+               respuesta = true;
+           }
+           
            
         }
         catch(Exception e){
