@@ -1,6 +1,7 @@
 package servidor;
 
 import java.rmi.RemoteException;
+import sop_rmi.EstadisticasImpl;
 import sop_rmi.UsuariosImpl;
 import sop_rmi.JugarImpl;
 //import sop_rmi.UsuarioCallBackImpl;
@@ -11,7 +12,7 @@ public class ServidorDeObjetos {
     
     public static void main(String args[]) throws RemoteException
     {
-        int numPuertoRMIRegistry = 2020;
+        int numPuertoRMIRegistry = 4040;
         String direccionIpRMIRegistry = "localhost";
         /*
         System.out.println("Cual es la dirección ip donde se encuentra  el rmiregistry ");
@@ -21,7 +22,7 @@ public class ServidorDeObjetos {
         try
         {
             UsuariosImpl objRemoto = new UsuariosImpl();            
-            UtilidadesRMIServidor.ArrancarNS(2020);
+            UtilidadesRMIServidor.ArrancarNS(numPuertoRMIRegistry);
             UtilidadesRMIServidor.RegistrarObjetoRemoto(objRemoto, direccionIpRMIRegistry, numPuertoRMIRegistry,"ServidorUsuarios");            
             
             System.out.println("Objeto remoto Usuarios Registrado, esperado peticiones ...");
@@ -35,6 +36,15 @@ public class ServidorDeObjetos {
             System.out.println("Objeto remoto Juego Registrado, esperado peticiones ...");
         } catch (Exception e) {
             System.err.println("No se pudo Registrar el objeto remoto <<ServidorJuego>>");
+            System.out.println("Error " + e.getMessage());
+            System.exit(0);
+        }
+        try {
+            EstadisticasImpl objRemotoEstadisticas = new EstadisticasImpl();
+            UtilidadesRMIServidor.RegistrarObjetoRemoto(objRemotoEstadisticas, direccionIpRMIRegistry, numPuertoRMIRegistry,"ServidorEstadisticas");            
+            System.out.println("Objeto remoto Juego Registrado, esperado peticiones ...");
+        } catch (Exception e) {
+            System.err.println("No se pudo Registrar el objeto remoto <<ServidorEstadisticas>>");
             System.out.println("Error " + e.getMessage());
             System.exit(0);
         }
