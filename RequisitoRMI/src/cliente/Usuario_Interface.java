@@ -21,6 +21,7 @@ public class Usuario_Interface extends javax.swing.JFrame {
     private int Numero_Fichas_Partida = 0;
     private static UsuarioCallBackInt objRemotoCallbk;
     private boolean AceptarInvitacion;
+    private String loginActual;
     
     public Usuario_Interface(int numPuertoRMIRegistry, String direccionIpRMIRegistry) {
         initComponents();
@@ -45,7 +46,7 @@ public class Usuario_Interface extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         Empezar_Partida_btn = new javax.swing.JButton();
-        Consultar_Estadisticas_btn = new javax.swing.JButton();
+        btnConsultarEstadisticas = new javax.swing.JButton();
         Chat_Entre_Jugadores_btn = new javax.swing.JButton();
         jButton26 = new javax.swing.JButton();
         Menu_Principal_btn = new javax.swing.JButton();
@@ -91,9 +92,14 @@ public class Usuario_Interface extends javax.swing.JFrame {
             }
         });
 
-        Consultar_Estadisticas_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        Consultar_Estadisticas_btn.setForeground(new java.awt.Color(0, 0, 204));
-        Consultar_Estadisticas_btn.setText("Consultar Estadisticas");
+        btnConsultarEstadisticas.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnConsultarEstadisticas.setForeground(new java.awt.Color(0, 0, 204));
+        btnConsultarEstadisticas.setText("Consultar Estadisticas");
+        btnConsultarEstadisticas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarEstadisticasActionPerformed(evt);
+            }
+        });
 
         Chat_Entre_Jugadores_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Chat_Entre_Jugadores_btn.setForeground(new java.awt.Color(0, 0, 204));
@@ -129,7 +135,7 @@ public class Usuario_Interface extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(Empezar_Partida_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Consultar_Estadisticas_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                        .addComponent(btnConsultarEstadisticas, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
                         .addComponent(Chat_Entre_Jugadores_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(Usuario_Actual_Lb, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -153,7 +159,7 @@ public class Usuario_Interface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                 .addComponent(Empezar_Partida_btn)
                 .addGap(18, 18, 18)
-                .addComponent(Consultar_Estadisticas_btn)
+                .addComponent(btnConsultarEstadisticas)
                 .addGap(18, 18, 18)
                 .addComponent(Chat_Entre_Jugadores_btn)
                 .addGap(85, 85, 85)
@@ -456,6 +462,7 @@ public class Usuario_Interface extends javax.swing.JFrame {
             try {
                 inicio = ObjRemotoUsuario.iniciarSesion(login, clave, false);
                 if(inicio){
+                    loginActual = login;
                     objRemotoCallbk = new UsuarioCallBackImpl(this);
                     ObjRemotoUsuario.registrarReferenciaRemota(login, objRemotoCallbk);
                     this.setVisible(false);
@@ -624,6 +631,11 @@ public class Usuario_Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_Seleccionar_NumeroFichas_btnActionPerformed
 
+    private void btnConsultarEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarEstadisticasActionPerformed
+        Menu_Juego.setVisible(false);
+        new estadisticasInterfaz(numPuertoRMIRegistry, direccionIpRMIRegistry, loginActual,false).setVisible(true);
+    }//GEN-LAST:event_btnConsultarEstadisticasActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -664,7 +676,6 @@ public class Usuario_Interface extends javax.swing.JFrame {
     private javax.swing.JButton Autentificar_Usr;
     private javax.swing.JButton Chat_Entre_Jugadores_btn;
     private javax.swing.JPasswordField Clave_Usuario_Jpassword;
-    private javax.swing.JButton Consultar_Estadisticas_btn;
     private javax.swing.JFrame Elegir_Numero_Fichas;
     private javax.swing.JButton Empezar_Partida_btn;
     private javax.swing.JTextField Login_Usuario_JtextField;
@@ -676,6 +687,7 @@ public class Usuario_Interface extends javax.swing.JFrame {
     private javax.swing.JFrame Seleccionar_Jugador_Red;
     private javax.swing.JButton Seleccionar_NumeroFichas_btn;
     private javax.swing.JLabel Usuario_Actual_Lb;
+    private javax.swing.JButton btnConsultarEstadisticas;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton26;
     private javax.swing.JComboBox jComboBox3;
@@ -737,6 +749,18 @@ public class Usuario_Interface extends javax.swing.JFrame {
     public void IniciarJuego(ArrayList<Ficha> Fichas){
         Menu_Juego.setVisible(false);
         new Tablero_Interface(Usuario_Actual_Lb.getText(), LoginContrincante, Fichas, numPuertoRMIRegistry, direccionIpRMIRegistry).setVisible(true);
+    }
+    
+    public void mostrarMenu(String login){
+        //Ya debe estar registrada la ref remota en el obj remoto
+        //objRemotoCallbk = new UsuarioCallBackImpl(this);
+        //ObjRemotoUsuario.registrarReferenciaRemota(login, objRemotoCallbk);
+        this.setVisible(false);
+        Menu_Juego.setLocationRelativeTo(null);
+        Menu_Juego.setResizable(false);
+        Menu_Juego.setVisible(true);
+        Usuario_Actual_Lb.setText(login);
+        loginActual = login;
     }
     
 }

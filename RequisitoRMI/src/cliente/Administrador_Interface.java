@@ -695,7 +695,8 @@ public class Administrador_Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_Registrar_Usuario_btnActionPerformed
 
     private void Estadisticas_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Estadisticas_btnActionPerformed
-        // TODO add your handling code here:
+        Menu_Administrador.setVisible(false);
+        new estadisticasInterfaz(numPuertoRMIRegistry, direccionIpRMIRegistry, loginAdmin,true).setVisible(true);
     }//GEN-LAST:event_Estadisticas_btnActionPerformed
 
     private void Registrar_UsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Registrar_UsuarioActionPerformed
@@ -995,8 +996,15 @@ public class Administrador_Interface extends javax.swing.JFrame {
             return true;
         }else{
             return false;
-        }
-        
+        } 
+    }
+    
+    public void mostrarMenu(String login){
+        this.loginAdmin = login;
+        this.setVisible(false);
+        Menu_Administrador.setLocationRelativeTo(null);
+        Menu_Administrador.setResizable(false);
+        Menu_Administrador.setVisible(true);
     }
     
 }
