@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import cliente.CallBackJuegoInt;
 import cliente.Fichas_Tablero;
+import cliente.Lienzo;
         
 /**
  * @author Kevin Chantré
@@ -491,7 +492,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
     }
 
     @Override
-    public boolean enviarFicha(String LoginDestino, Fichas_Tablero N_ficha) throws RemoteException {
+    public boolean enviarFicha(String LoginDestino, Lienzo Mi_Lieno) throws RemoteException {
         System.out.println("Enviando ficha ...");
         boolean bandera=false;
         CallBackJuegoInt objUsuarioRemoto = null;
@@ -504,10 +505,31 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
         }
         
         if (objUsuarioRemoto!=null){
-            objUsuarioRemoto.enviarFicha(N_ficha);
+            objUsuarioRemoto.enviarFicha(Mi_Lieno);
             bandera=true;
         }
         return bandera;
+    }
+
+    @Override
+    public boolean informar_paso(String LoginDestino, String Mensaje) throws RemoteException {
+        System.out.println("Enviando Mensaje de Paso ...");
+        boolean bandera=false;
+        CallBackJuegoInt objUsuarioRemoto = null;
+        for(TableroActivo objUsuario: ListaTablerosActivos)
+        {
+            if (objUsuario.getLogin().equals(LoginDestino)){
+                objUsuarioRemoto = objUsuario.getObjetoRemotoTablero();
+                break;
+            }
+        }
+        
+        if (objUsuarioRemoto!=null){
+            objUsuarioRemoto.Informar_Paso(Mensaje);
+            bandera=true;
+        }
+        return bandera;
+        
     }
     
 }

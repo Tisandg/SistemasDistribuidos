@@ -3,7 +3,6 @@ package cliente;
 
 import java.rmi.RemoteException;
 import java.rmi.Remote;
-import cliente.Fichas_Tablero;
 
 /**
  *
@@ -11,5 +10,6 @@ import cliente.Fichas_Tablero;
  */
 public interface CallBackJuegoInt extends Remote{
     public void enviarMensaje(String login, String mensaje) throws RemoteException;
-    public void enviarFicha(Fichas_Tablero N_ficha) throws RemoteException;
+    public void enviarFicha(Lienzo Mi_Lienzo) throws RemoteException;
+    public void Informar_Paso(String Mensaje) throws RemoteException;
 }

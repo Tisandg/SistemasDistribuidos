@@ -5,7 +5,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import cliente.Fichas_Tablero;
-
+import cliente.Lienzo;
 /**
  * @author Santiago Garcia
  * Contiene todos los metodos que permiten seccionar un jugador en red,
@@ -24,5 +24,6 @@ public interface JugarInt extends Remote{
     public ArrayList<Ficha> getFichasJugador2()throws RemoteException;
     public boolean registrarReferenciaRemotaTablro(String login, CallBackJuegoInt objRemoto) throws RemoteException;
     public boolean enviarMensaje(String loginOrigen, String loginDestino, String mensaje) throws RemoteException;
-    public boolean enviarFicha(String LoginDestino, Fichas_Tablero N_ficha) throws RemoteException;
+    public boolean enviarFicha(String LoginDestino, Lienzo Mi_Lienzo) throws RemoteException;
+    public boolean informar_paso(String LoginDestino, String Mensaje) throws RemoteException;
 }

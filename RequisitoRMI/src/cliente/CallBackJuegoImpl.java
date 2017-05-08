@@ -3,8 +3,6 @@ package cliente;
 
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import sop_rmi.Ficha;
 
 /**
  *
@@ -26,7 +24,12 @@ public class CallBackJuegoImpl extends UnicastRemoteObject implements CallBackJu
     }
 
     @Override
-    public void enviarFicha(Fichas_Tablero N_ficha) throws RemoteException{
-        Tablero_Interface.ResivirFicha(N_ficha);
+    public void enviarFicha(Lienzo Mi_Lienzo) throws RemoteException{
+        Tablero_Interface.ResivirFicha(Mi_Lienzo);
+    }
+
+    @Override
+    public void Informar_Paso(String Mensaje) throws RemoteException {
+        Tablero_Interface.Informar_Paso(Mensaje);
     }
 }

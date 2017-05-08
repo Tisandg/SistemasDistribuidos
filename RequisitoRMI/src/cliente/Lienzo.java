@@ -20,23 +20,24 @@ import sop_rmi.Ficha;
  * 
  * 
  */
-public class Lienzo extends JComponent{
+public class Lienzo extends JComponent implements LienzoInt{
     private ArrayList<Fichas_Tablero> ListaFichas;
     private Point ubicacion;
     private int distancia_x_Izq;
     private int distancia_x_Der;
     private int distancia_y_Arr;
     private int distancia_y_Abj;
-    private Utilidades utilidades;
-    private int Lado_Izq_Valido;
-    private int Lado_Der_Valido;
+    private int lado_Izq_Valido;
+    private int lado_Der_Valido;
     
     public Lienzo() {
         ListaFichas = new ArrayList<>();
         this.distancia_y_Arr = 110;
         this.distancia_y_Abj = 110;
         this.distancia_x_Izq = 635;
-        this.distancia_x_Der = 635;
+        this.distancia_x_Der = 595;       
+        this.lado_Izq_Valido = 0;
+        this.lado_Der_Valido = 0;
 //        Fichas_Tablero f = new Fichas_Tablero(null, "/imagenes/6_6_v.png", new Point(624, 20));
 //        ListaFichas.add(f);
     }
@@ -53,9 +54,6 @@ public class Lienzo extends JComponent{
         g.drawImage (imagenInterna, ubicacion.x, ubicacion.y, this);
     }
 
-    public void setListaFichas(ArrayList<Fichas_Tablero> ListaFichas) {
-        this.ListaFichas = ListaFichas;
-    }
   //===================================================
     
     public Fichas_Tablero setFiha(Ficha ficha, String Lado){
@@ -70,13 +68,13 @@ public class Lienzo extends JComponent{
             }else{
                 NuevaFicha = new Fichas_Tablero(ficha, imagen(ficha, "_v"), p);
                 ListaFichas.add(NuevaFicha);
-                Lado_Izq_Valido = 6;
-                Lado_Der_Valido = 6;
+                lado_Izq_Valido = 6;
+                lado_Der_Valido = 6;
                 return NuevaFicha;
             }
         }else{
             if(Lado.equals("Izquierda")){
-                if(ficha.getLado_A() == Lado_Izq_Valido || ficha.getLado_B() == Lado_Izq_Valido){
+                if(ficha.getLado_A() == lado_Izq_Valido || ficha.getLado_B() == lado_Izq_Valido){
                     if(ficha.getLado_A() == ficha.getLado_B()){
                         tipo = UbicacionFichaVertical_Izq();
                         Imagen = imagen(ficha, tipo);
@@ -84,46 +82,58 @@ public class Lienzo extends JComponent{
                         ListaFichas.add(NuevaFicha);                                
                         return NuevaFicha;
                     }else{
-                        if(ficha.getLado_A() == Lado_Izq_Valido){                            
+                        if(ficha.getLado_A() == lado_Izq_Valido){                            
                             tipo = UbicacionFichaHorizontal_Izq();
                             Imagen = "/imagenes/"+Integer.toString(ficha.getLado_B())+"_"+Integer.toString(ficha.getLado_A())+tipo+".png";
                             NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
                             ListaFichas.add(NuevaFicha);
-                            Lado_Izq_Valido = ficha.getLado_B();
-                            return null;
+                            lado_Izq_Valido = ficha.getLado_B();
+                            return NuevaFicha;
                         }else{
                             tipo = UbicacionFichaHorizontal_Izq();
                             Imagen = "/imagenes/"+Integer.toString(ficha.getLado_A())+"_"+Integer.toString(ficha.getLado_B())+tipo+".png";
                             NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
                             ListaFichas.add(NuevaFicha);
-                            Lado_Izq_Valido = ficha.getLado_A();
+                            lado_Izq_Valido = ficha.getLado_A();
                             return NuevaFicha;
                         }
                     }
                 }else{
                     System.out.println("La ficha no se puede colocar a la Izquierda");
-                    return null;
+                    String Error = "Error";
+                    NuevaFicha = new Fichas_Tablero(ficha, Error, ubicacion);
+                    return NuevaFicha;
                 }
             }else{
-                if(ficha.getLado_A() == Lado_Der_Valido || ficha.getLado_B() == Lado_Der_Valido){
+                if(ficha.getLado_A() == lado_Der_Valido || ficha.getLado_B() == lado_Der_Valido){
                     if(ficha.getLado_A() == ficha.getLado_B()){
-                        Imagen = utilidades.Buscar_Imagen(ficha);
+                        tipo = UbicacionFichaVertical_Der();
+                        Imagen = imagen(ficha, tipo);
                         NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
+                        ListaFichas.add(NuevaFicha);                                
                         return NuevaFicha;
                     }else{
-                        if(ficha.getLado_A() == Lado_Der_Valido){
-                            Imagen = "/imagenes/"+Integer.toString(ficha.getLado_A())+"_"+Integer.toString(ficha.getLado_B())+"_h.png";
+                        if(ficha.getLado_A() == lado_Der_Valido){
+                            tipo = UbicacionFichaHorizontal_Der();
+                            Imagen = "/imagenes/"+Integer.toString(ficha.getLado_A())+"_"+Integer.toString(ficha.getLado_B())+tipo+".png";
                             NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
+                            ListaFichas.add(NuevaFicha);
+                            lado_Der_Valido = ficha.getLado_B();
                             return NuevaFicha;
                         }else{
-                            Imagen = "/imagenes/"+Integer.toString(ficha.getLado_B())+"_"+Integer.toString(ficha.getLado_A())+"_h.png";
+                            tipo = UbicacionFichaHorizontal_Der();
+                            Imagen = "/imagenes/"+Integer.toString(ficha.getLado_B())+"_"+Integer.toString(ficha.getLado_A())+tipo+".png";
                             NuevaFicha = new Fichas_Tablero(ficha, Imagen, ubicacion);
+                            ListaFichas.add(NuevaFicha);
+                            lado_Der_Valido = ficha.getLado_A();
                             return NuevaFicha;
                         }
                     }
                 }else{
-                    System.out.println("La ficha no se puede colocar a la Izquierda");
-                    return null;
+                    System.out.println("La ficha no se puede colocar a la Derecha");
+                    String Error = "Error";
+                    NuevaFicha = new Fichas_Tablero(ficha, Error, ubicacion);
+                    return NuevaFicha;
                 }
             }
         }        
@@ -146,6 +156,7 @@ public class Lienzo extends JComponent{
         if(distancia_y_Arr > 90){
             distancia_y_Arr = distancia_y_Arr - tam_vertical;
             ubicacion = new Point(distancia_x_Izq, distancia_y_Arr);
+            distancia_x_Izq = distancia_x_Izq + 42;
             return "_v";
         }else{
             ubicacion = new Point(distancia_x_Izq, distancia_y_Arr);
@@ -165,22 +176,39 @@ public class Lienzo extends JComponent{
         }      
     }
     
-    public Point UbicacionFichaHorizontal_Der(){
-        
-        return null;
+    public String UbicacionFichaVertical_Der(){
+        if(distancia_x_Der < 1220){
+            distancia_x_Der = distancia_x_Der + 82;
+            ubicacion = new Point(distancia_x_Der, distancia_y_Abj);
+            distancia_x_Der = distancia_x_Der - 40;
+            return "_v";
+        }else{
+            System.out.println("Sin espacio...!!");
+            return UbicacionFichaHorizontal_Der();
+        }
     }
-
-    public void ColocarFicha(Ficha ficha, String Lado){
-        Fichas_Tablero NuevaFicha;
-        Point p = new Point(625, 20);
-        System.out.println("*************");
-        System.out.println("ficha = "+ficha.getLado_A()+" - "+ficha.getLado_B()+" - "+ficha.getColocada());
-        System.out.println("Imagen = "+"/imagenes/"+Integer.toString(ficha.getLado_A())+"_"+Integer.toString(ficha.getLado_B())+"_h.png");
-        System.out.println("Point "+p.getX());
-        System.out.println("Point "+p.getY());
-        System.out.println("**************");
-        NuevaFicha = new Fichas_Tablero(ficha, imagen(ficha, "_h"), p);
-        ListaFichas.add(NuevaFicha);
+    
+    public String UbicacionFichaHorizontal_Der(){
+        if(distancia_x_Der < 1138){
+            distancia_x_Der = distancia_x_Der + 82;
+            ubicacion = new Point(distancia_x_Der, distancia_y_Abj + 20);
+            return "_h";
+        }else{
+            System.out.println("Sin espacio por la Derecha...!");
+            return UbicacionFicha_Der_SinEspacio(82); 
+        }
+    }
+    
+    public String UbicacionFicha_Der_SinEspacio(int tam_vertical){
+        if(distancia_y_Abj < 200){
+            distancia_y_Abj = distancia_y_Abj + tam_vertical;
+            ubicacion = new Point(distancia_x_Der+40, distancia_y_Abj);
+            return "_v";
+        }else{
+            System.out.println("no funciona funcion sin espacio derecha...");
+            ubicacion = new Point(distancia_x_Izq, distancia_y_Arr);
+            return "_v";
+        }         
     }
     
     public String imagen(Ficha ficha, String pos){
@@ -195,8 +223,84 @@ public class Lienzo extends JComponent{
         System.out.println("Resiviendo Ficha de otro juador...!!");
     }
 
+    @Override
     public ArrayList<Fichas_Tablero> getListaFichas() {
-        return ListaFichas;
+        return this.ListaFichas;
+    }
+
+    @Override
+    public Point getUbcacion() {
+        return this.ubicacion;
+    }
+
+    @Override
+    public int getDistancia_x_Izq() {
+        return this.distancia_x_Izq;
+    }
+
+    @Override
+    public int getDistancia_x_Der() {
+        return this.distancia_x_Der;
+    }
+
+    @Override
+    public int getDistancia_y_Arr() {
+        return this.distancia_y_Arr;
+    }
+
+    @Override
+    public int getDistancia_y_Abj() {
+        return this.distancia_y_Abj;
+    }
+
+    @Override
+    public int getLado_Izq_Valido() {
+        return this.lado_Izq_Valido;
+    }
+
+    @Override
+    public int getLado_Der_Valido() {
+        return this.lado_Der_Valido;
+    }
+
+    @Override
+    public void setUbicacion(Point ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    @Override
+    public void setDistancia_x_Izq(int distancia_x_Izq) {
+        this.distancia_x_Izq = distancia_x_Izq;
+    }
+
+    @Override
+    public void setDistancia_x_Der(int distancia_x_Der) {
+        this.distancia_x_Der = distancia_x_Der;
+    }
+
+    @Override
+    public void setDistancia_y_Arr(int distancia_y_Arr) {
+        this.distancia_y_Arr = distancia_y_Arr;
+    }
+
+    @Override
+    public void setDistancia_y_Abj(int distancia_y_Abj) {
+        this.distancia_y_Abj = distancia_y_Abj;
+    }
+
+    @Override
+    public void setLado_Izq_Valido(int lado_Izq_Valido) {
+        this.lado_Izq_Valido = lado_Izq_Valido;
+    }
+
+    @Override
+    public void setLado_Der_Valido(int lado_Der_Valido) {
+        this.lado_Der_Valido = lado_Der_Valido;
+    }
+
+    @Override
+    public void setListaFichas(ArrayList<Fichas_Tablero> ListaFichas) {
+        this.ListaFichas = ListaFichas;
     }
     
 }

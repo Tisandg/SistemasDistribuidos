@@ -6,7 +6,7 @@ import java.io.Serializable;
 import sop_rmi.Ficha;
 /**
  *
- * @author HP
+ * @author Kevin Chantré
  */
 public interface Fichas_TableroInt extends Serializable {
     public Ficha getFicha();
