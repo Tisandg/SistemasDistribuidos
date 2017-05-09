@@ -15,5 +15,4 @@ sandra;santiago;1
 sandra;santiago;2
 sandra;santiago;0
 Santiago;Kevin;1
-
 Santiago;Kevin;1
