@@ -173,7 +173,7 @@ public class JugarImpl extends UnicastRemoteObject implements JugarInt{
                 id++;
             }
         }
-        imprimirFichas();
+        //imprimirFichas();
     }
     
     /*Funcion para escoger al azar las fichas que se van a repartir.

@@ -77,11 +77,11 @@ public class Administrador_Interface extends javax.swing.JFrame {
         Nombre_Usuario_Modificar_Label = new javax.swing.JLabel();
         Apellido_Usuario_Modificar_Label = new javax.swing.JLabel();
         Login_Usuario_Modificar_Label = new javax.swing.JLabel();
-        Contraseña_Usuario_Modificar_Label = new javax.swing.JLabel();
+        Contrasena_Usuario_Modificar_Label = new javax.swing.JLabel();
         Nombre_Usuario_Modificar_JTextFiel = new javax.swing.JTextField();
         Apellido_Usuario_Modificar_JTextFiel = new javax.swing.JTextField();
         Login_Usuario_Mod = new javax.swing.JLabel();
-        Contraseña_Usuario_Modificar_JTextFiel = new javax.swing.JTextField();
+        Contrasena_Usuario_Modificar_JTextFiel = new javax.swing.JTextField();
         Guardar_Cambios_Modificacion = new javax.swing.JButton();
         Cancelar_Modificacion_Datos_Usuario = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
@@ -435,8 +435,8 @@ public class Administrador_Interface extends javax.swing.JFrame {
         Login_Usuario_Modificar_Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Login_Usuario_Modificar_Label.setText("Login");
 
-        Contraseña_Usuario_Modificar_Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        Contraseña_Usuario_Modificar_Label.setText("Contraseña");
+        Contrasena_Usuario_Modificar_Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        Contrasena_Usuario_Modificar_Label.setText("Contraseña");
 
         Nombre_Usuario_Modificar_JTextFiel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -444,7 +444,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
 
         Login_Usuario_Mod.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        Contraseña_Usuario_Modificar_JTextFiel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        Contrasena_Usuario_Modificar_JTextFiel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         Guardar_Cambios_Modificacion.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Guardar_Cambios_Modificacion.setForeground(new java.awt.Color(0, 0, 153));
@@ -474,7 +474,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(Contraseña_Usuario_Modificar_Label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Contrasena_Usuario_Modificar_Label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Login_Usuario_Modificar_Label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Apellido_Usuario_Modificar_Label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Nombre_Usuario_Modificar_Label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -485,7 +485,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
                             .addComponent(Nombre_Usuario_Modificar_JTextFiel)
                             .addComponent(Apellido_Usuario_Modificar_JTextFiel)
                             .addComponent(Login_Usuario_Mod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Contraseña_Usuario_Modificar_JTextFiel))))
+                            .addComponent(Contrasena_Usuario_Modificar_JTextFiel))))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -508,8 +508,8 @@ public class Administrador_Interface extends javax.swing.JFrame {
                     .addComponent(Login_Usuario_Mod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Contraseña_Usuario_Modificar_JTextFiel)
-                    .addComponent(Contraseña_Usuario_Modificar_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Contrasena_Usuario_Modificar_JTextFiel)
+                    .addComponent(Contrasena_Usuario_Modificar_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(48, 48, 48)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Guardar_Cambios_Modificacion)
@@ -753,7 +753,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
                     Nombre_Usuario_Modificar_JTextFiel.setText(ListaUsuariosRegistrados.get(i).getNombre());
                     Apellido_Usuario_Modificar_JTextFiel.setText(ListaUsuariosRegistrados.get(i).getApellido());
                     Login_Usuario_Mod.setText(ListaUsuariosRegistrados.get(i).getLogin());
-                    Contraseña_Usuario_Modificar_JTextFiel.setText(ListaUsuariosRegistrados.get(i).getClave());
+                    Contrasena_Usuario_Modificar_JTextFiel.setText(ListaUsuariosRegistrados.get(i).getClave());
                 }
             }
             Operaciones_Sobre_Usuario.setVisible(false);
@@ -770,10 +770,10 @@ public class Administrador_Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
         boolean admin = editandoAdmin, modificado = false;
         if(Nombre_Usuario_Modificar_JTextFiel.getText().equals("") || Apellido_Usuario_Modificar_JTextFiel.getText().equals("") 
-            || Contraseña_Usuario_Modificar_JTextFiel.getText().equals("")){
+            || Contrasena_Usuario_Modificar_JTextFiel.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Espacios sin llenar.....!!", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            Usuario usr_actualizar = new Usuario(Nombre_Usuario_Modificar_JTextFiel.getText(), Apellido_Usuario_Modificar_JTextFiel.getText(), Login_Usuario_Mod.getText(), Contraseña_Usuario_Modificar_JTextFiel.getText(), admin);
+            Usuario usr_actualizar = new Usuario(Nombre_Usuario_Modificar_JTextFiel.getText(), Apellido_Usuario_Modificar_JTextFiel.getText(), Login_Usuario_Mod.getText(), Contrasena_Usuario_Modificar_JTextFiel.getText(), admin);
             try {
                 modificado = ObjRemotoAdministrador.modificarUsuario(usr_actualizar);
             } catch (Exception e) {
@@ -870,7 +870,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
         Nombre_Usuario_Modificar_JTextFiel.setText(admin.getNombre());
         Apellido_Usuario_Modificar_JTextFiel.setText(admin.getApellido());
         Login_Usuario_Mod.setText(admin.getLogin());
-        Contraseña_Usuario_Modificar_JTextFiel.setText(admin.getClave());
+        Contrasena_Usuario_Modificar_JTextFiel.setText(admin.getClave());
         
         editandoAdmin = true;
         
@@ -921,8 +921,8 @@ public class Administrador_Interface extends javax.swing.JFrame {
     private javax.swing.JButton Autenticar_Administrador_btn;
     private javax.swing.JButton Cancelar_Modificacion_Datos_Usuario;
     private javax.swing.JPasswordField Clave_admin;
-    private javax.swing.JTextField Contraseña_Usuario_Modificar_JTextFiel;
-    private javax.swing.JLabel Contraseña_Usuario_Modificar_Label;
+    private javax.swing.JTextField Contrasena_Usuario_Modificar_JTextFiel;
+    private javax.swing.JLabel Contrasena_Usuario_Modificar_Label;
     private javax.swing.JButton Eliminar_Usuario_Funcion;
     private javax.swing.JButton Estadisticas_btn;
     private javax.swing.JButton Guardar_Cambios_Modificacion;

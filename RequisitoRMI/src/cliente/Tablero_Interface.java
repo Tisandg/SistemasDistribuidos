@@ -1239,7 +1239,8 @@ public class Tablero_Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
         String Mensaje = "Paso";
         try {
-            objRemoto_Juego.informar_paso(UsuarioActual, Mensaje);
+            objRemoto_Juego.informar_paso(UsuarioContrincante, Mensaje);
+            Mi_Turno = false;
         } catch (Exception e) {
             System.out.println("Error Paso "+e.getMessage());
             JOptionPane.showMessageDialog(null, "Error. Invocando la operacion Remota <<Informar Paso>> \n"+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -1472,8 +1473,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
     }
     
     public void Informar_Paso(String Mensaje){
-        JOptionPane.showMessageDialog(null, "Tu contrincante Informa que no tiene una Ficha para colocar \nPor lo tanto sede el turno", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-        Mensaje_Fichas.setText("Mi Turno para realizar mi Jugada....!");
+        Mensaje_Fichas.setText("Tu contrincante Pasa. Mi Turno para realizar una Jugada....!");
         Mi_Turno = true;
     }
     
