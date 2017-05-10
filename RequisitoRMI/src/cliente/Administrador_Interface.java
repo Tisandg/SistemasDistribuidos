@@ -3,8 +3,6 @@ package cliente;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import sop_rmi.UsuariosInt;
@@ -138,6 +136,8 @@ public class Administrador_Interface extends javax.swing.JFrame {
             }
         });
 
+        jButtonEditarPerfil.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButtonEditarPerfil.setForeground(new java.awt.Color(0, 0, 153));
         jButtonEditarPerfil.setText("Modificar mi perfil");
         jButtonEditarPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,7 +173,7 @@ public class Administrador_Interface extends javax.swing.JFrame {
                 .addComponent(Estadisticas_btn)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonEditarPerfil)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(jButton14)
                 .addGap(42, 42, 42))
         );
@@ -529,7 +529,6 @@ public class Administrador_Interface extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(430, 270));
         setMinimumSize(new java.awt.Dimension(430, 270));
 
         jPanel5.setMaximumSize(new java.awt.Dimension(430, 270));

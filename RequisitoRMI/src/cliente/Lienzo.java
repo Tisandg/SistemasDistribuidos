@@ -302,5 +302,13 @@ public class Lienzo extends JComponent implements LienzoInt{
     public void setListaFichas(ArrayList<Fichas_Tablero> ListaFichas) {
         this.ListaFichas = ListaFichas;
     }
+
+    @Override
+    public int getCantidadFichasColocadas() {
+        if(this.ListaFichas.isEmpty())
+            return 0;
+        else
+            return this.ListaFichas.size();
+    }
     
 }

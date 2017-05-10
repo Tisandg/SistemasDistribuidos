@@ -21,13 +21,15 @@ public class Tablero_Interface extends javax.swing.JFrame {
     private static UsuariosInt ObjRemotoUsuarioChat;
     Lienzo Mi_Lienzo;
     Utilidades utilidades;
-    ArrayList<Ficha> Mis_Fichas;
+    private ArrayList<Ficha> Mis_Fichas;
+    private ArrayList<Ficha> Mis_Fichas_Colocadas;
     int numPuertoRMIRegistry = 0;
     String direccionIpRMIRegistry = "";
     String UsuarioActual;
     String UsuarioContrincante;
     int NumeroFichas;
     public Cronometro miCronometro;
+    public Fondo_Musical miMusica;
     public static int Hora = 0;
     public static int minuto = 0;
     public static int segundo = 0;
@@ -36,6 +38,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
     private Ficha FichaSeleccionada;
     private boolean BanderaSeleccion = false;
     private boolean Mi_Turno;
+    public static boolean IniciaJuego = true;
     
     public Tablero_Interface(String UsuarioActual, String UsuarioContrincante, ArrayList<Ficha> MisFichas, int numPuertoRMIRegistry, String direccionIpRMIRegistry) {
         initComponents();
@@ -51,6 +54,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
         this.utilidades = new Utilidades(NumeroFichas);
         this.FichaSeleccionada = new Ficha();
         this.Mi_Turno = false;
+        this.Mis_Fichas_Colocadas = new ArrayList<>();
         Mi_Lienzo.setBounds(2, 2, 1310, 300);
         Mi_Lienzo.setBorder(BorderFactory.createBevelBorder(1));
         jPanel12.add(Mi_Lienzo);
@@ -71,8 +75,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
+        CantidadFichasColocadas = new javax.swing.JLabel();
         Mi_Numero_Fichas_Label = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jLabel59 = new javax.swing.JLabel();
@@ -146,11 +149,8 @@ public class Tablero_Interface extends javax.swing.JFrame {
         jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel22.setText("Cantidad de puntos que suman las fichas que tienes:   ");
 
-        jLabel23.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel23.setText("Es tu turno, Selecciona una ficha     ");
-
-        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel25.setText("0");
+        CantidadFichasColocadas.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        CantidadFichasColocadas.setText("0");
 
         Mi_Numero_Fichas_Label.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Mi_Numero_Fichas_Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -176,7 +176,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jLabel20)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(CantidadFichasColocadas, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jLabel21)
                         .addGap(18, 18, 18)
@@ -185,7 +185,6 @@ public class Tablero_Interface extends javax.swing.JFrame {
                         .addComponent(jLabel22)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel23)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jLabel59)
                         .addGap(18, 18, 18)
@@ -198,7 +197,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
                 .addGap(37, 37, 37)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel20)
-                    .addComponent(jLabel25))
+                    .addComponent(CantidadFichasColocadas))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
@@ -206,11 +205,9 @@ public class Tablero_Interface extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel22)
-                            .addComponent(jLabel27))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel23))
+                            .addComponent(jLabel27)))
                     .addComponent(Mi_Numero_Fichas_Label))
-                .addGap(18, 18, 18)
+                .addGap(53, 53, 53)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel59)
                     .addComponent(Cronometro_Label))
@@ -737,20 +734,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(0).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(0).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(0).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 1");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 1");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            }  
         }
               
     }//GEN-LAST:event_Ficha_1_LabelMouseClicked
@@ -761,20 +765,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(1).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(1).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(1).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 2");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 2");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }    
     }//GEN-LAST:event_Ficha_2_LabelMouseClicked
 
@@ -784,20 +795,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(2).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(2).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(2).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 3");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 3");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_3_LabelMouseClicked
 
@@ -807,20 +825,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(3).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(3).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(3).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 4");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 4");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_4_LabelMouseClicked
 
@@ -830,20 +855,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(4).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(4).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(4).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 5");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 5");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_5_LabelMouseClicked
 
@@ -853,20 +885,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(5).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(5).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(5).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 6");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 6");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_6_LabelMouseClicked
 
@@ -876,20 +915,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(6).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(6).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(6).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 7");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 7");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_7_LabelMouseClicked
 
@@ -899,20 +945,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(7).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(7).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioActual, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(7).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioActual, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 8");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 8");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_8_LabelMouseClicked
 
@@ -922,20 +975,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(8).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(8).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(8).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 9");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 9");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_9_LabelMouseClicked
 
@@ -945,20 +1005,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(9).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(9).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(9).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 10");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 10");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_10_LabelMouseClicked
 
@@ -968,20 +1035,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(10).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(10).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(10).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 11");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 11");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_11_LabelMouseClicked
 
@@ -991,20 +1065,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(11).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(11).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(11).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 12");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 12");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_12_LabelMouseClicked
 
@@ -1014,20 +1095,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(12).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(12).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(12).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 13");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 13");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_13_LabelMouseClicked
 
@@ -1037,20 +1125,27 @@ public class Tablero_Interface extends javax.swing.JFrame {
         if(Mi_Lienzo.getListaFichas().isEmpty() && Mis_Fichas.get(13).getId() != 27){
             JOptionPane.showMessageDialog(null, "El Juego inicia con la ficha [6 | 6] ", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            if(Mis_Fichas.get(13).getId() == 27){
-                Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                try {
-                    objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                    Mi_Lienzo.repaint();
-                    Mi_Turno = false;
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                if(Mis_Fichas.get(13).getId() == 27){
+                    Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    try {
+                        objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-1));
+                        Mi_Lienzo.repaint();
+                        Mi_Turno = false;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-            else{
-                BanderaSeleccion = true;            
-                System.out.println("Seleccionaste la ficha 14");    
-            }
+                else{
+                    BanderaSeleccion = true;            
+                    System.out.println("Seleccionaste la ficha 14");    
+                }
+            }else{
+               JOptionPane.showMessageDialog(null, "Error. La ficha seleccionada Ya fue colocada. \nIntenta con otra ", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
         }
     }//GEN-LAST:event_Ficha_14_LabelMouseClicked
 
@@ -1060,21 +1155,28 @@ public class Tablero_Interface extends javax.swing.JFrame {
            if(!BanderaSeleccion){
                 JOptionPane.showMessageDialog(null, "Error. Debe seleccionar una Ficha", "Error", JOptionPane.ERROR_MESSAGE);
             }else{
-                Fichas_Tablero Aux = Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
-                if(Aux.getImagen().equals("Error")){
-                    JOptionPane.showMessageDialog(null, "La Ficha Seleccionada no es valida...", "Error", JOptionPane.ERROR_MESSAGE);
-                }else{
-                    try {
-                            objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                            Mi_Lienzo.repaint();
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    FichaSeleccionada = new Ficha();
-                    BanderaSeleccion = false;
-                    Mi_Turno = false;
-                    Mensaje_Fichas.setText("Turno para que tu contrincante realice su Jugada....!");
-                }           
+               if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                    Fichas_Tablero Aux = Mi_Lienzo.setFiha(FichaSeleccionada,"Izquierda");
+                    if(Aux.getImagen().equals("Error")){
+                        JOptionPane.showMessageDialog(null, "La Ficha Seleccionada no es valida...", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        try {
+                                objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                                Mi_Lienzo.repaint();
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        FichaSeleccionada = new Ficha();
+                        BanderaSeleccion = false;
+                        Mi_Turno = false;
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-Mis_Fichas_Colocadas.size()));
+                        Mensaje_Fichas.setText("Turno para que tu contrincante realice su Jugada....!");
+                    }
+               }else{
+                   JOptionPane.showMessageDialog(null, "Error. La Ficha Seleccionada ya fue colocada \n Intenta con otra...!!", "Error", JOptionPane.ERROR_MESSAGE);
+               }
             } 
         }else{
             Mensaje_Fichas.setText("No Puedes Colocar Fichas hasta que Tu contrincante no realice su Jugada....!");
@@ -1088,21 +1190,28 @@ public class Tablero_Interface extends javax.swing.JFrame {
             if(!BanderaSeleccion){
                 JOptionPane.showMessageDialog(null, "Error. Debe seleccionar una Ficha", "Error", JOptionPane.ERROR_MESSAGE);
             }else{
-                Fichas_Tablero Aux = Mi_Lienzo.setFiha(FichaSeleccionada,"Derecha");
-                if(Aux.getImagen().equals("Error")){
-                    JOptionPane.showMessageDialog(null, "La Ficha Seleccionada no es valida...", "Error", JOptionPane.ERROR_MESSAGE);
+                if(!Mis_Fichas_Colocadas.contains(FichaSeleccionada)){
+                    Fichas_Tablero Aux = Mi_Lienzo.setFiha(FichaSeleccionada,"Derecha");
+                    if(Aux.getImagen().equals("Error")){
+                        JOptionPane.showMessageDialog(null, "La Ficha Seleccionada no es valida...", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        try {
+                                objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
+                                Mi_Lienzo.repaint();
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        FichaSeleccionada = new Ficha();
+                        BanderaSeleccion = false;
+                        Mi_Turno = false;
+                        Mis_Fichas_Colocadas.add(FichaSeleccionada);
+                        CantidadFichasColocadas.setText(Integer.toString(Mis_Fichas_Colocadas.size()));
+                        Mi_Numero_Fichas_Label.setText(Integer.toString(Mis_Fichas.size()-Mis_Fichas_Colocadas.size()));
+                        Mensaje_Fichas.setText("Turno para que tu contrincante realice su Jugada....!");
+                    }   
                 }else{
-                    try {
-                            objRemoto_Juego.enviarFicha(UsuarioContrincante, Mi_Lienzo);
-                            Mi_Lienzo.repaint();
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "No fue posible invocar el metodo Remoto <<enviar Ficha>> \n "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    FichaSeleccionada = new Ficha();
-                    BanderaSeleccion = false;
-                    Mi_Turno = false;
-                    Mensaje_Fichas.setText("Turno para que tu contrincante realice su Jugada....!");
-                }           
+                    JOptionPane.showMessageDialog(null, "Error. La Ficha Seleccionada ya fue colocada \n Intenta con otra...!!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }else{
             Mensaje_Fichas.setText("No Puedes Colocar Fichas hasta que Tu contrincante no realice su Jugada....!");
@@ -1176,6 +1285,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea AreaDeChat_JtextArea;
     private javax.swing.JTextArea AreaDeMensaje_jTextArea2;
+    private javax.swing.JLabel CantidadFichasColocadas;
     private javax.swing.JLabel Cronometro_Label;
     private javax.swing.JButton Derecha;
     private javax.swing.JButton EnviarMensaje_jbtn;
@@ -1202,9 +1312,7 @@ public class Tablero_Interface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel31;
@@ -1245,6 +1353,14 @@ public class Tablero_Interface extends javax.swing.JFrame {
         }
     }
     
+    private void IniciarMusica(){
+        if(IniciaJuego == true){
+            System.out.println("Inicia el Hilo de Musica.....\n");
+            miMusica = new Fondo_Musical();
+            miMusica.start();
+        }
+    }
+    
     private void mi_play(){
         AudioClip Sonido;
         Sonido = java.applet.Applet.newAudioClip(getClass().getResource("/imagenes/switch-3.wav"));
@@ -1273,12 +1389,13 @@ public class Tablero_Interface extends javax.swing.JFrame {
     
     private void IniciarTablero(){
         IniciarHiloCronometro();
+        IniciarMusica();
         Usuario1_Lb.setText(UsuarioActual);
         Usuario2_Lb.setText(UsuarioContrincante);
         Mi_Numero_Fichas_Label.setText(Integer.toString(NumeroFichas));
+        CantidadFichasColocadas.setText(Integer.toString(Mi_Lienzo.getCantidadFichasColocadas()));
         ObtenerObjetoRemoto();
         ObtenerObjetoRemotoUsuarioChat();
-        ArrayList<Ficha> Sus_Fichas = new ArrayList<>();
         try {
             objRemotoCallBackJuego = new CallBackJuegoImpl(this);
             objRemoto_Juego.registrarReferenciaRemotaTablro(UsuarioActual, objRemotoCallBackJuego);

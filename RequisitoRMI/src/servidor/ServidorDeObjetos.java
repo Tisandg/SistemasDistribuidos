@@ -12,7 +12,7 @@ public class ServidorDeObjetos {
     
     public static void main(String args[]) throws RemoteException
     {
-        int numPuertoRMIRegistry = 4040;
+        int numPuertoRMIRegistry = 2020;
         String direccionIpRMIRegistry = "localhost";
         /*
         System.out.println("Cual es la dirección ip donde se encuentra  el rmiregistry ");

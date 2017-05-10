@@ -17,6 +17,7 @@ public interface LienzoInt extends Serializable{
     public int getDistancia_y_Abj();
     public int getLado_Izq_Valido();
     public int getLado_Der_Valido();
+    public int getCantidadFichasColocadas();
     public void setListaFichas(ArrayList<Fichas_Tablero> ListaFichas);
     public void setUbicacion(Point ubicacion);
     public void setDistancia_x_Izq(int distancia_x_Izq);
