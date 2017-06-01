@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-06-2017 a las 17:32:40
+-- Tiempo de generación: 01-06-2017 a las 18:54:46
 -- Versión del servidor: 10.1.16-MariaDB
 -- Versión de PHP: 5.6.24
 
@@ -19,6 +19,23 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `bdusuarios_audio`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `suscrito`
+--
+
+CREATE TABLE `suscrito` (
+  `login` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `suscrito`
+--
+
+INSERT INTO `suscrito` (`login`) VALUES
+('rey');
 
 -- --------------------------------------------------------
 

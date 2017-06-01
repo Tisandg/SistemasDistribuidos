@@ -8,7 +8,6 @@ package cliente;
 import LogicaNegocio.UsuarioDAO;
 import sop_corba.Interfaz_UsuarioOperations;
 import sop_corba.Usuario;
-import servidor.FuncionesAdministradorImpl;
 /**
  *
  * @author Kevin Chantré

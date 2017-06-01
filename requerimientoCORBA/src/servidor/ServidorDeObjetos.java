@@ -41,7 +41,7 @@ public class ServidorDeObjetos {
         NamingContextExt refContextoNombrado = NamingContextExtHelper.narrow(objRefNameService);
 
         System.out.println("9.Construir un contexto de nombres que identifica al servant");
-        String identificadorServant = "xxxx";
+        String identificadorServant = "ServantAdmin";
 
         NameComponent [] path = new NameComponent[1];
         path[0] = new NameComponent();
