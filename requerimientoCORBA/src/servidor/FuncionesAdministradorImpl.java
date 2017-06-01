@@ -121,26 +121,12 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
     }
 
     @Override
-    public boolean suscripcionUsuario(String login) {
-        System.out.println("Servidor : Registrando Suscripcion.....");
-        if(!UsuariosSuscritos.contains(login)){
-            UsuariosSuscritos.add(login);
-            return true;
-        }else{
-            return false;
-        }
+    public String[] obtenerSuscritos() {
+        System.out.println("Servidor : Obtenersuscritos");
+        ArrayList<String> list = objUsuariosDAO.obtenerSuscritos();
+        String[] suscritos = new String[list.size()];
+        list.toArray(suscritos);
+        return suscritos;
     }
-
-    @Override
-    public boolean EliminarSuscripcionUsuario(String login) {
-        System.out.println("Servidor: EliminarSuscripcionUsuario...");
-        if(UsuariosSuscritos.contains(login)){
-            UsuariosSuscritos.remove(login);
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
-    
+     
 }

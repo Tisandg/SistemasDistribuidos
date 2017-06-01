@@ -224,4 +224,73 @@ public class UsuarioDAO {
         return false;
     }
     
+    public boolean suscribirse(String login){
+        ConexionBD conex= new ConexionBD();
+        int valor=conex.conectar();
+        System.out.println("valor cone:" + valor);
+        int resultado=-1;
+        try {            
+            PreparedStatement sentencia = null;
+            String consulta = "insert into suscrito (suscrito.login) VALUES (?)";
+            sentencia = conex.getConnection().prepareStatement(consulta);
+            sentencia.setString(1, login);
+            resultado = sentencia.executeUpdate(); 
+            sentencia.close();
+            conex.desconectar();
+
+        } catch (SQLException e) {
+                  System.out.println("error en la inserción: "+e.getMessage());         
+        }
+        
+        if (resultado!=1)        
+            return false;        
+        else
+            return true;
+    }
+    
+    public boolean EliminarSuscripcion(String login){
+        ConexionBD conex= new ConexionBD();
+        conex.conectar();
+        int resultado=-1;
+        try {            
+            PreparedStatement sentencia = null;
+            String consulta = "delete from suscrito where suscrito.login=?";
+            sentencia = conex.getConnection().prepareStatement(consulta);            
+            sentencia.setString(1, login);
+            resultado = sentencia.executeUpdate(); 
+            sentencia.close();
+            conex.desconectar();
+
+        } catch (SQLException e) {
+                  System.out.println("error en la eliminación: "+e.getMessage());         
+        }
+        
+        if (resultado!=1)        
+            return false;        
+        else
+            return true;
+    }
+    
+    public ArrayList<String> obtenerSuscritos(){
+        ArrayList<String> suscritos = new ArrayList<>();
+        ConexionBD conex= new ConexionBD();
+        conex.conectar();
+        try {            
+            PreparedStatement sentencia = null;
+            String consulta = "select * from suscrito";
+            sentencia = conex.getConnection().prepareStatement(consulta);            
+            ResultSet res = sentencia.executeQuery();
+            while(res.next()){                
+                suscritos.add(res.getString("login"));
+            }
+            sentencia.close();
+            conex.desconectar();
+
+        } catch (SQLException e) {
+                  System.out.println("error en la inserción: "+e.getMessage());         
+        }       
+        return suscritos;      
+    }
+    
+    
 }

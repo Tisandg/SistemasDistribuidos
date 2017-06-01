@@ -16,7 +16,6 @@ import servidor.FuncionesAdministradorImpl;
 public class FuncionesUsuarioImpl implements Interfaz_UsuarioOperations{
 
     private UsuarioDAO objUsuariosDAO;
-    private FuncionesAdministradorImpl objFucncionesAdministrador;
     
     public FuncionesUsuarioImpl(){
         
@@ -35,15 +34,15 @@ public class FuncionesUsuarioImpl implements Interfaz_UsuarioOperations{
     }
 
     @Override
-    public boolean suscribirse(String login, String clave) {
+    public boolean suscribirse(String login) {
         System.out.println("Servidor : Suscribirse ...");
-        
+        return objUsuariosDAO.suscribirse(login);
     }
 
     @Override
-    public boolean eliminarSuscripcion(String login, String clave) {
+    public boolean eliminarSuscripcion(String login) {
         System.out.println("Servidor: Eliminar Suscripcion.....");
-        return false;
+        return objUsuariosDAO.EliminarSuscripcion(login);
     }
 
     @Override
