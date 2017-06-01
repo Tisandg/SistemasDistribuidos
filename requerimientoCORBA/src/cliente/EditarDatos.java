@@ -67,7 +67,7 @@ public class EditarDatos extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI Symbol", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(57, 113, 177));
         jLabel5.setText("Editando usuario");
 
@@ -76,7 +76,7 @@ public class EditarDatos extends javax.swing.JFrame {
         contenedorEncabezadoLayout.setHorizontalGroup(
             contenedorEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorEncabezadoLayout.createSequentialGroup()
-                .addContainerGap(119, Short.MAX_VALUE)
+                .addContainerGap(112, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addGap(108, 108, 108)
                 .addComponent(botonCerrar)
