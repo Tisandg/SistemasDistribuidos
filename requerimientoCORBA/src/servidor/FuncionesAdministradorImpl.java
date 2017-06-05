@@ -15,8 +15,8 @@ import java.util.ArrayList;
  */
 public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperations{
     
-    private UsuarioDAO objUsuariosDAO;   
-    private ArrayList<String> UsuariosSuscritos;
+    private UsuarioDAO objUsuariosDAO;
+    public static ArrayList<usuarioSuscrito> usuarios_Suscritos;
     private byte[] contenidoDelFichero;
     private File Archivo;
     private FileInputStream cancion;
@@ -28,7 +28,7 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
     
     public FuncionesAdministradorImpl(){
         objUsuariosDAO = new UsuarioDAO();
-        UsuariosSuscritos = new ArrayList<>();
+        usuarios_Suscritos = new ArrayList<>();
         contenidoDelFichero = null;
         cancion = null;
         theBIS = null;
@@ -36,7 +36,11 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
         leido = 0;
         theBOS = new ByteArrayOutputStream();
     }
-    
+
+    public ArrayList<usuarioSuscrito> getUsuarios_Suscritos() {
+        return usuarios_Suscritos;
+    }
+     
     @Override
     public boolean ingresoSistemaAdministrador(String login, String clave) {
         System.out.println("Servidor: Ingreso al sistema Administrador....");
@@ -83,25 +87,7 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
     }
 
     @Override
-    public byte[] enviarAudio() {       
-        System.out.println("Servidor: Enviar Audio....");
-        return contenidoDelFichero;
-    }
-
-
-    @Override
-    public boolean EjecutarAudio() {
-        int i = 0;
-        while(contenidoDelFichero.length < i){
-            
-            i++;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean seleccionarAudio(String ruta) {
-        //"C:\\Users\\HP\\Documents\\Universidad\\NetBeansProjects\\Sonido\\src\\Musica\\Sonido_1.mp3"
+    public boolean seleccionarAudio(String ruta) {       
         Archivo = new File(ruta);
         try {
             cancion = new FileInputStream(Archivo);
@@ -118,15 +104,89 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
             e1.printStackTrace();
             return false;
         }
-    }
+    } 
 
     @Override
+    public boolean EjecutarAudio() {
+        Estacion aud = new Estacion(contenidoDelFichero, this);
+        aud.Dividir_Cancion();
+        aud.start();
+        System.out.println("Impl continua ejecuacion....");
+        return false;
+    }
+    
+    @Override
     public String[] obtenerSuscritos() {
-        System.out.println("Servidor : Obtenersuscritos");
-        ArrayList<String> list = objUsuariosDAO.obtenerSuscritos();
+        System.out.println("Servidor : Obtenersuscritos");     
+        ArrayList<String> list = new ArrayList<>();
+        int i = 0;
+        while(usuarios_Suscritos.size() > i){
+            list.add(usuarios_Suscritos.get(i).getLoginUsuario());
+            i++;
+        }
         String[] suscritos = new String[list.size()];
         list.toArray(suscritos);
         return suscritos;
+    }
+
+    @Override
+    public boolean eliminarSuscripcion_Usuario(String loginUsuario) {
+        System.out.println("Servidor : Eliminar Suscripcion");
+        int i = 0;
+        while(usuarios_Suscritos.size() > i){
+            if(usuarios_Suscritos.get(i).getLoginUsuario().equals(loginUsuario)){
+                usuarios_Suscritos.remove(i);
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean suscribir_Usuario(usuarioCallbackInt objcllbck, String loginUsuario) {
+        System.out.println("Servidor : Agragar Suscripcion");
+        usuarioSuscrito nuevoUsuario = new usuarioSuscrito(loginUsuario, objcllbck);
+        if(!usuarios_Suscritos.contains(nuevoUsuario)){
+            usuarios_Suscritos.add(nuevoUsuario);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @Override
+    public void enviarAudio(String loginUsuario, byte[] paquete) {
+        System.out.println("Servidor : Enviar Audio......");
+        int i = 0;
+        usuarioCallbackIntOperations objRemoto = null; 
+        while(usuarios_Suscritos.size() > i){
+            if(usuarios_Suscritos.get(i).getLoginUsuario().equals(loginUsuario)){
+                objRemoto = usuarios_Suscritos.get(i).getObjcllbck();
+                break;
+            }
+            i++;
+        }
+        if(objRemoto != null){
+            objRemoto.resibirAudio(loginUsuario, paquete);
+        }      
+    }
+
+    @Override
+    public void notificarUsuario(String loginUsuario, String mensaje) {
+        System.out.println("Servidor : Notificar Usuario......");
+        int i = 0;
+        usuarioCallbackIntOperations objRemoto = null; 
+        while(usuarios_Suscritos.size() > i){
+            if(usuarios_Suscritos.get(i).getLoginUsuario().equals(loginUsuario)){
+                objRemoto = usuarios_Suscritos.get(i).getObjcllbck();
+                break;
+            }
+            i++;
+        }
+        if(objRemoto != null){
+            objRemoto.resibirMensaje(loginUsuario, mensaje);
+        }
     }
      
 }

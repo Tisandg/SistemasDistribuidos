@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cliente;
+package servidor;
 
 import LogicaNegocio.UsuarioDAO;
 import sop_corba.Interfaz_UsuarioOperations;
@@ -30,24 +30,6 @@ public class FuncionesUsuarioImpl implements Interfaz_UsuarioOperations{
     public boolean actualizarInformacion(Usuario objUsuario) {
         System.out.println("Servidor : Actualizar Informacion de Usuario....");
         return objUsuariosDAO.actualizarUsuario(objUsuario, objUsuario.getLoginUsuario());
-    }
-
-    @Override
-    public boolean suscribirse(String login) {
-        System.out.println("Servidor : Suscribirse ...");
-        return objUsuariosDAO.suscribirse(login);
-    }
-
-    @Override
-    public boolean eliminarSuscripcion(String login) {
-        System.out.println("Servidor: Eliminar Suscripcion.....");
-        return objUsuariosDAO.EliminarSuscripcion(login);
-    }
-
-    @Override
-    public boolean notificacionAudio(String mensaje) {
-        System.out.println("Servidor: notificarAudio......");
-        return false;
     }
     
 }
