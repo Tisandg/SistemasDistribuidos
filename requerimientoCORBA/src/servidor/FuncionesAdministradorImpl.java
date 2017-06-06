@@ -40,51 +40,6 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
     public ArrayList<usuarioSuscrito> getUsuarios_Suscritos() {
         return usuarios_Suscritos;
     }
-     
-    @Override
-    public boolean ingresoSistemaAdministrador(String login, String clave) {
-        System.out.println("Servidor: Ingreso al sistema Administrador....");
-        return objUsuariosDAO.IngresoSistema(login, clave, true);
-    }
-    
-    @Override
-    public boolean registrarUsuario(Usuario N_Usuario) {
-        System.out.println("Servidor : Registrar Usuario");
-        return objUsuariosDAO.registrarUsuario(N_Usuario);
-    }
-
-    @Override
-    public Usuario[] consultarUsuarios() {
-        System.out.println("Servidor : Consultar Usuarios");
-        ArrayList<Usuario> empl = objUsuariosDAO.consultarUsuarios();
-        Usuario[] usuarios = new Usuario[empl.size()];
-        empl.toArray(usuarios);
-        return usuarios;
-    }
-
-    @Override
-    public Usuario consultarUsuario(String login) {
-        System.out.println("Servidor : Consultar Usuario");
-        return objUsuariosDAO.consultarUsuario(login);
-    }
-
-    @Override
-    public boolean exiteUsuario(String login) {
-        System.out.println("Servidor : Existe Usuario");
-        return objUsuariosDAO.ExisteUsuario(login);
-    }
-
-    @Override
-    public boolean actualizarUsuario(Usuario objUsuario, String login) {
-        System.out.println("Servidor : Actualizar Usuario");
-        return objUsuariosDAO.actualizarUsuario(objUsuario, login);
-    }
-
-    @Override
-    public boolean eliminarUsuario(String login) {
-        System.out.println("Servidor : Eliminar Usuario");
-        return objUsuariosDAO.eliminarUsuario(login);
-    }
 
     @Override
     public boolean seleccionarAudio(String ruta) {       
@@ -108,10 +63,17 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
 
     @Override
     public boolean EjecutarAudio() {
+        usuarioSuscrito nuevo = new usuarioSuscrito("pepe", null);
+        usuarioSuscrito nuevo2 = new usuarioSuscrito("pepe2", null);
+        usuarios_Suscritos.add(nuevo);
+        usuarios_Suscritos.add(nuevo2);
         Estacion aud = new Estacion(contenidoDelFichero, this);
         aud.Dividir_Cancion();
         aud.start();
-        System.out.println("Impl continua ejecuacion....");
+//        ReproductorAudio aud = new ReproductorAudio(contenidoDelFichero);
+//        aud.Dividir_Cancion();
+//        aud.start();
+//        System.out.println("Impl continua ejecuacion....");
         return false;
     }
     
@@ -157,12 +119,13 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
 
     @Override
     public void enviarAudio(String loginUsuario, byte[] paquete) {
-        System.out.println("Servidor : Enviar Audio......");
+        System.out.println("Servidor : Enviar Audio......"+ loginUsuario);
         int i = 0;
         usuarioCallbackIntOperations objRemoto = null; 
         while(usuarios_Suscritos.size() > i){
             if(usuarios_Suscritos.get(i).getLoginUsuario().equals(loginUsuario)){
                 objRemoto = usuarios_Suscritos.get(i).getObjcllbck();
+                System.out.println("Esta....");
                 break;
             }
             i++;

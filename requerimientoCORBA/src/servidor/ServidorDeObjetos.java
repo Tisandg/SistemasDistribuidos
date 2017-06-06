@@ -51,16 +51,16 @@ public class ServidorDeObjetos {
 
 //        
         System.out.println("4. Crea el objeto servant Usuarios Impl");
-        FuncionesUsuarioImpl ObjServantUsuario = new FuncionesUsuarioImpl();   
+        GestionImpl ObjServantGestion = new GestionImpl();   
         
         System.out.println("5. Crea el objeto tie y se registra una referencia al objeto servant mediante el contructor");
-        Interfaz_UsuarioPOATie objTIE_Usuario= new Interfaz_UsuarioPOATie(ObjServantUsuario);
+        Interfaz_GestionPOATie objTIE_Gestion = new Interfaz_GestionPOATie(ObjServantGestion);
 
         System.out.println("6. Obtiene la referencia al orb ");
-        Interfaz_Usuario referenciaORB_Usuario = objTIE_Usuario._this(orb);
+        Interfaz_Gestion referenciaORB_Gestion = objTIE_Gestion._this(orb);
 
         System.out.println("9.Construir un contexto de nombres que identifica al servant");
-        identificadorServant = "ServantUser";
+        identificadorServant = "ServantGest";
 
         path = new NameComponent[1];
         path[0] = new NameComponent();
@@ -68,7 +68,7 @@ public class ServidorDeObjetos {
         path[0].kind = "tipoServicio";     
 
         System.out.println("10.Realiza el binding de la referencia de objeto en el N_S");
-        refContextoNombrado.rebind(path, referenciaORB_Usuario);
+        refContextoNombrado.rebind(path, referenciaORB_Gestion);
 //   
 //        
         System.out.println("4. Crea el objeto servant Usuarios Callback");
@@ -90,7 +90,28 @@ public class ServidorDeObjetos {
 
         System.out.println("10.Realiza el binding de la referencia de objeto en el N_S");
         refContextoNombrado.rebind(path, referenciaORB_UsuarioCallback);
+//
 //        
+        System.out.println("4. Crea el objeto servant Usuarios Callback");
+        AutentificacionUsuarioImpl ObjServantAutenticacion = new AutentificacionUsuarioImpl();   
+        
+        System.out.println("5. Crea el objeto tie y se registra una referencia al objeto servant mediante el contructor");
+        autenticacionUsuarioPOATie objTIE_Autenticacion = new autenticacionUsuarioPOATie(ObjServantAutenticacion);
+
+        System.out.println("6. Obtiene la referencia al orb ");
+        autenticacionUsuario referenciaORB_Autenticacion = objTIE_Autenticacion._this(orb);
+
+        System.out.println("9.Construir un contexto de nombres que identifica al servant");
+        identificadorServant = "ServantAuten";
+
+        path = new NameComponent[1];
+        path[0] = new NameComponent();
+        path[0].id = identificadorServant;
+        path[0].kind = "tipoServicio";     
+
+        System.out.println("10.Realiza el binding de la referencia de objeto en el N_S");
+        refContextoNombrado.rebind(path, referenciaORB_Autenticacion);
+//   
         
         System.out.println("El Servidor esta listo y esperando ...");
         orb.run();

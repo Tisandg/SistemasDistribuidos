@@ -20,6 +20,7 @@ public class usuarioCallbackImpl implements usuarioCallbackIntOperations{
     @Override
     public boolean resibirMensaje(String loginUsuario, String mensaje) {
         System.out.println("UsuarioCallback : resibir Mensaje......");
+        //
         return true;
     }
 

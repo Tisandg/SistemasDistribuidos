@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package LogicaNegocio;
 
 import sop_corba.Usuario;
@@ -196,16 +192,15 @@ public class UsuarioDAO {
         
     }
     
-    public boolean IngresoSistema(String login, String clave, boolean privilegios){
+    public boolean IngresoSistema(String login, String clave){
         ConexionBD conex= new ConexionBD();
         conex.conectar();
         try {
             PreparedStatement sentencia = null;
-            String consulta = "select * from usuario where usuario.loginUsuario=? and usuario.claveUsuario=? and usuario.privilegiosUsuario=?";
+            String consulta = "select * from usuario where usuario.loginUsuario=? and usuario.claveUsuario=?";
             sentencia = conex.getConnection().prepareStatement(consulta);            
             sentencia.setString(1, login);
             sentencia.setString(2, clave);
-            sentencia.setBoolean(3, privilegios);
             ResultSet res = sentencia.executeQuery();
             
             while(res.next()){

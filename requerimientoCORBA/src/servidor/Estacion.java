@@ -23,9 +23,11 @@ public class Estacion extends Thread{
         int i = 0;
         if(FuncionesAdministradorImpl.usuarios_Suscritos.isEmpty()){
             System.out.println("Lista de Usuarios Suscritos vacia....");
+        }else{
+            System.out.println("Usuarios Suscritos : "+FuncionesAdministradorImpl.usuarios_Suscritos.size());
         }
         while(cola.size() > 0){
-            while(FuncionesAdministradorImpl.usuarios_Suscritos.size() > i){
+            while(FuncionesAdministradorImpl.usuarios_Suscritos.size() > i){               
                 objFuncionesAdministrador.enviarAudio(FuncionesAdministradorImpl.usuarios_Suscritos.get(i).getLoginUsuario(), cola.getFirst());
                 i++;
             }

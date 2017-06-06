@@ -31,7 +31,7 @@ public class ReproductorAudio extends Thread{
         cola2 = new LinkedList<>();           
     }
     
-    public void run(){
+    public synchronized void run(){
         Player player;
         while(cola.size() > 0){
             InputStream c = new ByteArrayInputStream(cola.getFirst());
