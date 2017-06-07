@@ -63,17 +63,18 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
 
     @Override
     public boolean EjecutarAudio() {
-        usuarioSuscrito nuevo = new usuarioSuscrito("pepe", null);
-        usuarioSuscrito nuevo2 = new usuarioSuscrito("pepe2", null);
-        usuarios_Suscritos.add(nuevo);
-        usuarios_Suscritos.add(nuevo2);
-        Estacion aud = new Estacion(contenidoDelFichero, this);
-        aud.Dividir_Cancion();
-        aud.start();
-//        ReproductorAudio aud = new ReproductorAudio(contenidoDelFichero);
+//        usuarioSuscrito nuevo = new usuarioSuscrito("pepe", null);
+//        usuarioSuscrito nuevo2 = new usuarioSuscrito("pepe2", null);
+//        usuarios_Suscritos.add(nuevo);
+//        usuarios_Suscritos.add(nuevo2);
+//        Estacion aud = new Estacion(contenidoDelFichero, this);
 //        aud.Dividir_Cancion();
 //        aud.start();
-//        System.out.println("Impl continua ejecuacion....");
+        
+        ReproductorAudio aud = new ReproductorAudio(contenidoDelFichero);
+        aud.Dividir_Cancion();
+        aud.start();
+        System.out.println("Impl continua ejecuacion....");
         return false;
     }
     

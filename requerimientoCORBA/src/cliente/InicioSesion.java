@@ -1,6 +1,7 @@
 package cliente;
 
 import java.awt.Color;
+import servidor.usuarioCallbackImpl;
 import sop_corba.*;
 
 /**
@@ -10,15 +11,22 @@ public class InicioSesion extends javax.swing.JFrame {
 
     private autenticacionUsuario autenticacion;
     private Interfaz_Gestion gestion;
+    private Interfaz_Administrador administrador;
+    private ClienteDeObjetos objc;
     /**
      * Creates new form InicioSesion
      */
-    public InicioSesion() {
+    public InicioSesion(ClienteDeObjetos objc) {
         initComponents();
         panelTransparente.setBackground(new Color(0,0,0,200));
         setLocationRelativeTo(this);
         this.mensajeLoginClave.setVisible(false);
+        this.objc = objc;
         obtenerObjetosRemotos();
+    }
+
+    private InicioSesion() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -214,11 +222,13 @@ public class InicioSesion extends javax.swing.JFrame {
                 Usuario usuario = gestion.consultarUsuario(login);
                 if(usuario.isPrivilegiosUsuario()){
                     System.out.println("Es administrador");
-                    Dashboard tableroAdmin = new Dashboard(login);
+                    Dashboard tableroAdmin = new Dashboard(objc,login);
                     tableroAdmin.setVisible(true);
+//                    usuarioCallbackImpl objCallback = new usuarioCallbackImpl(tableroAdmin);
+//                    administrador.suscribir_Usuario(this, login);
                 }else{
                     System.out.println("Es usuario");
-                    DashboardCliente tableroCliente = new DashboardCliente(login);
+                    DashboardCliente tableroCliente = new DashboardCliente(objc ,login);
                     tableroCliente.setVisible(true);
                 }
                 this.setVisible(false);
@@ -233,24 +243,11 @@ public class InicioSesion extends javax.swing.JFrame {
         
     }//GEN-LAST:event_botonIniciarSesionActionPerformed
 
-    public void obtenerObjetosRemotos(){
-        String direccion = conexion.DireccionIP;
-        int puerto = conexion.NumeroPuerto;
-
-        ClienteDeObjetos objc = new ClienteDeObjetos();
-        String[] datos = new String[4];
-        datos[0] = "-ORBInitialHost";
-        datos[1] = conexion.DireccionIP;
-        datos[2] = "-ORBInitialPort";
-        datos[3] = Integer.toString(conexion.NumeroPuerto);
-
-        if(objc.iniciarORB(datos)){
-            /*Comprobamos los datos*/
+    public void obtenerObjetosRemotos(){       
             autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
             gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
-        }else{
-            System.out.println("Error. No fue posible iniciar el ORB.....");
-        }
+            administrador = (Interfaz_Administrador) objc.ObtenerServant("ServantAdmin");
+       
     }
     /**
      * @param args the command line arguments

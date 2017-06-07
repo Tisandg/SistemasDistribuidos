@@ -23,8 +23,8 @@ public class conexion extends javax.swing.JFrame {
         initComponents();
         panelTransparente.setBackground(new Color(0,0,0,200));
         setLocationRelativeTo(this);
-        Conectar_ORB.DireccionIP = "";
-        Conectar_ORB.NumeroPuerto = 0;
+        DireccionIP = "";
+        NumeroPuerto = 0;
     }
     
 
@@ -148,7 +148,7 @@ public class conexion extends javax.swing.JFrame {
             datos[3] = Integer.toString(NumeroPuerto);
             
             if(objc.iniciarORB(datos)){
-                InicioSesion objInicio = new InicioSesion();
+                InicioSesion objInicio = new InicioSesion(objc);
                 objInicio.setVisible(true);
                 this.setVisible(false);
             }else{

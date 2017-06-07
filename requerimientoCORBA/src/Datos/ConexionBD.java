@@ -26,7 +26,7 @@ public class ConexionBD {
         con=null;
         bd="bdusuarios_audio";
         login="root";
-        password="";
+        password="root";
         url = "jdbc:mysql://localhost/"+bd;
     }
     /**Permite hacer la conexion con la base de datos

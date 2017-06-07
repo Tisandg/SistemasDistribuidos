@@ -21,20 +21,27 @@ public class DashboardCliente extends javax.swing.JFrame {
     private String loginActual;
     private usuarioCallbackImpl usuario;
     private boolean suscripcion;
-    
+    private ClienteDeObjetos objc;
     /**
      * Creates new form Dashboard
+     * @param objc
+     * @param login
      */
-    public DashboardCliente(String login) {
+    public DashboardCliente(ClienteDeObjetos objc, String login) {
         initComponents();
         this.setLocationRelativeTo(this);
         loginActual = login;
         this.usuarioIniciado.setText(login);
+        this.objc = objc;
         obtenerObjetosRemotos();
         this.suscripcion = false;
         this.estadoSuscripcion.setText("No suscrito");
         /*Debemos establecer el objeto Callback*/
         usuario = new usuarioCallbackImpl(this);
+    }
+
+    private DashboardCliente(String usuario) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -299,7 +306,7 @@ public class DashboardCliente extends javax.swing.JFrame {
             if(autenticacion.salir(loginActual)){
                 System.out.println("Has salido. Sesion cerrada");
                 this.setVisible(false);
-                InicioSesion inicio = new InicioSesion();
+                InicioSesion inicio = new InicioSesion(objc);
                 inicio.setVisible(true);
             }else{
                 System.out.println("Error al cerrar sesion");
@@ -318,7 +325,7 @@ public class DashboardCliente extends javax.swing.JFrame {
             if(autenticacion.salir(loginActual)){
                 System.out.println("Has salido. Sesion cerrada");
                 this.setVisible(false);
-                InicioSesion inicio = new InicioSesion();
+                InicioSesion inicio = new InicioSesion(objc);
                 inicio.setVisible(true);
             }else{
                 System.out.println("Error al cerrar sesion");
@@ -360,24 +367,10 @@ public class DashboardCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_botonEditarPerfilActionPerformed
 
     public void obtenerObjetosRemotos(){
-        String direccion = conexion.DireccionIP;
-        int puerto = conexion.NumeroPuerto;
-
-        ClienteDeObjetos objc = new ClienteDeObjetos();
-        String[] datos = new String[4];
-        datos[0] = "-ORBInitialHost";
-        datos[1] = conexion.DireccionIP;
-        datos[2] = "-ORBInitialPort";
-        datos[3] = Integer.toString(conexion.NumeroPuerto);
-
-        if(objc.iniciarORB(datos)){
-            /*Comprobamos los datos*/
-            autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
-            gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
-            admin = (Interfaz_Administrador) objc.ObtenerServant("ServantAdmin");
-        }else{
-            System.out.println("Error. No fue posible iniciar el ORB.....");
-        }
+        autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
+        gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
+        admin = (Interfaz_Administrador) objc.ObtenerServant("ServantAdmin");
+        
     }
     
     public void actualizarInformacion(String login){

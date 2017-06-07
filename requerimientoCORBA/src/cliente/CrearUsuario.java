@@ -10,13 +10,15 @@ import sop_corba.Usuario;
 public class CrearUsuario extends javax.swing.JFrame {
 
     private Interfaz_Gestion gestion;
+    private ClienteDeObjetos objc;
     Dashboard tablero;
     /**
      * Creates new form EditarDatos
      */
-    public CrearUsuario(Dashboard tab) {
+    public CrearUsuario(ClienteDeObjetos objc, Dashboard tab) {
         initComponents();
         this.setLocationRelativeTo(this);
+        this.objc = objc;
         obtenerObjetosRemotos();
         this.tablero = tab;
     }
@@ -289,22 +291,7 @@ public class CrearUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_botonCancelarActionPerformed
 
     public void obtenerObjetosRemotos(){
-        String direccion = conexion.DireccionIP;
-        int puerto = conexion.NumeroPuerto;
-
-        ClienteDeObjetos objc = new ClienteDeObjetos();
-        String[] datos = new String[4];
-        datos[0] = "-ORBInitialHost";
-        datos[1] = conexion.DireccionIP;
-        datos[2] = "-ORBInitialPort";
-        datos[3] = Integer.toString(conexion.NumeroPuerto);
-
-        if(objc.iniciarORB(datos)){
-            /*Comprobamos los datos*/
             gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
-        }else{
-            System.out.println("Error. No fue posible iniciar el ORB.....");
-        }
     }
     /**
      * @param args the command line arguments

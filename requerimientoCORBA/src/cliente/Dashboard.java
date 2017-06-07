@@ -26,18 +26,24 @@ public class Dashboard extends javax.swing.JFrame {
     private String rutaCancion;
     private String loginSeleccionado;
     private usuarioCallbackImpl usuario;
+    private ClienteDeObjetos objc;
     /**
      * Creates new form Dashboard
      */
-    public Dashboard(String login) {
+    public Dashboard(ClienteDeObjetos objc, String login) {
         initComponents();
         contenedorInfoUsuario.setVisible(false);
         this.setLocationRelativeTo(this);
+        this.objc = objc;
         obtenerObjetosRemotos();
         loginActual = login;
         usuarioIniciado.setText(login);
         actualizarListaRegistrados();
         
+    }
+
+    private Dashboard(String usuario) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -60,11 +66,11 @@ public class Dashboard extends javax.swing.JFrame {
         contenedorUsuariosConectados = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        listaConectados = new javax.swing.JList<>();
+        listaConectados = new javax.swing.JList<String>();
         contenedorUsuariosRegistrados = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        listaRegistrados = new javax.swing.JList<>();
+        listaRegistrados = new javax.swing.JList<String>();
         jButton1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         contenedorBienvenida = new javax.swing.JPanel();
@@ -89,6 +95,7 @@ public class Dashboard extends javax.swing.JFrame {
         nombreCancion = new javax.swing.JLabel();
         botonReproducir = new javax.swing.JLabel();
         botonPausa = new javax.swing.JLabel();
+        Play = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -122,7 +129,6 @@ public class Dashboard extends javax.swing.JFrame {
 
         usuarioIniciado.setFont(new java.awt.Font("Segoe UI Semibold", 0, 11)); // NOI18N
         usuarioIniciado.setForeground(new java.awt.Color(255, 255, 255));
-        usuarioIniciado.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Imagenes\\iconos PNG\\usuario.png")); // NOI18N
         usuarioIniciado.setText("Usuario");
         usuarioIniciado.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -150,10 +156,10 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabel11.setText("Usuarios conectados");
 
-        listaConectados.setModel(new javax.swing.AbstractListModel<String>() {
+        listaConectados.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            public Object getElementAt(int i) { return strings[i]; }
         });
         jScrollPane4.setViewportView(listaConectados);
 
@@ -189,10 +195,10 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabel5.setText("Usuarios registrados");
 
-        listaRegistrados.setModel(new javax.swing.AbstractListModel<String>() {
+        listaRegistrados.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            public Object getElementAt(int i) { return strings[i]; }
         });
         listaRegistrados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -408,16 +414,21 @@ public class Dashboard extends javax.swing.JFrame {
         nombreCancion.setText("Nombre cancion");
         contenedorReproductor.add(nombreCancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(224, 20, 244, 32));
 
-        botonReproducir.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Imagenes\\iconos PNG\\boton-de-reproduccion.png")); // NOI18N
         botonReproducir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonReproducirMouseClicked(evt);
             }
         });
         contenedorReproductor.add(botonReproducir, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 20, -1, -1));
-
-        botonPausa.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Imagenes\\iconos PNG\\pausa.png")); // NOI18N
         contenedorReproductor.add(botonPausa, new org.netbeans.lib.awtextra.AbsoluteConstraints(562, 20, -1, -1));
+
+        Play.setText("Play");
+        Play.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PlayActionPerformed(evt);
+            }
+        });
+        contenedorReproductor.add(Play, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 100, -1));
 
         getContentPane().add(contenedorReproductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 470, 760, 70));
 
@@ -429,7 +440,7 @@ public class Dashboard extends javax.swing.JFrame {
             if(autenticacion.salir(loginActual)){
                 System.out.println("Has salido. Sesion cerrada");
                 this.setVisible(false);
-                InicioSesion inicio = new InicioSesion();
+                InicioSesion inicio = new InicioSesion(objc);
                 inicio.setVisible(true);
             }else{
                 System.out.println("Error al cerrar sesion");
@@ -501,7 +512,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        CrearUsuario crear = new CrearUsuario(this);
+        CrearUsuario crear = new CrearUsuario(objc ,this);
         crear.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -513,7 +524,7 @@ public class Dashboard extends javax.swing.JFrame {
         if(JOptionPane.showConfirmDialog(null, "Esta seguro que desea salir?", "Salir", JOptionPane.YES_NO_OPTION) == 0){
             System.out.println("Has salido. Sesion cerrada");
             this.setVisible(false);
-            InicioSesion inicio = new InicioSesion();
+            InicioSesion inicio = new InicioSesion(objc);
             inicio.setVisible(true);
         }else{
             System.out.println("Cancelado cierre de sesion");
@@ -526,25 +537,14 @@ public class Dashboard extends javax.swing.JFrame {
         admin.EjecutarAudio();
     }//GEN-LAST:event_botonReproducirMouseClicked
 
-    public void obtenerObjetosRemotos(){
-        String direccion = conexion.DireccionIP;
-        int puerto = conexion.NumeroPuerto;
+    private void PlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlayActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PlayActionPerformed
 
-        ClienteDeObjetos objc = new ClienteDeObjetos();
-        String[] datos = new String[4];
-        datos[0] = "-ORBInitialHost";
-        datos[1] = conexion.DireccionIP;
-        datos[2] = "-ORBInitialPort";
-        datos[3] = Integer.toString(conexion.NumeroPuerto);
-
-        if(objc.iniciarORB(datos)){
-            /*Comprobamos los datos*/
-            autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
-            gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
-            admin = (Interfaz_Administrador) objc.ObtenerServant("ServantAdmin");
-        }else{
-            System.out.println("Error. No fue posible iniciar el ORB.....");
-        }
+    public void obtenerObjetosRemotos(){      
+        autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
+        gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
+        admin = (Interfaz_Administrador) objc.ObtenerServant("ServantAdmin");     
     }
     
     public void actualizarListaRegistrados(){
@@ -625,6 +625,7 @@ public class Dashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BarraPrograma;
     private javax.swing.JPanel ContenedorDatosSesion;
+    private javax.swing.JButton Play;
     private javax.swing.JButton botonAceptar;
     private javax.swing.JLabel botonCerrar;
     private javax.swing.JButton botonDesactivar;
