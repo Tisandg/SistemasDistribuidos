@@ -95,7 +95,6 @@ public class Dashboard extends javax.swing.JFrame {
         nombreCancion = new javax.swing.JLabel();
         botonReproducir = new javax.swing.JLabel();
         botonPausa = new javax.swing.JLabel();
-        Play = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -422,14 +421,6 @@ public class Dashboard extends javax.swing.JFrame {
         contenedorReproductor.add(botonReproducir, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 20, -1, -1));
         contenedorReproductor.add(botonPausa, new org.netbeans.lib.awtextra.AbsoluteConstraints(562, 20, -1, -1));
 
-        Play.setText("Play");
-        Play.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PlayActionPerformed(evt);
-            }
-        });
-        contenedorReproductor.add(Play, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 100, -1));
-
         getContentPane().add(contenedorReproductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 470, 760, 70));
 
         pack();
@@ -459,6 +450,7 @@ public class Dashboard extends javax.swing.JFrame {
         explorador.showOpenDialog(null);
         File archivo = explorador.getSelectedFile();
         rutaCancion = archivo.getPath();
+        rutaCancion = rutaCancion.replace("'\'", );
         /*actualizamos el nombre*/
         this.nombreCancion.setText(archivo.getName());
         System.out.println("Ruta seleccionada "+rutaCancion);
@@ -536,10 +528,6 @@ public class Dashboard extends javax.swing.JFrame {
         admin.seleccionarAudio(rutaCancion);
         admin.EjecutarAudio();
     }//GEN-LAST:event_botonReproducirMouseClicked
-
-    private void PlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlayActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PlayActionPerformed
 
     public void obtenerObjetosRemotos(){      
         autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
@@ -625,7 +613,6 @@ public class Dashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BarraPrograma;
     private javax.swing.JPanel ContenedorDatosSesion;
-    private javax.swing.JButton Play;
     private javax.swing.JButton botonAceptar;
     private javax.swing.JLabel botonCerrar;
     private javax.swing.JButton botonDesactivar;
