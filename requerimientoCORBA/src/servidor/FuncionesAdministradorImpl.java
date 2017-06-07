@@ -107,7 +107,7 @@ public class FuncionesAdministradorImpl implements Interfaz_AdministradorOperati
 
     @Override
     public boolean suscribir_Usuario(usuarioCallbackInt objcllbck, String loginUsuario) {
-        System.out.println("Servidor : Agragar Suscripcion");
+        System.out.println("Servidor : Agregar Suscripcion "+loginUsuario);
         usuarioSuscrito nuevoUsuario = new usuarioSuscrito(loginUsuario, objcllbck);
         if(!usuarios_Suscritos.contains(nuevoUsuario)){
             usuarios_Suscritos.add(nuevoUsuario);

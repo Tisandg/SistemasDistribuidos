@@ -52,7 +52,7 @@ public class UsuarioDAO {
         conex.conectar();
         try {            
             PreparedStatement sentencia = null;
-            String consulta = "select * from usuario";
+            String consulta = "select * from usuario where privilegiosUsuario != 1";
             sentencia = conex.getConnection().prepareStatement(consulta);            
             ResultSet res = sentencia.executeQuery();
             while(res.next()){
@@ -64,6 +64,7 @@ public class UsuarioDAO {
                 objUsuario.setClaveUsuario(res.getString("claveUsuario"));
                 objUsuario.setImagenUsuario(res.getString("imagenUsuario"));
                 objUsuario.setPrivilegiosUsuario(res.getBoolean("privilegiosUsuario"));
+                objUsuario.setDesactivado(res.getBoolean("desactivado"));
                 usuarios.add(objUsuario);
             }
             sentencia.close();
@@ -84,25 +85,28 @@ public class UsuarioDAO {
         int resultado=-1;
         try {            
             PreparedStatement sentencia = null;
-            String consulta = "select usuario.nombresUsuario, usuario.apellidosUsuario, usuario.loginUsuario, usuario.claveUsuario, usuario.imagenUsuario, usuario.privilegiosUsuario  from usuario where usuario.loginUsuario=?";
+            String consulta = "select *  from usuario where loginUsuario=?";
             sentencia = conex.getConnection().prepareStatement(consulta);            
             sentencia.setString(1, loginUsuario);
             ResultSet res = sentencia.executeQuery();
             while(res.next()){
                 objUsuario = new Usuario();
-                //objUsuario.setIdUsuario(res.getInt("idUsuario"));
+                objUsuario.setIdUsuario(res.getInt("idUsuario"));
                 objUsuario.setNombresUsuario(res.getString("nombresUsuario"));
                 objUsuario.setApellidosUsuario(res.getString("apellidosUsuario"));
                 objUsuario.setLoginUsuario(res.getString("loginUsuario"));
                 objUsuario.setClaveUsuario(res.getString("claveUsuario"));
                 objUsuario.setImagenUsuario(res.getString("imagenUsuario"));
                 objUsuario.setPrivilegiosUsuario(res.getBoolean("privilegiosUsuario"));
+                objUsuario.setDesactivado(res.getBoolean("desactivado"));
+                System.out.println("Valor: "+res.getInt("desactivado"));
+                System.out.println("Valor: "+objUsuario.desactivado);
             }
             sentencia.close();
             conex.desconectar();
 
         } catch (SQLException e) {
-                  System.out.println("error en la consulta de un empleado: "+e.getMessage());         
+                  System.out.println("error en la consulta de un usuario: "+e.getMessage());         
         }
         
         return objUsuario;
@@ -115,21 +119,23 @@ public class UsuarioDAO {
         int resultado=-1;
         try {            
             PreparedStatement sentencia = null;
-            String consulta = "update usuario set usuario.nombresUsuario=?,"
-                                                 + "usuario.apellidosUsuario=?,"
-                                                 + "usuario.claveUsuario=?,"
-                                                 + "usuario.idUsuario=?"
-                                                 + "usuario.imagenUsuario=?"
-                                                 + "usuario.privilegiosUsuario=?"
-                                                 + "where usuario.loginUsuario=?";
+            String consulta = "update usuario set loginUsuario=?, "
+                                                + "nombresUsuario=?, "
+                                                 + "apellidosUsuario=?, "
+                                                 + "claveUsuario=?, "
+                                                 + "imagenUsuario=?, "
+                                                 + "desactivado=? "
+                                                // + "privilegiosUsuario=?"
+                                                 + "where idUsuario=?";
             sentencia = conex.getConnection().prepareStatement(consulta);
-            sentencia.setString(1, objUsuario.getNombresUsuario());
-            sentencia.setString(2, objUsuario.getApellidosUsuario());
-            sentencia.setString(3, objUsuario.getClaveUsuario());
-            sentencia.setInt(4, objUsuario.getIdUsuario());
+            sentencia.setString(1, objUsuario.getLoginUsuario());
+            sentencia.setString(2, objUsuario.getNombresUsuario());
+            sentencia.setString(3, objUsuario.getApellidosUsuario());
+            sentencia.setString(4, objUsuario.getClaveUsuario());
             sentencia.setString(5, objUsuario.getImagenUsuario());
-            sentencia.setBoolean(6, objUsuario.isPrivilegiosUsuario());
-            sentencia.setString(7, loginUsuario);
+            sentencia.setBoolean(6, objUsuario.isDesactivado());
+            //sentencia.setBoolean(6, objUsuario.isPrivilegiosUsuario());
+            sentencia.setInt(7, objUsuario.getIdUsuario());
             resultado = sentencia.executeUpdate(); 
             sentencia.close();
             conex.desconectar();
@@ -144,23 +150,25 @@ public class UsuarioDAO {
             return true;
     }
     
+    /*Lo que hace es desactivar el usuario*/
     public boolean eliminarUsuario(String loginUsuario){
+        System.out.println("Desactivando "+loginUsuario);
         ConexionBD conex= new ConexionBD();
         conex.conectar();
         int resultado=-1;
         try {            
             PreparedStatement sentencia = null;
-            String consulta = "delete from usuario where usuario.loginUsuario=?";
-            sentencia = conex.getConnection().prepareStatement(consulta);            
-            sentencia.setString(1, loginUsuario);
+            String consulta = "UPDATE usuario SET desactivado=? WHERE loginUsuario=?";
+            sentencia = conex.getConnection().prepareStatement(consulta); 
+            boolean desactivar = true;
+            sentencia.setBoolean(1,desactivar);
+            sentencia.setString(2,loginUsuario);
             resultado = sentencia.executeUpdate(); 
             sentencia.close();
             conex.desconectar();
-
         } catch (SQLException e) {
-                  System.out.println("error en la eliminación: "+e.getMessage());         
+                  System.out.println("error en la desactivacion: "+e.getMessage());         
         }
-        
         if (resultado!=1)        
             return false;        
         else
@@ -197,7 +205,7 @@ public class UsuarioDAO {
         conex.conectar();
         try {
             PreparedStatement sentencia = null;
-            String consulta = "select * from usuario where usuario.loginUsuario=? and usuario.claveUsuario=?";
+            String consulta = "select * from usuario where usuario.loginUsuario=? and usuario.claveUsuario=? and usuario.desactivado != 1";
             sentencia = conex.getConnection().prepareStatement(consulta);            
             sentencia.setString(1, login);
             sentencia.setString(2, clave);

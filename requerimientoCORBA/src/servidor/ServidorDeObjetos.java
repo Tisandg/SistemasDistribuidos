@@ -4,6 +4,7 @@ import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
 import org.omg.PortableServer.POA;
+import org.omg.CosNaming.NamingContextExt;
 
 import sop_corba.*;
 
@@ -12,7 +13,12 @@ public class ServidorDeObjetos {
   public static void main(String args[]) {
     try{
         System.out.println("1. Crea e inicia el orb");
-        ORB orb = ORB.init(args, null);
+        String[] datos = new String[4];
+        datos[0] = "-ORBInitialHost";
+        datos[1] = "localhost";
+        datos[2] = "-ORBInitialPort";
+        datos[3] = "2020";
+        ORB orb = ORB.init(datos, null);
 
         System.out.println("2. Obtiene la referencia al poa raiz, por medio del orb ");
         org.omg.CORBA.Object objPOA = null;
@@ -21,7 +27,6 @@ public class ServidorDeObjetos {
 
         System.out.println("3. Activa el POAManager");
         rootPOA.the_POAManager().activate();
-
                
         System.out.println("4. Crea el objeto servant");
         FuncionesAdministradorImpl ObjServant = new FuncionesAdministradorImpl();   
@@ -50,7 +55,7 @@ public class ServidorDeObjetos {
         refContextoNombrado.rebind(path, referenciaORB);
 
 //        
-        System.out.println("4. Crea el objeto servant Usuarios Impl");
+        System.out.println("4. Crea el objeto servant Gestion Impl");
         GestionImpl ObjServantGestion = new GestionImpl();   
         
         System.out.println("5. Crea el objeto tie y se registra una referencia al objeto servant mediante el contructor");
@@ -92,7 +97,7 @@ public class ServidorDeObjetos {
         refContextoNombrado.rebind(path, referenciaORB_UsuarioCallback);
 //
 //        
-        System.out.println("4. Crea el objeto servant Usuarios Callback");
+        System.out.println("4. Crea el objeto servant Autenticacion");
         AutentificacionUsuarioImpl ObjServantAutenticacion = new AutentificacionUsuarioImpl();   
         
         System.out.println("5. Crea el objeto tie y se registra una referencia al objeto servant mediante el contructor");

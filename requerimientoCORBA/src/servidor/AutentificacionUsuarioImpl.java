@@ -36,7 +36,7 @@ public class AutentificacionUsuarioImpl implements autenticacionUsuarioOperation
                 System.out.println("Usuario o clave no coinciden. Vuelva a intentar");
             }
         }else{
-            System.out.println("No hay un usuario registrado con ese login");
+            System.out.println("No hay un usuario registrado con este login "+login);
         }
         return autenticado;
     }

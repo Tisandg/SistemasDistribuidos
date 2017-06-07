@@ -17,12 +17,13 @@ public final class Usuario implements org.omg.CORBA.portable.IDLEntity
   public String claveUsuario = null;
   public String imagenUsuario = null;
   public boolean privilegiosUsuario = false;
+  public boolean desactivado = false;
 
   public Usuario ()
   {
   } // ctor
 
-  public Usuario (int _idUsuario, String _nombresUsuario, String _apellidosUsuario, String _loginUsuario, String _claveUsuario, String _imagenUsuario, boolean _privilegiosUsuario)
+  public Usuario (int _idUsuario, String _nombresUsuario, String _apellidosUsuario, String _loginUsuario, String _claveUsuario, String _imagenUsuario, boolean _privilegiosUsuario, boolean _desactivado)
   {
     idUsuario = _idUsuario;
     nombresUsuario = _nombresUsuario;
@@ -31,6 +32,7 @@ public final class Usuario implements org.omg.CORBA.portable.IDLEntity
     claveUsuario = _claveUsuario;
     imagenUsuario = _imagenUsuario;
     privilegiosUsuario = _privilegiosUsuario;
+    desactivado = _desactivado;
   } // ctor
 
     public int getIdUsuario() {
@@ -87,6 +89,14 @@ public final class Usuario implements org.omg.CORBA.portable.IDLEntity
 
     public void setPrivilegiosUsuario(boolean privilegiosUsuario) {
         this.privilegiosUsuario = privilegiosUsuario;
+    }
+
+    public boolean isDesactivado() {
+        return desactivado;
+    }
+
+    public void setDesactivado(boolean desactivado) {
+        this.desactivado = desactivado;
     }
 
 } // class Usuario

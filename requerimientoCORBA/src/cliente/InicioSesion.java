@@ -1,12 +1,15 @@
 package cliente;
 
 import java.awt.Color;
+import sop_corba.*;
 
 /**
  * @author Santiago Garcia Ch
  */
 public class InicioSesion extends javax.swing.JFrame {
 
+    private autenticacionUsuario autenticacion;
+    private Interfaz_Gestion gestion;
     /**
      * Creates new form InicioSesion
      */
@@ -14,8 +17,9 @@ public class InicioSesion extends javax.swing.JFrame {
         initComponents();
         panelTransparente.setBackground(new Color(0,0,0,200));
         setLocationRelativeTo(this);
+        this.mensajeLoginClave.setVisible(false);
+        obtenerObjetosRemotos();
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -41,7 +45,8 @@ public class InicioSesion extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         botonCerrar = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        campoClave = new javax.swing.JPasswordField();
+        mensajeLoginClave = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -87,11 +92,6 @@ public class InicioSesion extends javax.swing.JFrame {
         campoLogin.setBackground(new java.awt.Color(32, 33, 35));
         campoLogin.setForeground(new java.awt.Color(255, 255, 255));
         campoLogin.setBorder(null);
-        campoLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                campoLoginActionPerformed(evt);
-            }
-        });
 
         botonIniciarSesion.setBackground(new java.awt.Color(126, 87, 194));
         botonIniciarSesion.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
@@ -121,14 +121,12 @@ public class InicioSesion extends javax.swing.JFrame {
             }
         });
 
-        jPasswordField1.setBackground(new java.awt.Color(32, 33, 35));
-        jPasswordField1.setForeground(new java.awt.Color(255, 255, 255));
-        jPasswordField1.setBorder(null);
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
-            }
-        });
+        campoClave.setBackground(new java.awt.Color(32, 33, 35));
+        campoClave.setForeground(new java.awt.Color(255, 255, 255));
+        campoClave.setBorder(null);
+
+        mensajeLoginClave.setForeground(new java.awt.Color(255, 0, 0));
+        mensajeLoginClave.setText("Login y Clave no coinciden.Vuelva a intentar");
 
         javax.swing.GroupLayout panelDatosInicioLayout = new javax.swing.GroupLayout(panelDatosInicio);
         panelDatosInicio.setLayout(panelDatosInicioLayout);
@@ -141,10 +139,10 @@ public class InicioSesion extends javax.swing.JFrame {
                         .addComponent(botonCerrar)
                         .addGap(19, 19, 19))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
+                        .addComponent(botonIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(89, 89, 89))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
                         .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(panelDatosInicioLayout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(botonIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelDatosInicioLayout.createSequentialGroup()
                                 .addGap(58, 58, 58)
                                 .addComponent(jLabel8))
@@ -154,7 +152,10 @@ public class InicioSesion extends javax.swing.JFrame {
                             .addComponent(jSeparator1)
                             .addComponent(jSeparator2)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                            .addComponent(jPasswordField1))
+                            .addComponent(campoClave)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
+                                .addComponent(mensajeLoginClave)
+                                .addGap(8, 8, 8)))
                         .addGap(38, 38, 38))))
         );
         panelDatosInicioLayout.setVerticalGroup(
@@ -171,16 +172,18 @@ public class InicioSesion extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(campoClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
+                .addComponent(mensajeLoginClave)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(botonIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addGap(29, 29, 29))
         );
 
         getContentPane().add(panelDatosInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, 330, 380));
@@ -191,25 +194,64 @@ public class InicioSesion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void campoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoLoginActionPerformed
-
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
-
     private void botonCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonCerrarMouseClicked
+        System.out.println("Hasta Pronto!");
         System.exit(0);
     }//GEN-LAST:event_botonCerrarMouseClicked
 
     private void botonIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIniciarSesionActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-        Dashboard tablero = new Dashboard();
-        tablero.setVisible(true);
+        String login = campoLogin.getText();
+        char[] c = campoClave.getPassword();
+        String clave = new String(c);
+        if(login.equals("") || clave.equals("")){
+            this.mensajeLoginClave.setVisible(true);
+            this.mensajeLoginClave.setText("Los campos no pueden estar vacios");
+        }else{
+            if(autenticacion.ingresar(login, clave)){
+                this.mensajeLoginClave.setVisible(false);
+                System.out.println("Usuario autenticado");
+                /*Verificamos si es administrador o usuario normal*/
+                Usuario usuario = gestion.consultarUsuario(login);
+                if(usuario.isPrivilegiosUsuario()){
+                    System.out.println("Es administrador");
+                    Dashboard tableroAdmin = new Dashboard(login);
+                    tableroAdmin.setVisible(true);
+                }else{
+                    System.out.println("Es usuario");
+                    DashboardCliente tableroCliente = new DashboardCliente(login);
+                    tableroCliente.setVisible(true);
+                }
+                this.setVisible(false);
+            }else{
+                this.mensajeLoginClave.setVisible(true);
+                this.mensajeLoginClave.setText("Usuario o clave no coinciden. Vuelva a intentar");
+                System.out.println("Usuario no se ha autenticado");
+            }
+        }
+        
+        
+        
     }//GEN-LAST:event_botonIniciarSesionActionPerformed
 
+    public void obtenerObjetosRemotos(){
+        String direccion = conexion.DireccionIP;
+        int puerto = conexion.NumeroPuerto;
+
+        ClienteDeObjetos objc = new ClienteDeObjetos();
+        String[] datos = new String[4];
+        datos[0] = "-ORBInitialHost";
+        datos[1] = conexion.DireccionIP;
+        datos[2] = "-ORBInitialPort";
+        datos[3] = Integer.toString(conexion.NumeroPuerto);
+
+        if(objc.iniciarORB(datos)){
+            /*Comprobamos los datos*/
+            autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
+            gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
+        }else{
+            System.out.println("Error. No fue posible iniciar el ORB.....");
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -248,6 +290,7 @@ public class InicioSesion extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel botonCerrar;
     private java.awt.Button botonIniciarSesion;
+    private javax.swing.JPasswordField campoClave;
     private javax.swing.JTextField campoLogin;
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel jLabel2;
@@ -258,9 +301,9 @@ public class InicioSesion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JLabel mensajeLoginClave;
     private javax.swing.JPanel panelDatosInicio;
     private javax.swing.JPanel panelTransparente;
     // End of variables declaration//GEN-END:variables

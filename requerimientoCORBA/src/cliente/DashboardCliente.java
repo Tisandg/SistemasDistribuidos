@@ -2,6 +2,12 @@ package cliente;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import servidor.usuarioCallbackImpl;
+import sop_corba.Interfaz_Administrador;
+import sop_corba.Interfaz_Gestion;
+import sop_corba.Usuario;
+import sop_corba.autenticacionUsuario;
+import sop_corba.usuarioCallbackInt;
 
 /**
  *
@@ -9,14 +15,26 @@ import javax.swing.JOptionPane;
  */
 public class DashboardCliente extends javax.swing.JFrame {
 
+    private autenticacionUsuario autenticacion;
+    private Interfaz_Gestion gestion;
+    private Interfaz_Administrador admin;
+    private String loginActual;
+    private usuarioCallbackImpl usuario;
+    private boolean suscripcion;
     
     /**
      * Creates new form Dashboard
      */
-    public DashboardCliente() {
+    public DashboardCliente(String login) {
         initComponents();
-        contenedorInfoUsuario.setVisible(false);
         this.setLocationRelativeTo(this);
+        loginActual = login;
+        this.usuarioIniciado.setText(login);
+        obtenerObjetosRemotos();
+        this.suscripcion = false;
+        this.estadoSuscripcion.setText("No suscrito");
+        /*Debemos establecer el objeto Callback*/
+        usuario = new usuarioCallbackImpl(this);
     }
 
     /**
@@ -33,25 +51,14 @@ public class DashboardCliente extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         ContenedorDatosSesion = new javax.swing.JPanel();
         usuarioIniciado = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        botonCerrarSesion = new javax.swing.JLabel();
         contenedorGeneral = new javax.swing.JPanel();
         contenedorBienvenida = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         textoBienvenida = new javax.swing.JTextArea();
         botonEditarPerfil = new javax.swing.JButton();
-        contenedorInfoUsuario = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        botonEditar = new javax.swing.JButton();
-        botonDesactivar = new javax.swing.JButton();
-        botonAceptar = new javax.swing.JButton();
-        campoNombre = new javax.swing.JLabel();
-        campoApellidos = new javax.swing.JLabel();
-        campoLogin = new javax.swing.JLabel();
-        contenedorUsuariosRegistrados = new javax.swing.JPanel();
+        contenedorOpciones = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         botonSuscribirme = new javax.swing.JButton();
@@ -61,7 +68,7 @@ public class DashboardCliente extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         estadoSuscripcion = new javax.swing.JLabel();
         contenedorReproductor = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        nombreCancion = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -105,16 +112,16 @@ public class DashboardCliente extends javax.swing.JFrame {
         });
         ContenedorDatosSesion.add(usuarioIniciado, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(126, 87, 194));
-        jLabel4.setText("Cerrar sesion");
-        jLabel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        botonCerrarSesion.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        botonCerrarSesion.setForeground(new java.awt.Color(126, 87, 194));
+        botonCerrarSesion.setText("Cerrar sesion");
+        botonCerrarSesion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
+                botonCerrarSesionMouseClicked(evt);
             }
         });
-        ContenedorDatosSesion.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 20, -1, -1));
+        ContenedorDatosSesion.add(botonCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 20, -1, -1));
 
         getContentPane().add(ContenedorDatosSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 760, 50));
 
@@ -172,99 +179,6 @@ public class DashboardCliente extends javax.swing.JFrame {
 
         contenedorGeneral.add(contenedorBienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 48, 320, 310));
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        jLabel8.setText("Informacion usuario");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jLabel2.setText("Nombres:");
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jLabel9.setText("Apellidos");
-
-        jLabel10.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jLabel10.setText("Login");
-
-        botonEditar.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
-        botonEditar.setText("Editar");
-        botonEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEditarActionPerformed(evt);
-            }
-        });
-
-        botonDesactivar.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
-        botonDesactivar.setText("Desactivar");
-        botonDesactivar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonDesactivarActionPerformed(evt);
-            }
-        });
-
-        botonAceptar.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
-        botonAceptar.setText("Aceptar");
-        botonAceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonAceptarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout contenedorInfoUsuarioLayout = new javax.swing.GroupLayout(contenedorInfoUsuario);
-        contenedorInfoUsuario.setLayout(contenedorInfoUsuarioLayout);
-        contenedorInfoUsuarioLayout.setHorizontalGroup(
-            contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorInfoUsuarioLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addGap(110, 110, 110))
-            .addGroup(contenedorInfoUsuarioLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(contenedorInfoUsuarioLayout.createSequentialGroup()
-                        .addComponent(botonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(botonDesactivar)
-                        .addGap(18, 18, 18)
-                        .addComponent(botonAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(contenedorInfoUsuarioLayout.createSequentialGroup()
-                        .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(campoNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(campoApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(campoLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-        contenedorInfoUsuarioLayout.setVerticalGroup(
-            contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenedorInfoUsuarioLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jLabel8)
-                .addGap(18, 18, 18)
-                .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(campoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(campoApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(campoLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonEditar)
-                    .addComponent(botonDesactivar)
-                    .addComponent(botonAceptar))
-                .addContainerGap(53, Short.MAX_VALUE))
-        );
-
-        contenedorGeneral.add(contenedorInfoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 58, 320, 300));
-
         jLabel5.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabel5.setText("Suscribete");
 
@@ -296,45 +210,48 @@ public class DashboardCliente extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         jLabel14.setText("Suscripcion");
 
-        javax.swing.GroupLayout contenedorUsuariosRegistradosLayout = new javax.swing.GroupLayout(contenedorUsuariosRegistrados);
-        contenedorUsuariosRegistrados.setLayout(contenedorUsuariosRegistradosLayout);
-        contenedorUsuariosRegistradosLayout.setHorizontalGroup(
-            contenedorUsuariosRegistradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenedorUsuariosRegistradosLayout.createSequentialGroup()
-                .addGroup(contenedorUsuariosRegistradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorUsuariosRegistradosLayout.createSequentialGroup()
+        javax.swing.GroupLayout contenedorOpcionesLayout = new javax.swing.GroupLayout(contenedorOpciones);
+        contenedorOpciones.setLayout(contenedorOpcionesLayout);
+        contenedorOpcionesLayout.setHorizontalGroup(
+            contenedorOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(contenedorOpcionesLayout.createSequentialGroup()
+                .addGroup(contenedorOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorOpcionesLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(contenedorUsuariosRegistradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(contenedorOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addGroup(contenedorUsuariosRegistradosLayout.createSequentialGroup()
+                            .addGroup(contenedorOpcionesLayout.createSequentialGroup()
                                 .addGap(8, 8, 8)
                                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(contenedorUsuariosRegistradosLayout.createSequentialGroup()
-                        .addGroup(contenedorUsuariosRegistradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(contenedorUsuariosRegistradosLayout.createSequentialGroup()
+                    .addGroup(contenedorOpcionesLayout.createSequentialGroup()
+                        .addGroup(contenedorOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(contenedorOpcionesLayout.createSequentialGroup()
                                 .addGap(83, 83, 83)
                                 .addComponent(jLabel11))
-                            .addGroup(contenedorUsuariosRegistradosLayout.createSequentialGroup()
+                            .addGroup(contenedorOpcionesLayout.createSequentialGroup()
                                 .addGap(88, 88, 88)
                                 .addComponent(botonEliminarSuscripcion))
-                            .addGroup(contenedorUsuariosRegistradosLayout.createSequentialGroup()
-                                .addGap(89, 89, 89)
-                                .addGroup(contenedorUsuariosRegistradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(contenedorOpcionesLayout.createSequentialGroup()
+                                .addGap(118, 118, 118)
+                                .addGroup(contenedorOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel14)
-                                    .addComponent(estadoSuscripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(contenedorUsuariosRegistradosLayout.createSequentialGroup()
+                                    .addGroup(contenedorOpcionesLayout.createSequentialGroup()
                                         .addComponent(jLabel5)
                                         .addGap(8, 8, 8)))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(contenedorUsuariosRegistradosLayout.createSequentialGroup()
+            .addGroup(contenedorOpcionesLayout.createSequentialGroup()
                 .addGap(114, 114, 114)
                 .addComponent(botonSuscribirme)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorOpcionesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(estadoSuscripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(95, 95, 95))
         );
-        contenedorUsuariosRegistradosLayout.setVerticalGroup(
-            contenedorUsuariosRegistradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorUsuariosRegistradosLayout.createSequentialGroup()
+        contenedorOpcionesLayout.setVerticalGroup(
+            contenedorOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorOpcionesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -354,7 +271,7 @@ public class DashboardCliente extends javax.swing.JFrame {
                 .addGap(38, 38, 38))
         );
 
-        contenedorGeneral.add(contenedorUsuariosRegistrados, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, 310));
+        contenedorGeneral.add(contenedorOpciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, 310));
 
         getContentPane().add(contenedorGeneral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 760, 380));
 
@@ -362,10 +279,10 @@ public class DashboardCliente extends javax.swing.JFrame {
         contenedorReproductor.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         contenedorReproductor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Nombre cancion");
-        contenedorReproductor.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 22, 244, 20));
+        nombreCancion.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        nombreCancion.setForeground(new java.awt.Color(255, 255, 255));
+        nombreCancion.setText("Nombre cancion");
+        contenedorReproductor.add(nombreCancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 22, 244, 20));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(126, 87, 194));
@@ -379,66 +296,95 @@ public class DashboardCliente extends javax.swing.JFrame {
 
     private void botonCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonCerrarMouseClicked
         if(JOptionPane.showConfirmDialog(null, "Esta seguro que desea salir?", "Salir", JOptionPane.YES_NO_OPTION) == 0){
-            System.out.println("Has salido. Sesion cerrada");
-            this.setVisible(false);
-            InicioSesion inicio = new InicioSesion();
-            inicio.setVisible(true);
+            if(autenticacion.salir(loginActual)){
+                System.out.println("Has salido. Sesion cerrada");
+                this.setVisible(false);
+                InicioSesion inicio = new InicioSesion();
+                inicio.setVisible(true);
+            }else{
+                System.out.println("Error al cerrar sesion");
+            }
         }else{
             System.out.println("Cancelado cierre de sesion");
         }
     }//GEN-LAST:event_botonCerrarMouseClicked
 
-    private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
-        // TODO add your handling code here:
-        contenedorInfoUsuario.setVisible(false);
-        contenedorBienvenida.setVisible(true);
-    }//GEN-LAST:event_botonAceptarActionPerformed
-
-    private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed
-        // TODO add your handling code here:
-        EditarDatos editar = new EditarDatos();
-        editar.setVisible(true);
-    }//GEN-LAST:event_botonEditarActionPerformed
-
-    private void botonDesactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDesactivarActionPerformed
-        // TODO add your handling code here:
-        if(JOptionPane.showConfirmDialog(null, "Esta seguro que desea desactivar este usuario?", "Confirmar desactivacion", JOptionPane.YES_NO_OPTION) == 0){
-            System.out.println("Ha confirmado la desactivacion del usuario");
-        }else{
-            System.out.println("Ha cancelado la desactivacion del usuairo");
-        }
-
-    }//GEN-LAST:event_botonDesactivarActionPerformed
-
     private void usuarioIniciadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usuarioIniciadoMouseClicked
 
     }//GEN-LAST:event_usuarioIniciadoMouseClicked
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+    private void botonCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonCerrarSesionMouseClicked
         if(JOptionPane.showConfirmDialog(null, "Esta seguro que desea salir?", "Salir", JOptionPane.YES_NO_OPTION) == 0){
-            System.out.println("Has salido. Sesion cerrada");
-            this.setVisible(false);
-            InicioSesion inicio = new InicioSesion();
-            inicio.setVisible(true);
+            if(autenticacion.salir(loginActual)){
+                System.out.println("Has salido. Sesion cerrada");
+                this.setVisible(false);
+                InicioSesion inicio = new InicioSesion();
+                inicio.setVisible(true);
+            }else{
+                System.out.println("Error al cerrar sesion");
+            }
         }else{
             System.out.println("Cancelado cierre de sesion");
         }
-    }//GEN-LAST:event_jLabel4MouseClicked
+    }//GEN-LAST:event_botonCerrarSesionMouseClicked
 
     private void botonSuscribirmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSuscribirmeActionPerformed
-        // TODO add your handling code here:
+        if(suscripcion){
+            JOptionPane.showMessageDialog(null,"Ya estas suscrito");
+        }else{
+            if(admin.suscribir_Usuario((usuarioCallbackInt) usuario, loginActual)){
+                System.out.println("Te has suscrito");
+                this.estadoSuscripcion.setText("Suscrito");
+                suscripcion = true;
+            }
+        }
+        
     }//GEN-LAST:event_botonSuscribirmeActionPerformed
 
     private void botonEliminarSuscripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarSuscripcionActionPerformed
-        // TODO add your handling code here:
+        if(!suscripcion){
+            JOptionPane.showMessageDialog(null,"No te has suscrito");
+        }else{
+            if(admin.eliminarSuscripcion_Usuario(loginActual)){
+                System.out.println("Suscripcion eliminada");
+                this.estadoSuscripcion.setText("No suscrito");
+                suscripcion = false;
+            }
+        }
     }//GEN-LAST:event_botonEliminarSuscripcionActionPerformed
 
     private void botonEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarPerfilActionPerformed
         // TODO add your handling code here:
-        EditarDatos editar = new EditarDatos();
+        EditarDatosCliente editar = new EditarDatosCliente(loginActual,this);
         editar.setVisible(true);
     }//GEN-LAST:event_botonEditarPerfilActionPerformed
 
+    public void obtenerObjetosRemotos(){
+        String direccion = conexion.DireccionIP;
+        int puerto = conexion.NumeroPuerto;
+
+        ClienteDeObjetos objc = new ClienteDeObjetos();
+        String[] datos = new String[4];
+        datos[0] = "-ORBInitialHost";
+        datos[1] = conexion.DireccionIP;
+        datos[2] = "-ORBInitialPort";
+        datos[3] = Integer.toString(conexion.NumeroPuerto);
+
+        if(objc.iniciarORB(datos)){
+            /*Comprobamos los datos*/
+            autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
+            gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
+            admin = (Interfaz_Administrador) objc.ObtenerServant("ServantAdmin");
+        }else{
+            System.out.println("Error. No fue posible iniciar el ORB.....");
+        }
+    }
+    
+    public void actualizarInformacion(String login){
+        Usuario u = gestion.consultarUsuario(login);
+        this.loginActual = u.getLoginUsuario();
+        this.usuarioIniciado.setText(loginActual);
+    }
     /**
      * @param args the command line arguments
      */
@@ -470,7 +416,7 @@ public class DashboardCliente extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DashboardCliente().setVisible(true);
+                new DashboardCliente("Usuario").setVisible(true);
             }
         });
     }
@@ -478,37 +424,26 @@ public class DashboardCliente extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BarraPrograma;
     private javax.swing.JPanel ContenedorDatosSesion;
-    private javax.swing.JButton botonAceptar;
     private javax.swing.JLabel botonCerrar;
-    private javax.swing.JButton botonDesactivar;
-    private javax.swing.JButton botonEditar;
+    private javax.swing.JLabel botonCerrarSesion;
     private javax.swing.JButton botonEditarPerfil;
     private javax.swing.JButton botonEliminarSuscripcion;
     private javax.swing.JButton botonSuscribirme;
-    private javax.swing.JLabel campoApellidos;
-    private javax.swing.JLabel campoLogin;
-    private javax.swing.JLabel campoNombre;
     private javax.swing.JPanel contenedorBienvenida;
     private javax.swing.JPanel contenedorGeneral;
-    private javax.swing.JPanel contenedorInfoUsuario;
+    private javax.swing.JPanel contenedorOpciones;
     private javax.swing.JPanel contenedorReproductor;
-    private javax.swing.JPanel contenedorUsuariosRegistrados;
     private javax.swing.JLabel estadoSuscripcion;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel nombreCancion;
     private javax.swing.JTextArea textoBienvenida;
     private javax.swing.JLabel usuarioIniciado;
     // End of variables declaration//GEN-END:variables

@@ -1,27 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cliente;
 
+import java.awt.Panel;
+import java.io.File;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import servidor.usuarioCallbackImpl;
+import sop_corba.Interfaz_Administrador;
+import sop_corba.Interfaz_Gestion;
+import sop_corba.Usuario;
+import sop_corba.autenticacionUsuario;
 
 /**
- *
  * @author Santiago Garcia Ch
  */
+
 public class Dashboard extends javax.swing.JFrame {
 
-    
+    private autenticacionUsuario autenticacion;
+    private Interfaz_Gestion gestion;
+    private Interfaz_Administrador admin;
+    private String loginActual;
+    private String rutaCancion;
+    private String loginSeleccionado;
+    private usuarioCallbackImpl usuario;
     /**
      * Creates new form Dashboard
      */
-    public Dashboard() {
+    public Dashboard(String login) {
         initComponents();
         contenedorInfoUsuario.setVisible(false);
         this.setLocationRelativeTo(this);
+        obtenerObjetosRemotos();
+        loginActual = login;
+        usuarioIniciado.setText(login);
+        actualizarListaRegistrados();
+        
     }
 
     /**
@@ -44,7 +60,7 @@ public class Dashboard extends javax.swing.JFrame {
         contenedorUsuariosConectados = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        listaRegistrados1 = new javax.swing.JList<>();
+        listaConectados = new javax.swing.JList<>();
         contenedorUsuariosRegistrados = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -66,9 +82,11 @@ public class Dashboard extends javax.swing.JFrame {
         campoNombre = new javax.swing.JLabel();
         campoApellidos = new javax.swing.JLabel();
         campoLogin = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        campoEstado = new javax.swing.JLabel();
         contenedorReproductor = new javax.swing.JPanel();
         botonSelecionarCancion = new java.awt.Button();
-        jLabel3 = new javax.swing.JLabel();
+        nombreCancion = new javax.swing.JLabel();
         botonReproducir = new javax.swing.JLabel();
         botonPausa = new javax.swing.JLabel();
 
@@ -132,17 +150,12 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabel11.setText("Usuarios conectados");
 
-        listaRegistrados1.setModel(new javax.swing.AbstractListModel<String>() {
+        listaConectados.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        listaRegistrados1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                listaRegistrados1MouseClicked(evt);
-            }
-        });
-        jScrollPane4.setViewportView(listaRegistrados1);
+        jScrollPane4.setViewportView(listaConectados);
 
         javax.swing.GroupLayout contenedorUsuariosConectadosLayout = new javax.swing.GroupLayout(contenedorUsuariosConectados);
         contenedorUsuariosConectados.setLayout(contenedorUsuariosConectadosLayout);
@@ -281,10 +294,10 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel2.setText("Nombres:");
 
         jLabel9.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jLabel9.setText("Apellidos");
+        jLabel9.setText("Apellidos:");
 
         jLabel10.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
-        jLabel10.setText("Login");
+        jLabel10.setText("Login:");
 
         botonEditar.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         botonEditar.setText("Editar");
@@ -310,14 +323,13 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
+        jLabel12.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        jLabel12.setText("Estado:");
+
         javax.swing.GroupLayout contenedorInfoUsuarioLayout = new javax.swing.GroupLayout(contenedorInfoUsuario);
         contenedorInfoUsuario.setLayout(contenedorInfoUsuarioLayout);
         contenedorInfoUsuarioLayout.setHorizontalGroup(
             contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorInfoUsuarioLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addGap(110, 110, 110))
             .addGroup(contenedorInfoUsuarioLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,12 +344,16 @@ public class Dashboard extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
-                        .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(campoNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(campoApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(campoLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))))
+                        .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(campoNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(campoApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(campoLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
+                            .addComponent(campoEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         contenedorInfoUsuarioLayout.setVerticalGroup(
@@ -357,12 +373,16 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(campoLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
+                .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel12)
+                    .addComponent(campoEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(contenedorInfoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonEditar)
                     .addComponent(botonDesactivar)
                     .addComponent(botonAceptar))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addGap(26, 26, 26))
         );
 
         contenedorGeneral.add(contenedorInfoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 58, 320, 300));
@@ -384,11 +404,16 @@ public class Dashboard extends javax.swing.JFrame {
         });
         contenedorReproductor.add(botonSelecionarCancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 20, -1, 32));
 
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Nombre cancion");
-        contenedorReproductor.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(224, 20, 244, 32));
+        nombreCancion.setForeground(new java.awt.Color(255, 255, 255));
+        nombreCancion.setText("Nombre cancion");
+        contenedorReproductor.add(nombreCancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(224, 20, 244, 32));
 
         botonReproducir.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Imagenes\\iconos PNG\\boton-de-reproduccion.png")); // NOI18N
+        botonReproducir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonReproducirMouseClicked(evt);
+            }
+        });
         contenedorReproductor.add(botonReproducir, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 20, -1, -1));
 
         botonPausa.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Imagenes\\iconos PNG\\pausa.png")); // NOI18N
@@ -401,10 +426,14 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void botonCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonCerrarMouseClicked
         if(JOptionPane.showConfirmDialog(null, "Esta seguro que desea salir?", "Salir", JOptionPane.YES_NO_OPTION) == 0){
-            System.out.println("Has salido. Sesion cerrada");
-            this.setVisible(false);
-            InicioSesion inicio = new InicioSesion();
-            inicio.setVisible(true);
+            if(autenticacion.salir(loginActual)){
+                System.out.println("Has salido. Sesion cerrada");
+                this.setVisible(false);
+                InicioSesion inicio = new InicioSesion();
+                inicio.setVisible(true);
+            }else{
+                System.out.println("Error al cerrar sesion");
+            }
         }else{
             System.out.println("Cancelado cierre de sesion");
         }
@@ -413,7 +442,15 @@ public class Dashboard extends javax.swing.JFrame {
     private void botonSelecionarCancionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonSelecionarCancionMouseClicked
         // TODO add your handling code here:
         JFileChooser explorador = new JFileChooser();
+        explorador.setDialogTitle("Buscar cancion");
+        /*Agregamos el filtro*/
+        explorador.setFileFilter(new FileNameExtensionFilter("Mp3","mp3"));
         explorador.showOpenDialog(null);
+        File archivo = explorador.getSelectedFile();
+        rutaCancion = archivo.getPath();
+        /*actualizamos el nombre*/
+        this.nombreCancion.setText(archivo.getName());
+        System.out.println("Ruta seleccionada "+rutaCancion);
     }//GEN-LAST:event_botonSelecionarCancionMouseClicked
 
     private void listaRegistradosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaRegistradosMouseClicked
@@ -421,32 +458,41 @@ public class Dashboard extends javax.swing.JFrame {
         if(listaRegistrados.isSelectionEmpty()){
             System.out.println("");
         }else{
+            /*Obtenemos el login seleccionado y buscamos los datos para 
+             mostrarlos en el panel de la derecha*/
+            loginSeleccionado = listaRegistrados.getSelectedValue();
+            System.out.println("Login seleccionado: "+loginSeleccionado);
             System.out.println("Se ha seleccionado un usuario registrados");
+            Usuario usuario = gestion.consultarUsuario(loginSeleccionado);
             contenedorBienvenida.setVisible(false);
             contenedorInfoUsuario.setVisible(true);
+            actualizarPanelInfoUsuario(usuario);
         }
     }//GEN-LAST:event_listaRegistradosMouseClicked
 
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
         // TODO add your handling code here:
+        limpiarPanelInfoUsuario();
         contenedorInfoUsuario.setVisible(false);
         contenedorBienvenida.setVisible(true);
     }//GEN-LAST:event_botonAceptarActionPerformed
 
-    private void listaRegistrados1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaRegistrados1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_listaRegistrados1MouseClicked
-
     private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed
         // TODO add your handling code here:
-        EditarDatos editar = new EditarDatos();
+        EditarDatos editar = new EditarDatos(loginSeleccionado,this);
         editar.setVisible(true);
     }//GEN-LAST:event_botonEditarActionPerformed
 
     private void botonDesactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDesactivarActionPerformed
         // TODO add your handling code here:
         if(JOptionPane.showConfirmDialog(null, "Esta seguro que desea desactivar este usuario?", "Confirmar desactivacion", JOptionPane.YES_NO_OPTION) == 0){
-            System.out.println("Ha confirmado la desactivacion del usuario");
+            if(gestion.eliminarUsuario(loginSeleccionado)){
+                System.out.println("El usuario ha sido desactivado");
+                Usuario u = gestion.consultarUsuario(loginSeleccionado);
+                actualizarPanelInfoUsuario(u);
+            }else{
+                System.out.println("El usuario no se ha desactivado");
+            }
         }else{
             System.out.println("Ha cancelado la desactivacion del usuairo");
         }
@@ -455,7 +501,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        CrearUsuario crear = new CrearUsuario();
+        CrearUsuario crear = new CrearUsuario(this);
         crear.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -474,6 +520,73 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLabel4MouseClicked
 
+    private void botonReproducirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonReproducirMouseClicked
+        /*Reproducir cancion*/
+        admin.seleccionarAudio(rutaCancion);
+        admin.EjecutarAudio();
+    }//GEN-LAST:event_botonReproducirMouseClicked
+
+    public void obtenerObjetosRemotos(){
+        String direccion = conexion.DireccionIP;
+        int puerto = conexion.NumeroPuerto;
+
+        ClienteDeObjetos objc = new ClienteDeObjetos();
+        String[] datos = new String[4];
+        datos[0] = "-ORBInitialHost";
+        datos[1] = conexion.DireccionIP;
+        datos[2] = "-ORBInitialPort";
+        datos[3] = Integer.toString(conexion.NumeroPuerto);
+
+        if(objc.iniciarORB(datos)){
+            /*Comprobamos los datos*/
+            autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
+            gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
+            admin = (Interfaz_Administrador) objc.ObtenerServant("ServantAdmin");
+        }else{
+            System.out.println("Error. No fue posible iniciar el ORB.....");
+        }
+    }
+    
+    public void actualizarListaRegistrados(){
+        System.out.println("Actualizando Registrados");
+        DefaultListModel modelo = new DefaultListModel();
+        Usuario[] usuarios = gestion.consultarUsuarios();
+        for(Usuario usuario: usuarios){
+            modelo.addElement(usuario.getLoginUsuario());
+        }
+        this.listaRegistrados.setModel(modelo);
+    }
+    
+    public void actualizarListaSuscritos(){
+        System.out.println("Actualizando suscritos");
+        DefaultListModel modelo = new DefaultListModel();
+        String[] usuarios = admin.obtenerSuscritos();
+        for(String usuario: usuarios){
+            modelo.addElement(usuario);
+        }
+        this.listaConectados.setModel(modelo);
+    }
+    
+    public void actualizarPanelInfoUsuario(Usuario u){
+        System.out.println("Actualizando datos del panel");
+        this.campoNombre.setText(u.getNombresUsuario());
+        this.campoApellidos.setText(u.getApellidosUsuario());
+        this.campoLogin.setText(u.getLoginUsuario());
+        System.out.println("Valor desactivado "+u.isDesactivado());
+        if(u.desactivado){
+            /*Esta desactivado, se muestra el campo estado como inactivo*/
+            this.campoEstado.setText("Inactivo");
+        }else{
+            /*Esta activado, se muestra el campo estado como activo*/
+            this.campoEstado.setText("Activo");
+        }
+    }
+    
+    public void limpiarPanelInfoUsuario(){
+        this.campoNombre.setText("");
+        this.campoApellidos.setText("");
+        this.campoLogin.setText("");
+    }
     /**
      * @param args the command line arguments
      */
@@ -504,7 +617,7 @@ public class Dashboard extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Dashboard().setVisible(true);
+                new Dashboard("Usuario").setVisible(true);
             }
         });
     }
@@ -520,6 +633,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel botonReproducir;
     private java.awt.Button botonSelecionarCancion;
     private javax.swing.JLabel campoApellidos;
+    private javax.swing.JLabel campoEstado;
     private javax.swing.JLabel campoLogin;
     private javax.swing.JLabel campoNombre;
     private javax.swing.JPanel contenedorBienvenida;
@@ -532,8 +646,8 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -544,8 +658,9 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JList<String> listaConectados;
     private javax.swing.JList<String> listaRegistrados;
-    private javax.swing.JList<String> listaRegistrados1;
+    private javax.swing.JLabel nombreCancion;
     private javax.swing.JTextArea textoBienvenida;
     private javax.swing.JLabel usuarioIniciado;
     // End of variables declaration//GEN-END:variables

@@ -3,14 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/cliente/ClienteDeObjetos.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/servidor/Test.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/cliente/HiloNuevoPaquete.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/servidor/FuncionesAdministradorImpl.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/servidor/Estacion.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/cliente/Conectar_ORB.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/servidor/usuarioCallbackImpl.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/cliente/ReproductorAudio.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/sop_corba/Usuario.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/cliente/ClienteDeObjetos.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/servidor/ServidorDeObjetos.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/cliente/Dashboard.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/LogicaNegocio/UsuarioDAO.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/servidor/GestionImpl.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/cliente/EditarDatos.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/cliente/InicioSesion.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/cliente/conexion.java</file>
         </group>
     </open-files>
 </project-private>

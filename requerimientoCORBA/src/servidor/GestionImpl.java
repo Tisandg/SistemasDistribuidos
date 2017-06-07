@@ -52,7 +52,7 @@ public class GestionImpl implements Interfaz_GestionOperations{
 
     @Override
     public boolean eliminarUsuario(String login) {
-        System.out.println("Servidor : Eliminar Usuario");
+        System.out.println("Servidor : Desactivar Usuario "+login);
         return objUsuariosDAO.eliminarUsuario(login);
     }
     
