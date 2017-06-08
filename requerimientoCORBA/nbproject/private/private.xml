@@ -3,14 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/cliente/InicioSesion.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/cliente/conexion.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/cliente/ClienteDeObjetos.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/servidor/FuncionesAdministradorImpl.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/servidor/Estacion.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/cliente/DashboardCliente.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/cliente/Dashboard.java</file>
-            <file>file:/C:/Users/HP/Documents/GitHub/SistemasDistribuidos/requerimientoCORBA/src/servidor/usuarioCallbackImpl.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/sop_corba/Interfaz_AdministradorPOA.java</file>
+            <file>file:/D:/Santiago/Laboratorio%20de%20Sistemas%20distribuidos/Repositorio%20Git%20Hub/SistemasDistribuidos/requerimientoCORBA/src/servidor/ServidorDeObjetos.java</file>
         </group>
     </open-files>
 </project-private>
