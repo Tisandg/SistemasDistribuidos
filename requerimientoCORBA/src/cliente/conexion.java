@@ -25,6 +25,7 @@ public class conexion extends javax.swing.JFrame {
         setLocationRelativeTo(this);
         DireccionIP = "";
         NumeroPuerto = 0;
+        this.campoMensaje.setVisible(false);
     }
     
 
@@ -50,12 +51,13 @@ public class conexion extends javax.swing.JFrame {
         botonConectar = new java.awt.Button();
         botonCerrar = new javax.swing.JLabel();
         campoDireccion = new javax.swing.JTextField();
+        campoMensaje = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelTransparente.setBackground(new java.awt.Color(0, 0, 0));
+        panelTransparente.setBackground(new java.awt.Color(32, 33, 35));
         panelTransparente.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel4.setBackground(new java.awt.Color(0, 102, 255));
@@ -67,12 +69,12 @@ public class conexion extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(204, 204, 204));
         jLabel5.setText("Creado por");
-        panelTransparente.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 320, -1, -1));
+        panelTransparente.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(204, 204, 204));
         jLabel6.setText("Santiago Garcia y Kevin Chantre");
-        panelTransparente.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, -1, -1));
+        panelTransparente.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(204, 204, 204));
@@ -105,7 +107,7 @@ public class conexion extends javax.swing.JFrame {
                 botonConectarActionPerformed(evt);
             }
         });
-        panelTransparente.add(botonConectar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 280, 142, -1));
+        panelTransparente.add(botonConectar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 300, 142, -1));
 
         botonCerrar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         botonCerrar.setForeground(new java.awt.Color(57, 113, 177));
@@ -123,7 +125,11 @@ public class conexion extends javax.swing.JFrame {
         campoDireccion.setBorder(null);
         panelTransparente.add(campoDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 230, -1));
 
-        getContentPane().add(panelTransparente, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 370, 380));
+        campoMensaje.setBackground(new java.awt.Color(32, 33, 35));
+        campoMensaje.setForeground(new java.awt.Color(255, 0, 0));
+        panelTransparente.add(campoMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 310, 20));
+
+        getContentPane().add(panelTransparente, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 370, 400));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -133,26 +139,38 @@ public class conexion extends javax.swing.JFrame {
     }//GEN-LAST:event_botonCerrarMouseClicked
 
     private void botonConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConectarActionPerformed
+        boolean error = false;
         String direccion = campoDireccion.getText();
         String puerto = campoPuerto.getText();
         if(direccion.equals("") || puerto.equals("")){
             System.out.println("Campo Invalido....Verifique la informacion..");
+            this.campoMensaje.setText("Los campos no pueden estar vacios");
         }else{
             DireccionIP = direccion;
-            NumeroPuerto = Integer.parseInt(puerto);
-            ClienteDeObjetos objc = new ClienteDeObjetos();
-            String[] datos = new String[4];
-            datos[0] = "-ORBInitialHost";
-            datos[1] = DireccionIP;
-            datos[2] = "-ORBInitialPort";
-            datos[3] = Integer.toString(NumeroPuerto);
-            
-            if(objc.iniciarORB(datos)){
-                InicioSesion objInicio = new InicioSesion(objc);
-                objInicio.setVisible(true);
-                this.setVisible(false);
-            }else{
-                System.out.println("Error. No fue posible iniciar el ORB.....");
+            try{
+                NumeroPuerto = Integer.parseInt(puerto);
+            }catch(Exception e){
+                error = true;
+                System.out.println("Problemas en la conversion del puerto: "+e);
+                this.campoMensaje.setText("El puerto debe ser un numero");
+            }
+            if(!error){
+                ClienteDeObjetos objc = new ClienteDeObjetos();
+                String[] datos = new String[4];
+                datos[0] = "-ORBInitialHost";
+                datos[1] = DireccionIP;
+                datos[2] = "-ORBInitialPort";
+                datos[3] = Integer.toString(NumeroPuerto);
+
+                if(objc.iniciarORB(datos)){
+                    InicioSesion objInicio = new InicioSesion(objc);
+                    objInicio.setVisible(true);
+                    this.setVisible(false);
+                }else{
+                    this.campoMensaje.setVisible(true);
+                    this.campoMensaje.setText("Error conexion. Verifique los datos");
+                    System.out.println("Error. No fue posible iniciar el ORB.....");
+                }
             }
         } 
     }//GEN-LAST:event_botonConectarActionPerformed
@@ -206,6 +224,7 @@ public class conexion extends javax.swing.JFrame {
     private javax.swing.JLabel botonCerrar;
     private java.awt.Button botonConectar;
     private javax.swing.JTextField campoDireccion;
+    private javax.swing.JLabel campoMensaje;
     private javax.swing.JTextField campoPuerto;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

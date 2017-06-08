@@ -153,6 +153,13 @@ public class UsuarioDAO {
     /*Lo que hace es desactivar el usuario*/
     public boolean eliminarUsuario(String loginUsuario){
         System.out.println("Desactivando "+loginUsuario);
+        Usuario u = consultarUsuario(loginUsuario);
+        boolean desactivar;
+        if(u.isDesactivado()){
+            desactivar = false;
+        }else{
+            desactivar = true;
+        }
         ConexionBD conex= new ConexionBD();
         conex.conectar();
         int resultado=-1;
@@ -160,7 +167,6 @@ public class UsuarioDAO {
             PreparedStatement sentencia = null;
             String consulta = "UPDATE usuario SET desactivado=? WHERE loginUsuario=?";
             sentencia = conex.getConnection().prepareStatement(consulta); 
-            boolean desactivar = true;
             sentencia.setBoolean(1,desactivar);
             sentencia.setString(2,loginUsuario);
             resultado = sentencia.executeUpdate(); 

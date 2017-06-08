@@ -20,7 +20,9 @@ public class InicioSesion extends javax.swing.JFrame {
         initComponents();
         panelTransparente.setBackground(new Color(0,0,0,200));
         setLocationRelativeTo(this);
-        this.mensajeLoginClave.setVisible(false);
+        this.mensajeGeneral.setVisible(false);
+        this.mensajeLogin.setVisible(false);
+        this.mensajeClave.setVisible(true);
         this.objc = objc;
         obtenerObjetosRemotos();
     }
@@ -54,7 +56,9 @@ public class InicioSesion extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         botonCerrar = new javax.swing.JLabel();
         campoClave = new javax.swing.JPasswordField();
-        mensajeLoginClave = new javax.swing.JLabel();
+        mensajeGeneral = new javax.swing.JLabel();
+        mensajeLogin = new javax.swing.JLabel();
+        mensajeClave = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -133,14 +137,20 @@ public class InicioSesion extends javax.swing.JFrame {
         campoClave.setForeground(new java.awt.Color(255, 255, 255));
         campoClave.setBorder(null);
 
-        mensajeLoginClave.setForeground(new java.awt.Color(255, 0, 0));
-        mensajeLoginClave.setText("Login y Clave no coinciden.Vuelva a intentar");
+        mensajeGeneral.setForeground(new java.awt.Color(255, 0, 0));
+        mensajeGeneral.setText("Login y Clave no coinciden.Vuelva a intentar");
+
+        mensajeLogin.setForeground(new java.awt.Color(255, 0, 0));
+        mensajeLogin.setText("Login y Clave no coinciden.Vuelva a intentar");
+
+        mensajeClave.setForeground(new java.awt.Color(255, 0, 0));
+        mensajeClave.setText("Login y Clave no coinciden.Vuelva a intentar");
 
         javax.swing.GroupLayout panelDatosInicioLayout = new javax.swing.GroupLayout(panelDatosInicio);
         panelDatosInicio.setLayout(panelDatosInicioLayout);
         panelDatosInicioLayout.setHorizontalGroup(
             panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDatosInicioLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
                 .addContainerGap(62, Short.MAX_VALUE)
                 .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
@@ -148,22 +158,24 @@ public class InicioSesion extends javax.swing.JFrame {
                         .addGap(19, 19, 19))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
                         .addComponent(botonIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(89, 89, 89))
+                        .addGap(92, 92, 92))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
-                        .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(panelDatosInicioLayout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addComponent(jLabel8))
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(campoLogin)
-                            .addComponent(jSeparator1)
-                            .addComponent(jSeparator2)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                            .addComponent(campoClave)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
-                                .addComponent(mensajeLoginClave)
-                                .addGap(8, 8, 8)))
+                        .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(mensajeGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(mensajeLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(panelDatosInicioLayout.createSequentialGroup()
+                                        .addGap(58, 58, 58)
+                                        .addComponent(jLabel8))
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(campoLogin)
+                                    .addComponent(jSeparator1)
+                                    .addComponent(jSeparator2)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(campoClave))
+                                .addComponent(mensajeClave, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(38, 38, 38))))
         );
         panelDatosInicioLayout.setVerticalGroup(
@@ -171,21 +183,25 @@ public class InicioSesion extends javax.swing.JFrame {
             .addGroup(panelDatosInicioLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(botonCerrar)
-                .addGap(38, 38, 38)
+                .addGap(20, 20, 20)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(campoLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(4, 4, 4)
+                .addComponent(mensajeLogin)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mensajeClave)
                 .addGap(18, 18, 18)
-                .addComponent(mensajeLoginClave)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addComponent(mensajeGeneral)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(botonIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
@@ -196,7 +212,7 @@ public class InicioSesion extends javax.swing.JFrame {
 
         getContentPane().add(panelDatosInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, 330, 380));
 
-        fondo.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Imagenes\\Banco de imagenes\\yvette-de-wit-118719_Reducida.jpg")); // NOI18N
+        fondo.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Laboratorio de Sistemas distribuidos\\Repositorio Git Hub\\SistemasDistribuidos\\requerimientoCORBA\\resources\\yvette-de-wit-118719_Reducida.jpg")); // NOI18N
         getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(-260, 0, 650, 380));
 
         pack();
@@ -212,29 +228,20 @@ public class InicioSesion extends javax.swing.JFrame {
         char[] c = campoClave.getPassword();
         String clave = new String(c);
         if(login.equals("") || clave.equals("")){
-            this.mensajeLoginClave.setVisible(true);
-            this.mensajeLoginClave.setText("Los campos no pueden estar vacios");
+            this.mensajeGeneral.setVisible(true);
+            this.mensajeGeneral.setText("Los campos no pueden estar vacios");
         }else{
             if(autenticacion.ingresar(login, clave)){
-                this.mensajeLoginClave.setVisible(false);
+                this.mensajeGeneral.setVisible(false);
                 System.out.println("Usuario autenticado");
                 /*Verificamos si es administrador o usuario normal*/
                 Usuario usuario = gestion.consultarUsuario(login);
-                if(usuario.isPrivilegiosUsuario()){
-                    System.out.println("Es administrador");
-                    Dashboard tableroAdmin = new Dashboard(objc,login);
-                    tableroAdmin.setVisible(true);
-//                    usuarioCallbackImpl objCallback = new usuarioCallbackImpl(tableroAdmin);
-//                    administrador.suscribir_Usuario(this, login);
-                }else{
-                    System.out.println("Es usuario");
-                    DashboardCliente tableroCliente = new DashboardCliente(objc ,login);
-                    tableroCliente.setVisible(true);
-                }
+                Dashboard tableroAdmin = new Dashboard(objc,login,usuario.isPrivilegiosUsuario());
+                tableroAdmin.setVisible(true);
                 this.setVisible(false);
             }else{
-                this.mensajeLoginClave.setVisible(true);
-                this.mensajeLoginClave.setText("Usuario o clave no coinciden. Vuelva a intentar");
+                this.mensajeGeneral.setVisible(true);
+                this.mensajeGeneral.setText("Usuario o clave no coinciden. Vuelva a intentar");
                 System.out.println("Usuario no se ha autenticado");
             }
         }
@@ -247,7 +254,43 @@ public class InicioSesion extends javax.swing.JFrame {
             autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
             gestion = (Interfaz_Gestion) objc.ObtenerServant("ServantGest");
             administrador = (Interfaz_Administrador) objc.ObtenerServant("ServantAdmin");
+            System.out.println("Objetos remotos obtenidos");
        
+    }
+    
+    public boolean camposVacios(){
+        boolean respuesta = false;
+        if(this.campoLogin.getText().equals("")){
+            this.mensajeLogin.setVisible(true);
+            this.mensajeLogin.setText("Este campo es requerido");
+            respuesta = true;
+        }
+        char[] c = campoClave.getPassword();
+        String clave = new String(c);
+        if(clave.equals("")){
+            this.mensajeClave.setVisible(true);
+            this.mensajeClave.setText("Este campo es requerido");
+            respuesta = true;
+        }
+        return respuesta;
+    }
+    
+    // < >
+    public boolean camposValidos(){
+        boolean respuesta = true;
+        if(campoLogin.getText().length()<8 || campoLogin.getText().length() > 15){
+            respuesta = false;
+            this.mensajeLogin.setVisible(true);
+            this.mensajeLogin.setText("Clave debe ser mayor a 7 y menor a 16 caracteres");
+        }
+        char[] c = campoClave.getPassword();
+        String clave = new String(c);
+        if(clave.length()<8 || clave.length() > 15){
+            respuesta = false;
+            this.mensajeClave.setVisible(true);
+            this.mensajeClave.setText("Clave debe ser mayor a 7 y menor a 16 caracteres");
+        }
+        return respuesta;
     }
     /**
      * @param args the command line arguments
@@ -300,7 +343,9 @@ public class InicioSesion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JLabel mensajeLoginClave;
+    private javax.swing.JLabel mensajeClave;
+    private javax.swing.JLabel mensajeGeneral;
+    private javax.swing.JLabel mensajeLogin;
     private javax.swing.JPanel panelDatosInicio;
     private javax.swing.JPanel panelTransparente;
     // End of variables declaration//GEN-END:variables

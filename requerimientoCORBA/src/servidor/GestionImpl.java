@@ -35,7 +35,9 @@ public class GestionImpl implements Interfaz_GestionOperations{
     @Override
     public Usuario consultarUsuario(String login) {
         System.out.println("Servidor Gestion : Consultar Usuario");
-        return objUsuariosDAO.consultarUsuario(login);
+        Usuario usuario = objUsuariosDAO.consultarUsuario(login);
+        System.out.println("Valor en gestion desactivado: "+usuario.desactivado);
+        return usuario;
     }
 
     @Override

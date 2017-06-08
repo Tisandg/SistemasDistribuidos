@@ -260,6 +260,7 @@ public class EditarDatos extends javax.swing.JFrame {
             System.out.println("Se han actualizado correctamente los datos");
             tablero.actualizarListaRegistrados();
             Usuario u = gestion.consultarUsuario(usuario.getLoginUsuario());
+            System.out.println("Valor en editarDatos: "+u.desactivado);
             tablero.actualizarPanelInfoUsuario(u);
             setVisible(false);
         }else{
