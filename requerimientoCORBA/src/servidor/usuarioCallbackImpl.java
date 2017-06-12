@@ -1,7 +1,7 @@
 
 package servidor;
 
-import cliente.DashboardCliente;
+import cliente.Dashboard;
 import sop_corba.*;
 /**
  *
@@ -9,11 +9,11 @@ import sop_corba.*;
  */
 public class usuarioCallbackImpl implements usuarioCallbackIntOperations{
 
-    DashboardCliente GUI;
+    Dashboard GUI;
     
     public usuarioCallbackImpl(){}
     
-    public usuarioCallbackImpl(DashboardCliente Gui){
+    public usuarioCallbackImpl(Dashboard Gui){
         this.GUI = Gui;
     }
     

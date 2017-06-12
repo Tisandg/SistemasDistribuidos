@@ -29,6 +29,7 @@ public class Dashboard extends javax.swing.JFrame {
     private usuarioCallbackImpl usuario;
     private boolean suscripcion;
     private ClienteDeObjetos objc;
+    public boolean isAdmin;
     /**
      * Creates new form Dashboard
      */
@@ -40,9 +41,10 @@ public class Dashboard extends javax.swing.JFrame {
         obtenerObjetosRemotos();
         loginActual = login;
         usuarioIniciado.setText(login);
-        actualizarListaRegistrados();
-        actualizarListaSuscritos();
+        this.isAdmin = esAdmin;
         if(esAdmin){
+            actualizarListaRegistrados();
+            actualizarListaSuscritos();
             dashboardAdmin();
         }else{
             dashboardCliente();
@@ -133,7 +135,7 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         textoBienvenida1 = new javax.swing.JTextArea();
-        botonEditarPerfil = new javax.swing.JButton();
+        botonEditarPerfilUsuario = new javax.swing.JButton();
         contenedorReproductor = new javax.swing.JPanel();
         botonSelecionarCancion = new java.awt.Button();
         nombreCancion = new javax.swing.JLabel();
@@ -175,7 +177,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         usuarioIniciado.setFont(new java.awt.Font("Segoe UI Semibold", 0, 11)); // NOI18N
         usuarioIniciado.setForeground(new java.awt.Color(255, 255, 255));
-        usuarioIniciado.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Laboratorio de Sistemas distribuidos\\Repositorio Git Hub\\SistemasDistribuidos\\requerimientoCORBA\\resources\\usuario.png")); // NOI18N
+        usuarioIniciado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
         usuarioIniciado.setText("Usuario");
         usuarioIniciado.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -546,10 +548,10 @@ public class Dashboard extends javax.swing.JFrame {
         textoBienvenida1.setBorder(null);
         jScrollPane5.setViewportView(textoBienvenida1);
 
-        botonEditarPerfil.setText("Editar mi perfil");
-        botonEditarPerfil.addActionListener(new java.awt.event.ActionListener() {
+        botonEditarPerfilUsuario.setText("Editar mi perfil");
+        botonEditarPerfilUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEditarPerfilActionPerformed(evt);
+                botonEditarPerfilUsuarioActionPerformed(evt);
             }
         });
 
@@ -568,7 +570,7 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(contenedorBienvenidaClienteLayout.createSequentialGroup()
                         .addGap(107, 107, 107)
-                        .addComponent(botonEditarPerfil)))
+                        .addComponent(botonEditarPerfilUsuario)))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         contenedorBienvenidaClienteLayout.setVerticalGroup(
@@ -579,7 +581,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(botonEditarPerfil)
+                .addComponent(botonEditarPerfilUsuario)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -606,7 +608,7 @@ public class Dashboard extends javax.swing.JFrame {
         nombreCancion.setText("Nombre cancion");
         contenedorReproductor.add(nombreCancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(224, 20, 244, 32));
 
-        botonReproducir.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Laboratorio de Sistemas distribuidos\\Repositorio Git Hub\\SistemasDistribuidos\\requerimientoCORBA\\resources\\boton-de-reproduccion.png")); // NOI18N
+        botonReproducir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/boton-de-reproduccion.png"))); // NOI18N
         botonReproducir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonReproducirMouseClicked(evt);
@@ -614,7 +616,7 @@ public class Dashboard extends javax.swing.JFrame {
         });
         contenedorReproductor.add(botonReproducir, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, -1, -1));
 
-        botonPausa.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Laboratorio de Sistemas distribuidos\\Repositorio Git Hub\\SistemasDistribuidos\\requerimientoCORBA\\resources\\pausa.png")); // NOI18N
+        botonPausa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pausa.png"))); // NOI18N
         contenedorReproductor.add(botonPausa, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, -1, -1));
 
         getContentPane().add(contenedorReproductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 470, 760, 70));
@@ -692,29 +694,42 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed
         // TODO add your handling code here:
-        EditarDatos editar = new EditarDatos(loginSeleccionado,this);
+        InterfazDatosUsuario editar = new InterfazDatosUsuario(objc ,this,false,loginSeleccionado);
         editar.setVisible(true);
     }//GEN-LAST:event_botonEditarActionPerformed
 
     private void botonDesactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDesactivarActionPerformed
-        // TODO add your handling code here:
-        if(JOptionPane.showConfirmDialog(null, "Esta seguro que desea desactivar este usuario?", "Confirmar desactivacion", JOptionPane.YES_NO_OPTION) == 0){
+        /*Consultamos el estado del usuario para saber si esta activo o no*/
+        Usuario usuario = gestion.consultarUsuario(loginSeleccionado);
+        String mensagePregunta, mensageConfirmacion, mensageError;
+        if(usuario.desactivado){
+            mensagePregunta= "Esta seguro que desea activar este usuario?";
+            mensageConfirmacion = "El usuario ha sido activado";
+            mensageError = "El usuario no ha sido activado";
+        }else{
+            mensagePregunta = "Esta seguro que desea desactivar este usuario?";
+            mensageConfirmacion = "El usuario ha sido desactivado";
+            mensageError = "El usuario no ha sido desactivado";
+        }
+        if(JOptionPane.showConfirmDialog(null, mensagePregunta, "Confirmar accion", JOptionPane.YES_NO_OPTION) == 0){
             if(gestion.eliminarUsuario(loginSeleccionado)){
-                System.out.println("El usuario ha sido desactivado");
+                JOptionPane.showMessageDialog(null,mensageConfirmacion );
+                System.out.println(mensageConfirmacion);
                 Usuario u = gestion.consultarUsuario(loginSeleccionado);
                 actualizarPanelInfoUsuario(u);
             }else{
-                System.out.println("El usuario no se ha desactivado");
+                System.out.println(mensageError);
+                JOptionPane.showMessageDialog(null,mensageError );
             }
         }else{
-            System.out.println("Ha cancelado la desactivacion del usuairo");
+            System.out.println("Ha cancelado la accion");
         }
 
     }//GEN-LAST:event_botonDesactivarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        CrearUsuario crear = new CrearUsuario(objc ,this);
+        InterfazDatosUsuario crear = new InterfazDatosUsuario(objc ,this,true,"");
         crear.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -764,11 +779,11 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonEliminarSuscripcionActionPerformed
 
-    private void botonEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarPerfilActionPerformed
+    private void botonEditarPerfilUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarPerfilUsuarioActionPerformed
         // TODO add your handling code here:
-        EditarDatos editar = new EditarDatos(loginActual,this);
+        InterfazDatosUsuario editar = new InterfazDatosUsuario(objc ,this,false,loginActual);
         editar.setVisible(true);
-    }//GEN-LAST:event_botonEditarPerfilActionPerformed
+    }//GEN-LAST:event_botonEditarPerfilUsuarioActionPerformed
 
     public void obtenerObjetosRemotos(){      
         autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
@@ -810,7 +825,6 @@ public class Dashboard extends javax.swing.JFrame {
         this.campoNombre.setText(u.getNombresUsuario());
         this.campoApellidos.setText(u.getApellidosUsuario());
         this.campoLogin.setText(u.getLoginUsuario());
-        System.out.println("Valor desactivado en dashboard "+u.desactivado);
         if(u.desactivado){
             /*Esta desactivado, se muestra el campo estado como inactivo*/
             this.campoEstado.setText("Inactivo");
@@ -827,6 +841,11 @@ public class Dashboard extends javax.swing.JFrame {
         this.campoApellidos.setText("");
         this.campoLogin.setText("");
     }
+    
+    public void actualizarLogin(String login){
+        this.usuarioIniciado.setText(login);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -870,7 +889,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel botonCerrarSesion;
     private javax.swing.JButton botonDesactivar;
     private javax.swing.JButton botonEditar;
-    private javax.swing.JButton botonEditarPerfil;
+    private javax.swing.JButton botonEditarPerfilUsuario;
     private javax.swing.JButton botonEliminarSuscripcion;
     private javax.swing.JLabel botonPausa;
     private javax.swing.JLabel botonReproducir;

@@ -152,6 +152,7 @@ public class conexion extends javax.swing.JFrame {
             }catch(Exception e){
                 error = true;
                 System.out.println("Problemas en la conversion del puerto: "+e);
+                this.campoMensaje.setVisible(true);
                 this.campoMensaje.setText("El puerto debe ser un numero");
             }
             if(!error){

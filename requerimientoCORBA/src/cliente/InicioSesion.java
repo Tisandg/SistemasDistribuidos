@@ -22,7 +22,7 @@ public class InicioSesion extends javax.swing.JFrame {
         setLocationRelativeTo(this);
         this.mensajeGeneral.setVisible(false);
         this.mensajeLogin.setVisible(false);
-        this.mensajeClave.setVisible(true);
+        this.mensajeClave.setVisible(false);
         this.objc = objc;
         obtenerObjetosRemotos();
     }
@@ -92,18 +92,24 @@ public class InicioSesion extends javax.swing.JFrame {
         getContentPane().add(panelTransparente, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 370, 380));
 
         panelDatosInicio.setBackground(new java.awt.Color(32, 33, 35));
+        panelDatosInicio.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(57, 113, 177));
         jLabel2.setText("Login");
+        panelDatosInicio.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 62, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(57, 113, 177));
-        jLabel3.setText("Contraseña");
+        jLabel3.setText("Clave");
+        panelDatosInicio.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 150, -1, -1));
 
         campoLogin.setBackground(new java.awt.Color(32, 33, 35));
         campoLogin.setForeground(new java.awt.Color(255, 255, 255));
         campoLogin.setBorder(null);
+        panelDatosInicio.add(campoLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 91, 230, -1));
+        panelDatosInicio.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 111, 230, 10));
+        panelDatosInicio.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 196, 230, 10));
 
         botonIniciarSesion.setBackground(new java.awt.Color(126, 87, 194));
         botonIniciarSesion.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
@@ -114,14 +120,17 @@ public class InicioSesion extends javax.swing.JFrame {
                 botonIniciarSesionActionPerformed(evt);
             }
         });
+        panelDatosInicio.add(botonIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 268, 142, -1));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(204, 204, 204));
         jLabel8.setText("No tienes cuenta?");
+        panelDatosInicio.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 314, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(204, 204, 204));
         jLabel9.setText("Contacta al administrador para registrarte");
+        panelDatosInicio.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 336, 230, -1));
 
         botonCerrar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         botonCerrar.setForeground(new java.awt.Color(57, 113, 177));
@@ -132,87 +141,28 @@ public class InicioSesion extends javax.swing.JFrame {
                 botonCerrarMouseClicked(evt);
             }
         });
+        panelDatosInicio.add(botonCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(286, 11, -1, -1));
 
         campoClave.setBackground(new java.awt.Color(32, 33, 35));
         campoClave.setForeground(new java.awt.Color(255, 255, 255));
         campoClave.setBorder(null);
+        panelDatosInicio.add(campoClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 176, 230, -1));
 
         mensajeGeneral.setForeground(new java.awt.Color(255, 0, 0));
         mensajeGeneral.setText("Login y Clave no coinciden.Vuelva a intentar");
+        panelDatosInicio.add(mensajeGeneral, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 260, -1));
 
         mensajeLogin.setForeground(new java.awt.Color(255, 0, 0));
-        mensajeLogin.setText("Login y Clave no coinciden.Vuelva a intentar");
+        mensajeLogin.setText("Campo requerido");
+        panelDatosInicio.add(mensajeLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 125, 258, -1));
 
         mensajeClave.setForeground(new java.awt.Color(255, 0, 0));
-        mensajeClave.setText("Login y Clave no coinciden.Vuelva a intentar");
-
-        javax.swing.GroupLayout panelDatosInicioLayout = new javax.swing.GroupLayout(panelDatosInicio);
-        panelDatosInicio.setLayout(panelDatosInicioLayout);
-        panelDatosInicioLayout.setHorizontalGroup(
-            panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
-                .addContainerGap(62, Short.MAX_VALUE)
-                .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
-                        .addComponent(botonCerrar)
-                        .addGap(19, 19, 19))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
-                        .addComponent(botonIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(92, 92, 92))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatosInicioLayout.createSequentialGroup()
-                        .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(mensajeGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(mensajeLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(panelDatosInicioLayout.createSequentialGroup()
-                                        .addGap(58, 58, 58)
-                                        .addComponent(jLabel8))
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2)
-                                    .addComponent(campoLogin)
-                                    .addComponent(jSeparator1)
-                                    .addComponent(jSeparator2)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                                    .addComponent(campoClave))
-                                .addComponent(mensajeClave, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(38, 38, 38))))
-        );
-        panelDatosInicioLayout.setVerticalGroup(
-            panelDatosInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDatosInicioLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(botonCerrar)
-                .addGap(20, 20, 20)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(campoLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(mensajeLogin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(campoClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mensajeClave)
-                .addGap(18, 18, 18)
-                .addComponent(mensajeGeneral)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(botonIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addGap(29, 29, 29))
-        );
+        mensajeClave.setText("Campo requerido");
+        panelDatosInicio.add(mensajeClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 212, 249, -1));
 
         getContentPane().add(panelDatosInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, 330, 380));
 
-        fondo.setIcon(new javax.swing.ImageIcon("D:\\Santiago\\Laboratorio de Sistemas distribuidos\\Repositorio Git Hub\\SistemasDistribuidos\\requerimientoCORBA\\resources\\yvette-de-wit-118719_Reducida.jpg")); // NOI18N
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/yvette-de-wit-118719_Reducida.jpg"))); // NOI18N
         getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(-260, 0, 650, 380));
 
         pack();
@@ -227,27 +177,32 @@ public class InicioSesion extends javax.swing.JFrame {
         String login = campoLogin.getText();
         char[] c = campoClave.getPassword();
         String clave = new String(c);
-        if(login.equals("") || clave.equals("")){
-            this.mensajeGeneral.setVisible(true);
-            this.mensajeGeneral.setText("Los campos no pueden estar vacios");
-        }else{
-            if(autenticacion.ingresar(login, clave)){
-                this.mensajeGeneral.setVisible(false);
-                System.out.println("Usuario autenticado");
-                /*Verificamos si es administrador o usuario normal*/
-                Usuario usuario = gestion.consultarUsuario(login);
-                Dashboard tableroAdmin = new Dashboard(objc,login,usuario.isPrivilegiosUsuario());
-                tableroAdmin.setVisible(true);
-                this.setVisible(false);
-            }else{
-                this.mensajeGeneral.setVisible(true);
-                this.mensajeGeneral.setText("Usuario o clave no coinciden. Vuelva a intentar");
-                System.out.println("Usuario no se ha autenticado");
+        ocultarMensajes();
+        if(camposVacios() == false){
+            if(camposValidos()){
+                if(gestion.exiteUsuario(login)){
+                    if(autenticacion.ingresar(login, clave)){
+                        ocultarMensajes();
+                        System.out.println("Usuario autenticado");
+                        /*Verificamos si es administrador o usuario normal*/
+                        Usuario usuario = gestion.consultarUsuario(login);
+                        Dashboard tableroAdmin = new Dashboard(objc,login,usuario.isPrivilegiosUsuario());
+                        tableroAdmin.setVisible(true);
+                        this.setVisible(false);
+                    }else{
+                        ocultarMensajes();
+                        this.mensajeGeneral.setVisible(true);
+                        this.mensajeGeneral.setText("Usuario o clave no coinciden. Vuelva a intentar");
+                        System.out.println("Usuario no se ha autenticado");
+                    }
+                }else{
+                    ocultarMensajes();
+                    this.mensajeGeneral.setVisible(true);
+                    this.mensajeGeneral.setText("No existe un usuario con ese login");
+                }
             }
         }
-        
-        
-        
+  
     }//GEN-LAST:event_botonIniciarSesionActionPerformed
 
     public void obtenerObjetosRemotos(){       
@@ -281,16 +236,21 @@ public class InicioSesion extends javax.swing.JFrame {
         if(campoLogin.getText().length()<8 || campoLogin.getText().length() > 15){
             respuesta = false;
             this.mensajeLogin.setVisible(true);
-            this.mensajeLogin.setText("Clave debe ser mayor a 7 y menor a 16 caracteres");
+            this.mensajeLogin.setText("Minimo 8 y maximo 15 caracteres");
         }
         char[] c = campoClave.getPassword();
         String clave = new String(c);
         if(clave.length()<8 || clave.length() > 15){
             respuesta = false;
             this.mensajeClave.setVisible(true);
-            this.mensajeClave.setText("Clave debe ser mayor a 7 y menor a 16 caracteres");
+            this.mensajeClave.setText("Minimo 8 y maximo 15 caracteres");
         }
         return respuesta;
+    }
+    public void ocultarMensajes(){
+        this.mensajeClave.setVisible(false);
+        this.mensajeLogin.setVisible(false);
+        this.mensajeGeneral.setVisible(false);
     }
     /**
      * @param args the command line arguments
