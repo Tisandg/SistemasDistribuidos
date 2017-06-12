@@ -398,6 +398,22 @@ public class InterfazDatosUsuario extends javax.swing.JFrame {
             public void run() {
                 new CrearUsuario().setVisible(true);
             }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CrearUsuario().setVisible(true);
+            }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CrearUsuario().setVisible(true);
+            }
         });*/
     }
 

@@ -2,6 +2,8 @@
 package servidor;
 
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,21 +23,25 @@ public class Estacion extends Thread{
     
     public void run(){
         int i = 0;
-        if(FuncionesAdministradorImpl.usuarios_Suscritos.isEmpty()){
-            System.out.println("Lista de Usuarios Suscritos vacia....");
-        }else{
-            System.out.println("Usuarios Suscritos : "+FuncionesAdministradorImpl.usuarios_Suscritos.size());
-        }
+        FuncionesAdministradorImpl.Reproduciendo = true;
         while(cola.size() > 0){
+            i = 1;
             while(FuncionesAdministradorImpl.usuarios_Suscritos.size() > i){               
-                objFuncionesAdministrador.enviarAudio(FuncionesAdministradorImpl.usuarios_Suscritos.get(i).getLoginUsuario(), cola.getFirst());
+                if(FuncionesAdministradorImpl.usuarios_Suscritos.get(i).isAceptaEscuchar()){
+                    objFuncionesAdministrador.enviarAudio(FuncionesAdministradorImpl.usuarios_Suscritos.get(i).getLoginUsuario(), cola.getFirst());
+                }
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Estacion.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 i++;
             }
             cola.removeFirst();
         }
+        FuncionesAdministradorImpl.Reproduciendo = false;
         System.out.println("Termina");
         this.stop();
-        System.out.println("Destruido");
     }
     
     public void Dividir_Cancion(){
@@ -47,5 +53,6 @@ public class Estacion extends Thread{
             cola.add(nuevo);
             pos = pos + 158000;
         }
+        System.out.println("Numero de paquetes ha enviar = "+ cola.size());
     }
 }

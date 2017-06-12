@@ -199,7 +199,8 @@ public class ConcatInputStream extends InputStream {
    *
    * @throws IOException if an I/O error occurs.
    */
-  @Override public int read() throws IOException {
+  @Override 
+  public int read() throws IOException {
     if (closed) throw new IOException("InputStream closed");
     int r = -1;
     while (r == -1){
@@ -272,7 +273,8 @@ public class ConcatInputStream extends InputStream {
    * @throws NullPointerException - If b is null.
    * @throws IndexOutOfBoundsException - if length or offset are not possible.
    */
-  @Override public int read(byte[] b, int off, int len) throws IOException {
+  @Override 
+  public int read(byte[] b, int off, int len) throws IOException {
     if (off < 0 || len < 0 || off + len > b.length) throw new IllegalArgumentException();
     if (closed) throw new IOException("InputStream closed");
     int r = -1;
@@ -311,7 +313,8 @@ public class ConcatInputStream extends InputStream {
    *
    * @since ostermillerutils 1.04.00
    */
-  @Override public long skip(long n) throws IOException {
+  @Override 
+  public long skip(long n) throws IOException {
     if (closed) throw new IOException("InputStream closed");
     if (n <= 0) return 0;
     long s = -1;
@@ -354,7 +357,8 @@ public class ConcatInputStream extends InputStream {
    *
    * @since ostermillerutils 1.04.00
    */
-  @Override public int available() throws IOException {
+  @Override 
+  public int available() throws IOException {
     if (closed) throw new IOException("InputStream closed");
     InputStream in = getCurrentInputStream();
     if (in == null) return 0;
@@ -366,7 +370,8 @@ public class ConcatInputStream extends InputStream {
    *
    * @since ostermillerutils 1.04.00
    */
-  @Override public void close() throws IOException {
+  @Override 
+  public void close() throws IOException {
     if (closed) return;
     for (Object element: inputStreamQueue) {
       ((InputStream)element).close();
@@ -379,7 +384,8 @@ public class ConcatInputStream extends InputStream {
    *
    * @since ostermillerutils 1.04.00
    */
-  @Override public void mark(int readlimit){
+  @Override 
+  public void mark(int readlimit){
     // Mark not supported -- do nothing
   }
 
@@ -390,7 +396,8 @@ public class ConcatInputStream extends InputStream {
    *
    * @since ostermillerutils 1.04.00
    */
-  @Override public void reset() throws IOException {
+  @Override 
+  public void reset() throws IOException {
     throw new IOException("Reset not supported");
   }
 
@@ -401,7 +408,8 @@ public class ConcatInputStream extends InputStream {
    *
    * @since ostermillerutils 1.04.00
    */
-  @Override public boolean markSupported(){
+  @Override 
+  public boolean markSupported(){
     return false;
   }
 }

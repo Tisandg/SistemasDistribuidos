@@ -1,19 +1,15 @@
 package cliente;
 
-import java.awt.Panel;
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.InputStream;
+import java.util.LinkedList;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import servidor.usuarioCallbackImpl;
-import sop_corba.Interfaz_Administrador;
-import sop_corba.Interfaz_Gestion;
-import sop_corba.Usuario;
-import sop_corba.autenticacionUsuario;
-import sop_corba.usuarioCallbackInt;
-
+import sop_corba.*;
 /**
  * @author Santiago Garcia Ch
  */
@@ -29,6 +25,9 @@ public class Dashboard extends javax.swing.JFrame {
     private usuarioCallbackImpl usuario;
     private boolean suscripcion;
     private ClienteDeObjetos objc;
+    private DefaultListModel modeloLista;
+    public static LinkedList<InputStream> colaPaquetes;
+    public static boolean Reproduciendo;
     public boolean isAdmin;
     /**
      * Creates new form Dashboard
@@ -36,15 +35,18 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard(ClienteDeObjetos objc, String login, boolean esAdmin) {
         initComponents();
         contenedorInfoUsuario.setVisible(false);
-        this.setLocationRelativeTo(this);
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
         this.objc = objc;
         obtenerObjetosRemotos();
         loginActual = login;
         usuarioIniciado.setText(login);
+        modeloLista = new DefaultListModel();
+        colaPaquetes = new LinkedList<>();
+        Reproduciendo = false;
         this.isAdmin = esAdmin;
         if(esAdmin){
             actualizarListaRegistrados();
-            actualizarListaSuscritos();
             dashboardAdmin();
         }else{
             dashboardCliente();
@@ -61,6 +63,7 @@ public class Dashboard extends javax.swing.JFrame {
         this.contenedorReproductorCliente.setVisible(true);
         this.contenedorBienvenidaCliente.setVisible(true);
         this.contenedorSuscripcion.setVisible(true);
+        usuario = new usuarioCallbackImpl(this);
     }
     
     public void dashboardAdmin(){
@@ -72,6 +75,8 @@ public class Dashboard extends javax.swing.JFrame {
         this.contenedorReproductorCliente.setVisible(false);
         this.contenedorBienvenidaCliente.setVisible(false);
         this.contenedorSuscripcion.setVisible(false);
+        usuario = new usuarioCallbackImpl(this);
+        SuscribirseAnteServidor();
     }
 
     private Dashboard(String usuario) {
@@ -87,22 +92,30 @@ public class Dashboard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Notificacion = new javax.swing.JFrame();
+        jPanel1 = new javax.swing.JPanel();
+        AceptarNotificacion = new javax.swing.JButton();
+        RechazarNotificacion = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        AreaNotificacion = new javax.swing.JTextPane();
         BarraPrograma = new javax.swing.JPanel();
         botonCerrar = new javax.swing.JLabel();
         tituloApp = new javax.swing.JLabel();
         ContenedorDatosSesion = new javax.swing.JPanel();
         usuarioIniciado = new javax.swing.JLabel();
         botonCerrarSesion = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         contenedorGeneral = new javax.swing.JPanel();
         contenedorPaneles = new javax.swing.JTabbedPane();
         contenedorUsuariosConectados = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        listaConectados = new javax.swing.JList<>();
+        listaConectados = new javax.swing.JList<String>();
         contenedorUsuariosRegistrados = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        listaRegistrados = new javax.swing.JList<>();
+        listaRegistrados = new javax.swing.JList<String>();
         jButton1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         contenedorBienvenida = new javax.swing.JPanel();
@@ -135,17 +148,92 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         textoBienvenida1 = new javax.swing.JTextArea();
-        botonEditarPerfilUsuario = new javax.swing.JButton();
+        botonEditarPerfil = new javax.swing.JButton();
         contenedorReproductor = new javax.swing.JPanel();
         botonSelecionarCancion = new java.awt.Button();
         nombreCancion = new javax.swing.JLabel();
         botonReproducir = new javax.swing.JLabel();
         botonPausa = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         contenedorReproductorCliente = new javax.swing.JPanel();
         nombreCancion1 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
 
+        Notificacion.setTitle("Notificacion");
+        Notificacion.setMinimumSize(new java.awt.Dimension(500, 220));
+
+        jPanel1.setMaximumSize(new java.awt.Dimension(500, 180));
+        jPanel1.setMinimumSize(new java.awt.Dimension(500, 180));
+
+        AceptarNotificacion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        AceptarNotificacion.setText("Aceptar");
+        AceptarNotificacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AceptarNotificacionActionPerformed(evt);
+            }
+        });
+
+        RechazarNotificacion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        RechazarNotificacion.setText("Rechazar");
+        RechazarNotificacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RechazarNotificacionActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("El Administrador dice");
+
+        AreaNotificacion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        AreaNotificacion.setEnabled(false);
+        jScrollPane1.setViewportView(AreaNotificacion);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(85, 85, 85))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(AceptarNotificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(RechazarNotificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(53, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(AceptarNotificacion)
+                    .addComponent(RechazarNotificacion))
+                .addContainerGap(51, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout NotificacionLayout = new javax.swing.GroupLayout(Notificacion.getContentPane());
+        Notificacion.getContentPane().setLayout(NotificacionLayout);
+        NotificacionLayout.setHorizontalGroup(
+            NotificacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        NotificacionLayout.setVerticalGroup(
+            NotificacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Streaming de Musica");
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -177,7 +265,6 @@ public class Dashboard extends javax.swing.JFrame {
 
         usuarioIniciado.setFont(new java.awt.Font("Segoe UI Semibold", 0, 11)); // NOI18N
         usuarioIniciado.setForeground(new java.awt.Color(255, 255, 255));
-        usuarioIniciado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
         usuarioIniciado.setText("Usuario");
         usuarioIniciado.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -197,6 +284,9 @@ public class Dashboard extends javax.swing.JFrame {
         });
         ContenedorDatosSesion.add(botonCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 20, -1, -1));
 
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/usuario.png"))); // NOI18N
+        ContenedorDatosSesion.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 0, 50, 50));
+
         getContentPane().add(ContenedorDatosSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 760, 50));
 
         contenedorGeneral.setBackground(new java.awt.Color(32, 47, 90));
@@ -205,10 +295,10 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabel11.setText("Usuarios conectados");
 
-        listaConectados.setModel(new javax.swing.AbstractListModel<String>() {
+        listaConectados.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            public Object getElementAt(int i) { return strings[i]; }
         });
         jScrollPane4.setViewportView(listaConectados);
 
@@ -244,10 +334,10 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabel5.setText("Usuarios registrados");
 
-        listaRegistrados.setModel(new javax.swing.AbstractListModel<String>() {
+        listaRegistrados.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            public Object getElementAt(int i) { return strings[i]; }
         });
         listaRegistrados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -548,10 +638,10 @@ public class Dashboard extends javax.swing.JFrame {
         textoBienvenida1.setBorder(null);
         jScrollPane5.setViewportView(textoBienvenida1);
 
-        botonEditarPerfilUsuario.setText("Editar mi perfil");
-        botonEditarPerfilUsuario.addActionListener(new java.awt.event.ActionListener() {
+        botonEditarPerfil.setText("Editar mi perfil");
+        botonEditarPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEditarPerfilUsuarioActionPerformed(evt);
+                botonEditarPerfilActionPerformed(evt);
             }
         });
 
@@ -570,7 +660,7 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(contenedorBienvenidaClienteLayout.createSequentialGroup()
                         .addGap(107, 107, 107)
-                        .addComponent(botonEditarPerfilUsuario)))
+                        .addComponent(botonEditarPerfil)))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         contenedorBienvenidaClienteLayout.setVerticalGroup(
@@ -581,7 +671,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(botonEditarPerfilUsuario)
+                .addComponent(botonEditarPerfil)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -602,22 +692,26 @@ public class Dashboard extends javax.swing.JFrame {
                 botonSelecionarCancionMouseClicked(evt);
             }
         });
-        contenedorReproductor.add(botonSelecionarCancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 20, -1, 32));
+        contenedorReproductor.add(botonSelecionarCancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, 32));
 
         nombreCancion.setForeground(new java.awt.Color(255, 255, 255));
+        nombreCancion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         nombreCancion.setText("Nombre cancion");
-        contenedorReproductor.add(nombreCancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(224, 20, 244, 32));
+        contenedorReproductor.add(nombreCancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 220, 32));
 
-        botonReproducir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/boton-de-reproduccion.png"))); // NOI18N
+        botonReproducir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/boton-de-reproduccion.png"))); // NOI18N
         botonReproducir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonReproducirMouseClicked(evt);
             }
         });
-        contenedorReproductor.add(botonReproducir, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, -1, -1));
+        contenedorReproductor.add(botonReproducir, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, -1, -1));
 
-        botonPausa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pausa.png"))); // NOI18N
-        contenedorReproductor.add(botonPausa, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, -1, -1));
+        botonPausa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pausa.png"))); // NOI18N
+        contenedorReproductor.add(botonPausa, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, -1, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/reproductor.gif"))); // NOI18N
+        contenedorReproductor.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 20, 210, 30));
 
         getContentPane().add(contenedorReproductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 470, 760, 70));
 
@@ -724,7 +818,6 @@ public class Dashboard extends javax.swing.JFrame {
         }else{
             System.out.println("Ha cancelado la accion");
         }
-
     }//GEN-LAST:event_botonDesactivarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -750,21 +843,20 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void botonReproducirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonReproducirMouseClicked
         /*Reproducir cancion*/
-        admin.seleccionarAudio(rutaCancion);
-        admin.EjecutarAudio();
+        if(!nombreCancion.getText().equals("Nombre cancion")){
+            admin.seleccionarAudio(rutaCancion);
+            admin.notificarUsuarios("El administrador ha empezado a \nreproducir la cancion : \n" + nombreCancion.getText()+"\nDeceas Escucharla...??"); 
+            admin.EjecutarAudio();          
+            jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/barras.gif")));
+        }else{
+            JOptionPane.showMessageDialog(null,"No has seleccionado ninguna cancion para reproducir..");
+        }       
+        
     }//GEN-LAST:event_botonReproducirMouseClicked
 
     private void botonSuscribirmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSuscribirmeActionPerformed
-        if(suscripcion){
-            JOptionPane.showMessageDialog(null,"Ya estas suscrito");
-        }else{
-            if(admin.suscribir_Usuario((usuarioCallbackInt) usuario, loginActual)){
-                System.out.println("Te has suscrito");
-                this.estadoSuscripcion.setText("Suscrito");
-                suscripcion = true;
-            }
-        }
-
+        System.out.println("Te estas suscribirndo en el Servidor...");
+        SuscribirseAnteServidor();
     }//GEN-LAST:event_botonSuscribirmeActionPerformed
 
     private void botonEliminarSuscripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarSuscripcionActionPerformed
@@ -779,11 +871,28 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonEliminarSuscripcionActionPerformed
 
-    private void botonEditarPerfilUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarPerfilUsuarioActionPerformed
+    private void botonEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarPerfilActionPerformed
         // TODO add your handling code here:
         InterfazDatosUsuario editar = new InterfazDatosUsuario(objc ,this,false,loginActual);
         editar.setVisible(true);
-    }//GEN-LAST:event_botonEditarPerfilUsuarioActionPerformed
+    }//GEN-LAST:event_botonEditarPerfilActionPerformed
+
+    private void RechazarNotificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RechazarNotificacionActionPerformed
+        //El usuario Rechaza la recepcion de paquetes audio..
+        Notificacion.setVisible(false);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        this.setVisible(true);
+    }//GEN-LAST:event_RechazarNotificacionActionPerformed
+
+    private void AceptarNotificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AceptarNotificacionActionPerformed
+        // El usuario Acepta la recepcion de paquetes de audio...
+        admin.AceptarPaquetes(loginActual);
+        Notificacion.setVisible(false);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        this.setVisible(true);
+    }//GEN-LAST:event_AceptarNotificacionActionPerformed
 
     public void obtenerObjetosRemotos(){      
         autenticacion = (autenticacionUsuario) objc.ObtenerServant("ServantAuten");
@@ -801,23 +910,23 @@ public class Dashboard extends javax.swing.JFrame {
             }
         }else{
             modelo.addElement("No hay usuarios registrados");
-        }
-        
+        }        
         this.listaRegistrados.setModel(modelo);
     }
     
-    public void actualizarListaSuscritos(){
-        System.out.println("Actualizando suscritos");
-        DefaultListModel modelo = new DefaultListModel();
-        String[] usuarios = admin.obtenerSuscritos();
-        if(usuarios.length != 0){
-            for(String usuario: usuarios){
-                modelo.addElement(usuario);
-            }
+    public void SuscribirseAnteServidor(){
+        if(suscripcion){
+            JOptionPane.showMessageDialog(null,"Ya estas suscrito");
         }else{
-            modelo.addElement("No hay usuarios suscritos");
+            usuarioCallbackIntPOATie ref = new usuarioCallbackIntPOATie(usuario);
+            usuarioCallbackInt ref2 = ref._this(objc.orb);
+            
+            if(admin.suscribir_Usuario(ref2, loginActual)){
+                System.out.println("Te has suscrito");
+                this.estadoSuscripcion.setText("Suscrito");
+                suscripcion = true;
+            }
         }
-        this.listaConectados.setModel(modelo);
     }
     
     public void actualizarPanelInfoUsuario(Usuario u){
@@ -825,6 +934,7 @@ public class Dashboard extends javax.swing.JFrame {
         this.campoNombre.setText(u.getNombresUsuario());
         this.campoApellidos.setText(u.getApellidosUsuario());
         this.campoLogin.setText(u.getLoginUsuario());
+        System.out.println("Valor desactivado en dashboard "+u.desactivado);
         if(u.desactivado){
             /*Esta desactivado, se muestra el campo estado como inactivo*/
             this.campoEstado.setText("Inactivo");
@@ -842,9 +952,39 @@ public class Dashboard extends javax.swing.JFrame {
         this.campoLogin.setText("");
     }
     
+    public void recibir_Notificacion(String Mensaje){
+        System.out.println("Mensaje Resibido "+Mensaje);
+        AreaNotificacion.setText(Mensaje);
+        this.setVisible(false);
+        Notificacion.setResizable(false);
+        Notificacion.setLocationRelativeTo(null);
+        Notificacion.setVisible(true);
+    }
+    
+    public void ActualizarSuscritos(String [] Vsuscritos){
+        int i = Vsuscritos.length;
+        modeloLista.clear();
+        for (int j = 0; j < i; j++) {
+            modeloLista.addElement(Vsuscritos[j]);
+        }
+         listaConectados.setModel(modeloLista);
+    }
+    
+    public void RecibirAudio(byte [] paquete){
+        System.out.println("se ha recibido un paquete de audio...");    
+        InputStream NuevoPaquete = new ByteArrayInputStream(paquete);
+        colaPaquetes.add(NuevoPaquete);
+        if(!Reproduciendo){
+            ReproductorAudio IniciarReproduccion = new ReproductorAudio();
+            IniciarReproduccion.start();
+            Reproduciendo = true;
+        }
+    }
+    
     public void actualizarLogin(String login){
         this.usuarioIniciado.setText(login);
     }
+    
     
     /**
      * @param args the command line arguments
@@ -882,14 +1022,18 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AceptarNotificacion;
+    private javax.swing.JTextPane AreaNotificacion;
     private javax.swing.JPanel BarraPrograma;
     private javax.swing.JPanel ContenedorDatosSesion;
+    private javax.swing.JFrame Notificacion;
+    private javax.swing.JButton RechazarNotificacion;
     private javax.swing.JButton botonAceptar;
     private javax.swing.JLabel botonCerrar;
     private javax.swing.JLabel botonCerrarSesion;
     private javax.swing.JButton botonDesactivar;
     private javax.swing.JButton botonEditar;
-    private javax.swing.JButton botonEditarPerfilUsuario;
+    private javax.swing.JButton botonEditarPerfil;
     private javax.swing.JButton botonEliminarSuscripcion;
     private javax.swing.JLabel botonPausa;
     private javax.swing.JLabel botonReproducir;
@@ -911,6 +1055,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel contenedorUsuariosRegistrados;
     private javax.swing.JLabel estadoSuscripcion;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -922,11 +1067,15 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;

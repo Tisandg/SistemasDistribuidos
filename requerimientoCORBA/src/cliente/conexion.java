@@ -88,6 +88,7 @@ public class conexion extends javax.swing.JFrame {
 
         campoPuerto.setBackground(new java.awt.Color(32, 33, 35));
         campoPuerto.setForeground(new java.awt.Color(255, 255, 255));
+        campoPuerto.setText("2020");
         campoPuerto.setBorder(null);
         panelTransparente.add(campoPuerto, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 230, 230, -1));
         panelTransparente.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 230, 10));
@@ -122,6 +123,7 @@ public class conexion extends javax.swing.JFrame {
 
         campoDireccion.setBackground(new java.awt.Color(32, 33, 35));
         campoDireccion.setForeground(new java.awt.Color(255, 255, 255));
+        campoDireccion.setText("localhost");
         campoDireccion.setBorder(null);
         panelTransparente.add(campoDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 230, -1));
 
@@ -153,7 +155,7 @@ public class conexion extends javax.swing.JFrame {
                 error = true;
                 System.out.println("Problemas en la conversion del puerto: "+e);
                 this.campoMensaje.setVisible(true);
-                this.campoMensaje.setText("El puerto debe ser un numero");
+                this.campoMensaje.setText("El puerto debe ser un numero");                
             }
             if(!error){
                 ClienteDeObjetos objc = new ClienteDeObjetos();

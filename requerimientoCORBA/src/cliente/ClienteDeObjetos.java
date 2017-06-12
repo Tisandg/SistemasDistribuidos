@@ -5,6 +5,8 @@ import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
+import org.omg.PortableServer.POA;
+import org.omg.PortableServer.POAHelper;
 import sop_corba.*;
 /**
  *
@@ -13,7 +15,9 @@ import sop_corba.*;
 public class ClienteDeObjetos {
     
     NamingContextExt refContextoNombrado;
-    
+    POA rootpoa;
+    ORB orb;
+            
     public ClienteDeObjetos(){
         this.refContextoNombrado = null;
     }
@@ -21,9 +25,12 @@ public class ClienteDeObjetos {
     public boolean iniciarORB(String args[]){
         try{
             System.out.println("1. Crea e inicia el ORB");
-            ORB orb = ORB.init(args, null);
+            orb = ORB.init(args, null);
             System.out.println("2. Obtiene una referencia al servicio de nombrado por medio del orb");
             org.omg.CORBA.Object objRefNameService = orb.resolve_initial_references("NameService");
+            
+            rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+            rootpoa.the_POAManager().activate();
             
             System.out.println("3. Convierte la ref genérica a ref de NamingContextExt");
             refContextoNombrado = NamingContextExtHelper.narrow(objRefNameService);

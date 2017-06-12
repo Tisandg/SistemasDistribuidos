@@ -18,15 +18,24 @@ public class usuarioCallbackImpl implements usuarioCallbackIntOperations{
     }
     
     @Override
-    public boolean resibirMensaje(String loginUsuario, String mensaje) {
+    public boolean resibirMensaje(String mensaje) {
         System.out.println("UsuarioCallback : recibir Mensaje......");
-        //
+        GUI.recibir_Notificacion(mensaje);
         return true;
     }
 
     @Override
-    public void resibirAudio(String loginUsuario, byte[] paquete) {
+    public void resibirAudio(byte[] paquete) {
         System.out.println("UsuarioCallback : recibir paquete......");
+        GUI.RecibirAudio(paquete);
     }
+
+    @Override
+    public void actualizarSuscritos(String[] ListUsuariosSuscritos) {
+        System.out.println("UsuarioCallback : Actualizando Lista  Suscritos......");
+        GUI.ActualizarSuscritos(ListUsuariosSuscritos);
+    }
+
+   
     
 }
